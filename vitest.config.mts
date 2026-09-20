@@ -14,6 +14,7 @@ export default defineConfig({
     alias: [
       { find: /^@\/lib\/mboa\//, replacement: `${root}registry/mboa/lib/` },
       { find: /^@\/components\/mboa\//, replacement: `${root}registry/mboa/components/` },
+      { find: /^@\/hooks\/mboa\//, replacement: `${root}registry/mboa/hooks/` },
       { find: /^@\//, replacement: root },
     ],
   },

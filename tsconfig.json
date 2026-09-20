@@ -21,6 +21,7 @@
     "paths": {
       "@/lib/mboa/*": ["./registry/mboa/lib/*"],
       "@/components/mboa/*": ["./registry/mboa/components/*"],
+      "@/hooks/mboa/*": ["./registry/mboa/hooks/*"],
       "@/*": ["./*"]
     }
   },
