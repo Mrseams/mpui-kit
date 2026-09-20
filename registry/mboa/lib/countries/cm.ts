@@ -25,8 +25,6 @@ export const cm: CountryConfig = {
         "65468",
         ...prefixRange("6547", "6549"),
         ...prefixRange("680", "683"),
-        // TODO: "67" was not in the supplied ranges; kept from earlier data, still unverified.
-        "67",
       ],
     },
     {
@@ -42,8 +40,6 @@ export const cm: CountryConfig = {
         ...prefixRange("6880", "6888"), // 688 0XX XXX to 688 8XX XXX
         ...prefixRange("68890", "68895"), // 688 90X XXX to 688 95X XXX
         ...prefixRange("688960", "688964"), // 688 960 XXX to 688 964 XXX
-        // TODO: "69" was not in the supplied ranges; kept from earlier data, still unverified.
-        "69",
       ],
     },
     {
@@ -51,6 +47,7 @@ export const cm: CountryConfig = {
       name: "Nexttel",
       color: "#e11d48",
       // TODO: verify against current ART allocation
+      // Not in the ranges supplied on 2026-09-20; kept on the maintainer's instruction.
       prefixes: ["66"],
     },
     {

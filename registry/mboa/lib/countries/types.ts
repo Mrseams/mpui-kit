@@ -16,7 +16,7 @@ export interface OperatorConfig {
   color: string
   /**
    * National-number prefixes (without calling code or trunk prefix), digits only.
-   * A prefix may be shorter than the full number, e.g. "67" or "655".
+   * A prefix may be shorter than the full number, e.g. "66" or "655".
    * Prefixes must not overlap across operators; the country tests enforce this.
    */
   prefixes: string[]

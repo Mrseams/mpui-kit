@@ -24,10 +24,10 @@ const trunkCountry: CountryConfig = {
 
 describe("detectOperator", () => {
   it.each([
-    ["671234567", "mtn"],
+    ["651234567", "mtn"],
     ["654123456", "mtn"],
     ["680123456", "mtn"],
-    ["691234567", "orange"],
+    ["687123456", "orange"],
     ["655123456", "orange"],
     ["661234567", "nexttel"],
     ["621234567", "camtel"],
@@ -36,8 +36,45 @@ describe("detectOperator", () => {
   })
 
   it("detects as soon as a full prefix is typed", () => {
-    expect(detectOperator("67", cm)?.id).toBe("mtn")
+    expect(detectOperator("651", cm)?.id).toBe("mtn")
     expect(detectOperator("655", cm)?.id).toBe("orange")
+  })
+
+  it.each([
+    // MTN 654 is split: 6540-6545, 65460, 65468, 6547-6549
+    ["654012345", "mtn"],
+    ["654512345", "mtn"],
+    ["654601234", "mtn"],
+    ["654681234", "mtn"],
+    ["654712345", "mtn"],
+    ["654912345", "mtn"],
+    // Orange 688: 0XX-8XX, 90X-95X, 960-964
+    ["688012345", "orange"],
+    ["688812345", "orange"],
+    ["688901234", "orange"],
+    ["688951234", "orange"],
+    ["688960123", "orange"],
+    ["688964123", "orange"],
+    // Camtel: 620-621, 6220, 6225
+    ["620123456", "camtel"],
+    ["622012345", "camtel"],
+    ["622512345", "camtel"],
+  ])("detects %s as %s inside a split range", (national, id) => {
+    expect(detectOperator(national, cm)?.id).toBe(id)
+  })
+
+  it.each([
+    "654612345", // 65461 is not allocated
+    "654691234", // 65469 is not allocated
+    "688965123", // 688 965 is not allocated
+    "688969123", // 688 969 is not allocated
+    "688991234", // 688 99X is not allocated
+    "622112345", // 6221 is not allocated
+    "623123456", // 623 is not allocated
+    "671234567", // 67x is not in the supplied ranges
+    "691234567", // 69x is not in the supplied ranges
+  ])("returns null for %s, which is outside the supplied ranges", (national) => {
+    expect(detectOperator(national, cm)).toBeNull()
   })
 
   it("returns null while the prefix is still ambiguous or unknown", () => {
@@ -50,16 +87,16 @@ describe("detectOperator", () => {
 
 describe("parseNationalNumber", () => {
   it.each([
-    ["671234567"],
-    ["6 71 23 45 67"],
-    ["671-234-567"],
-    ["+237 671 234 567"],
-    ["+237671234567"],
-    ["00237671234567"],
-    ["237671234567"],
-    ["(237) 671 234 567"],
-  ])("extracts 671234567 from %s", (raw) => {
-    expect(parseNationalNumber(raw, cm)).toEqual({ national: "671234567" })
+    ["651234567"],
+    ["6 51 23 45 67"],
+    ["651-234-567"],
+    ["+237 651 234 567"],
+    ["+237651234567"],
+    ["00237651234567"],
+    ["237651234567"],
+    ["(237) 651 234 567"],
+  ])("extracts 651234567 from %s", (raw) => {
+    expect(parseNationalNumber(raw, cm)).toEqual({ national: "651234567" })
   })
 
   it("treats a partial calling code after + as empty, not as an error", () => {
@@ -89,46 +126,46 @@ describe("parseNationalNumber", () => {
 
 describe("normalizePhoneInput", () => {
   it("caps at the national number length", () => {
-    expect(normalizePhoneInput("67123456789999", cm)).toBe("671234567")
+    expect(normalizePhoneInput("65123456789999", cm)).toBe("651234567")
   })
 
   it("keeps partial input as typed", () => {
-    expect(normalizePhoneInput("67 12", cm)).toBe("6712")
+    expect(normalizePhoneInput("65 12", cm)).toBe("6512")
   })
 })
 
 describe("formatNational / formatInternational", () => {
   it("groups a full number", () => {
-    expect(formatNational("671234567", cm)).toBe("6 71 23 45 67")
+    expect(formatNational("651234567", cm)).toBe("6 51 23 45 67")
   })
 
   it("groups partial input without trailing spaces", () => {
     expect(formatNational("", cm)).toBe("")
     expect(formatNational("6", cm)).toBe("6")
-    expect(formatNational("6712", cm)).toBe("6 71 2")
-    expect(formatNational("67123", cm)).toBe("6 71 23")
+    expect(formatNational("6512", cm)).toBe("6 51 2")
+    expect(formatNational("65123", cm)).toBe("6 51 23")
   })
 
   it("keeps extra digits in a final group", () => {
-    expect(formatNational("6712345678", cm)).toBe("6 71 23 45 67 8")
+    expect(formatNational("6512345678", cm)).toBe("6 51 23 45 67 8")
   })
 
   it("formats the international form", () => {
-    expect(formatInternational("671234567", cm)).toBe("+237 6 71 23 45 67")
+    expect(formatInternational("651234567", cm)).toBe("+237 6 51 23 45 67")
   })
 })
 
 describe("validatePhone", () => {
   it("accepts a valid number and returns E.164 and the operator", () => {
-    const result = validatePhone("6 71 23 45 67", cm)
+    const result = validatePhone("6 51 23 45 67", cm)
     expect(result.valid).toBe(true)
-    expect(result.e164).toBe("+237671234567")
+    expect(result.e164).toBe("+237651234567")
     expect(result.operator?.id).toBe("mtn")
     expect(result.issue).toBeUndefined()
   })
 
   it("accepts international input", () => {
-    expect(validatePhone("+237 691 234 567", cm).e164).toBe("+237691234567")
+    expect(validatePhone("+237 687 123 456", cm).e164).toBe("+237687123456")
   })
 
   it("reports empty input", () => {
@@ -137,7 +174,7 @@ describe("validatePhone", () => {
   })
 
   it("reports too short and still detects the operator", () => {
-    const result = validatePhone("6712", cm)
+    const result = validatePhone("6512", cm)
     expect(result.valid).toBe(false)
     expect(result.issue).toBe("too_short")
     expect(result.e164).toBeNull()
@@ -145,12 +182,12 @@ describe("validatePhone", () => {
   })
 
   it("reports too long", () => {
-    expect(validatePhone("6712345678", cm).issue).toBe("too_long")
+    expect(validatePhone("6512345678", cm).issue).toBe("too_long")
   })
 
   it("reports wrong country and invalid characters before length", () => {
     expect(validatePhone("+33612345678", cm).issue).toBe("wrong_country")
-    expect(validatePhone("671abc567", cm).issue).toBe("invalid_chars")
+    expect(validatePhone("651abc567", cm).issue).toBe("invalid_chars")
   })
 
   it("accepts an unknown operator by default and rejects it when required", () => {
@@ -163,8 +200,8 @@ describe("validatePhone", () => {
 
 describe("toE164", () => {
   it("returns the E.164 number or null", () => {
-    expect(toE164("671234567", cm)).toBe("+237671234567")
-    expect(toE164("6712", cm)).toBeNull()
+    expect(toE164("651234567", cm)).toBe("+237651234567")
+    expect(toE164("6512", cm)).toBeNull()
   })
 
   it("uses the country's own calling code", () => {

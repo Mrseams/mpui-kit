@@ -8,7 +8,7 @@ export interface PhoneValidation {
   issue?: PhoneIssue
   /** National significant number: digits only, no calling code, no trunk prefix. */
   national: string
-  /** E.164 number such as "+237671234567". Only set when `valid` is true. */
+  /** E.164 number such as "+237651234567". Only set when `valid` is true. */
   e164: string | null
   /** Operator detected from the prefix, even while the number is still incomplete. */
   operator: OperatorConfig | null
@@ -30,8 +30,8 @@ interface ParsedNational {
 /**
  * Extracts the national number from whatever the user typed or pasted.
  *
- * Accepts "671234567", "6 71 23 45 67", "+237 671 234 567", "00237671234567"
- * and a bare "237671234567". A bare calling code is only stripped when the
+ * Accepts "651234567", "6 51 23 45 67", "+237 651 234 567", "00237651234567"
+ * and a bare "237651234567". A bare calling code is only stripped when the
  * digits are long enough to be calling code + full national number, because a
  * national number can itself start with the same digits.
  *
@@ -96,7 +96,7 @@ export function detectOperator(national: string, country: CountryConfig): Operat
   return best ? best.operator : null
 }
 
-/** Groups national digits for display, e.g. "671234567" -> "6 71 23 45 67". Works on partial input. */
+/** Groups national digits for display, e.g. "651234567" -> "6 51 23 45 67". Works on partial input. */
 export function formatNational(national: string, country: CountryConfig): string {
   const groups: string[] = []
   let cursor = 0
@@ -109,7 +109,7 @@ export function formatNational(national: string, country: CountryConfig): string
   return groups.join(" ")
 }
 
-/** "+237 6 71 23 45 67" */
+/** "+237 6 51 23 45 67" */
 export function formatInternational(national: string, country: CountryConfig): string {
   return `+${country.callingCode} ${formatNational(national, country)}`.trim()
 }
