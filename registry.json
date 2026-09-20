@@ -307,6 +307,85 @@
           "target": "components/mboa/ussd-prompt.tsx"
         }
       ]
+    },
+    {
+      "name": "format-date",
+      "type": "registry:lib",
+      "title": "formatDateTime",
+      "description": "Formats a Unix time as a short date and time in French or English.",
+      "registryDependencies": ["@mboa/country-types"],
+      "files": [
+        {
+          "path": "registry/mboa/lib/format-date.ts",
+          "type": "registry:lib",
+          "target": "lib/mboa/format-date.ts"
+        }
+      ]
+    },
+    {
+      "name": "use-momo-checkout",
+      "type": "registry:hook",
+      "title": "useMomoCheckout",
+      "description": "Runs the Mobile Money payment flow: calls your onPay, polls onCheckStatus while the user approves on their phone, times out, and cleans up. Drives the checkout state machine.",
+      "registryDependencies": ["@mboa/checkout-machine", "@mboa/country-types"],
+      "files": [
+        {
+          "path": "registry/mboa/hooks/use-momo-checkout.ts",
+          "type": "registry:hook",
+          "target": "hooks/mboa/use-momo-checkout.ts"
+        }
+      ]
+    },
+    {
+      "name": "receipt-card",
+      "type": "registry:component",
+      "title": "ReceiptCard",
+      "description": "A confirmation card for a successful payment: amount, method, phone, reference and date, plus extra rows and an optional Done button.",
+      "dependencies": ["lucide-react"],
+      "registryDependencies": [
+        "button",
+        "@mboa/currency",
+        "@mboa/mboa-provider",
+        "@mboa/checkout-machine",
+        "@mboa/country-types",
+        "@mboa/format-date",
+        "@mboa/payment-methods",
+        "@mboa/phone"
+      ],
+      "files": [
+        {
+          "path": "registry/mboa/components/receipt-card.tsx",
+          "type": "registry:component",
+          "target": "components/mboa/receipt-card.tsx"
+        }
+      ]
+    },
+    {
+      "name": "momo-checkout",
+      "type": "registry:block",
+      "title": "Mobile Money checkout",
+      "description": "A complete Mobile Money checkout: choose a method, enter a number, approve on the phone, then see a receipt. You provide onPay and onCheckStatus; it never talks to a provider itself.",
+      "registryDependencies": [
+        "button",
+        "@mboa/currency",
+        "@mboa/mboa-provider",
+        "@mboa/payment-method-picker",
+        "@mboa/receipt-card",
+        "@mboa/ussd-prompt",
+        "@mboa/use-momo-checkout",
+        "@mboa/checkout-machine",
+        "@mboa/country-types",
+        "@mboa/format-fcfa",
+        "@mboa/payment-methods",
+        "@mboa/phone-errors"
+      ],
+      "files": [
+        {
+          "path": "registry/mboa/components/momo-checkout.tsx",
+          "type": "registry:component",
+          "target": "components/mboa/momo-checkout.tsx"
+        }
+      ]
     }
   ]
 }

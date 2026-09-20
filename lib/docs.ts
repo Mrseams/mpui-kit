@@ -36,7 +36,7 @@ export const componentDocs: DocEntry[] = [
     slug: "momo-checkout",
     title: "Mobile Money checkout",
     description: "A full checkout block with a payment state machine and receipt.",
-    status: "soon",
+    status: "ready",
   },
 ]
 

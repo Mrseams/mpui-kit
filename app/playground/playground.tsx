@@ -4,6 +4,7 @@ import { useState } from "react"
 
 import { Button } from "@/components/ui/button"
 
+import { CheckoutDemo } from "@/app/docs/components/momo-checkout/checkout-demo"
 import { LocaleToggle } from "@/components/site/locale-toggle"
 import { Currency } from "@/components/mboa/currency"
 import { MboaProvider, useLocale, useT } from "@/components/mboa/mboa-provider"
@@ -34,6 +35,9 @@ export function Playground() {
         <PhoneSection />
         <PickerSection />
         <UssdSection />
+        <Section title="MomoCheckout">
+          <CheckoutDemo />
+        </Section>
         <StringsSection />
       </div>
     </MboaProvider>
