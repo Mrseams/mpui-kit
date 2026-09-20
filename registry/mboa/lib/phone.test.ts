@@ -3,6 +3,8 @@ import { describe, expect, it } from "vitest"
 import { cm } from "@/lib/mboa/countries/cm"
 import type { CountryConfig } from "@/lib/mboa/countries/types"
 import {
+  caretIndexAfterDigits,
+  countDigits,
   detectOperator,
   formatInternational,
   formatNational,
@@ -198,6 +200,34 @@ describe("validatePhone", () => {
   })
 })
 
+describe("validatePhone with a required operator", () => {
+  it("accepts a number from the required operator", () => {
+    expect(validatePhone("651234567", cm, { operator: "mtn" }).valid).toBe(true)
+  })
+
+  it("rejects a number from a different known operator", () => {
+    const result = validatePhone("655123456", cm, { operator: "mtn" })
+    expect(result.valid).toBe(false)
+    expect(result.issue).toBe("operator_mismatch")
+    expect(result.operator?.id).toBe("orange")
+    expect(result.e164).toBeNull()
+  })
+
+  it("does not block a prefix that matches no known operator", () => {
+    // Prefix data is community-maintained and may be incomplete.
+    expect(validatePhone("601234567", cm, { operator: "mtn" }).valid).toBe(true)
+  })
+
+  it("is strict about unknown prefixes when requireOperator is also set", () => {
+    const result = validatePhone("601234567", cm, { operator: "mtn", requireOperator: true })
+    expect(result.issue).toBe("unknown_operator")
+  })
+
+  it("still reports length problems first", () => {
+    expect(validatePhone("6551", cm, { operator: "mtn" }).issue).toBe("too_short")
+  })
+})
+
 describe("toE164", () => {
   it("returns the E.164 number or null", () => {
     expect(toE164("651234567", cm)).toBe("+237651234567")
@@ -206,5 +236,34 @@ describe("toE164", () => {
 
   it("uses the country's own calling code", () => {
     expect(toE164("0712345678", trunkCountry)).toBe("+999712345678")
+  })
+})
+
+describe("countDigits", () => {
+  it("counts digits and ignores separators", () => {
+    expect(countDigits("6 51 23")).toBe(5)
+    expect(countDigits("+237 (651)")).toBe(6)
+    expect(countDigits("")).toBe(0)
+    expect(countDigits("abc")).toBe(0)
+  })
+})
+
+describe("caretIndexAfterDigits", () => {
+  it("returns the index just after the nth digit", () => {
+    // "6 51 23": digits at indexes 0, 2, 3, 5, 6
+    expect(caretIndexAfterDigits("6 51 23", 1)).toBe(1)
+    expect(caretIndexAfterDigits("6 51 23", 2)).toBe(3)
+    expect(caretIndexAfterDigits("6 51 23", 3)).toBe(4)
+    expect(caretIndexAfterDigits("6 51 23", 4)).toBe(6)
+    expect(caretIndexAfterDigits("6 51 23", 5)).toBe(7)
+  })
+
+  it("puts the caret at the start for zero digits", () => {
+    expect(caretIndexAfterDigits("6 51", 0)).toBe(0)
+  })
+
+  it("puts the caret at the end when there are fewer digits than asked", () => {
+    expect(caretIndexAfterDigits("6 51", 9)).toBe(4)
+    expect(caretIndexAfterDigits("", 2)).toBe(0)
   })
 })

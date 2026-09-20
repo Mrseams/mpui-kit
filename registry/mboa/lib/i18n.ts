@@ -15,7 +15,7 @@ const en = {
   "phone.error.wrongCountry": "This number does not belong to {country}.",
   "phone.error.invalidChars": "Use digits only.",
   "phone.error.unknownOperator": "This number does not match a known operator.",
-  "phone.error.operatorMismatch": "This is not a {operator} number.",
+  "phone.error.operatorMismatch": "This number does not belong to {operator}.",
 
   "picker.legend": "Payment method",
   "picker.mobileMoneyDescription": "Approve on your phone",
@@ -81,7 +81,7 @@ const fr: Messages = {
   "phone.error.wrongCountry": "Ce numéro n'appartient pas à ce pays : {country}.",
   "phone.error.invalidChars": "Utilisez uniquement des chiffres.",
   "phone.error.unknownOperator": "Ce numéro ne correspond à aucun opérateur connu.",
-  "phone.error.operatorMismatch": "Ce n'est pas un numéro {operator}.",
+  "phone.error.operatorMismatch": "Ce numéro n'appartient pas à {operator}.",
 
   "picker.legend": "Moyen de paiement",
   "picker.mobileMoneyDescription": "Validez sur votre téléphone",

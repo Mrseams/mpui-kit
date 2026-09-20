@@ -1,7 +1,13 @@
 import type { CountryConfig, OperatorConfig } from "@/lib/mboa/countries/types"
 
 export type PhoneIssue =
-  "empty" | "invalid_chars" | "wrong_country" | "too_short" | "too_long" | "unknown_operator"
+  | "empty"
+  | "invalid_chars"
+  | "wrong_country"
+  | "too_short"
+  | "too_long"
+  | "unknown_operator"
+  | "operator_mismatch"
 
 export interface PhoneValidation {
   valid: boolean
@@ -17,6 +23,13 @@ export interface PhoneValidation {
 export interface ValidatePhoneOptions {
   /** Treat numbers whose prefix matches no operator as invalid. Defaults to false. */
   requireOperator?: boolean
+  /**
+   * Id of the operator the number must belong to, e.g. "mtn". Only a *known*
+   * different operator is rejected ("operator_mismatch"). A prefix that matches
+   * no operator is accepted, because prefix data is community-maintained and may
+   * be incomplete. Combine with `requireOperator` to be strict.
+   */
+  operator?: string
 }
 
 // Digits plus the separators people type or paste: space, +, (, ), ., -
@@ -43,10 +56,10 @@ export function parseNationalNumber(raw: string, country: CountryConfig): Parsed
   const invalidChars = !ALLOWED_CHARS.test(trimmed)
   const { callingCode, nationalNumberLength, trunkPrefix } = country
 
-  const finish = (national: string, issue?: ParsedNational["issue"]): ParsedNational => ({
-    national,
-    ...(invalidChars ? { issue: "invalid_chars" as const } : issue ? { issue } : {}),
-  })
+  const finish = (national: string, issue?: ParsedNational["issue"]): ParsedNational => {
+    const resolved = invalidChars ? "invalid_chars" : issue
+    return resolved ? { national, issue: resolved } : { national }
+  }
 
   const explicitInternational = trimmed.startsWith("+") || digits.startsWith("00")
   if (explicitInternational) {
@@ -135,6 +148,8 @@ export function validatePhone(
   if (national.length < country.nationalNumberLength) return fail("too_short")
   if (national.length > country.nationalNumberLength) return fail("too_long")
   if (options.requireOperator && !operator) return fail("unknown_operator")
+  if (options.operator && operator && operator.id !== options.operator)
+    return fail("operator_mismatch")
 
   return { valid: true, national, e164: `+${country.callingCode}${national}`, operator }
 }
@@ -146,4 +161,28 @@ export function toE164(
   options?: ValidatePhoneOptions
 ): string | null {
   return validatePhone(raw, country, options).e164
+}
+
+/** Number of digits in a string, ignoring spaces and other separators. */
+export function countDigits(text: string): number {
+  return (text.match(/\d/g) ?? []).length
+}
+
+/**
+ * Index in `formatted` just after its `digitCount`-th digit. Used to keep the
+ * caret where the user expects it after digits are re-grouped as they type.
+ *
+ * @example
+ * caretIndexAfterDigits("6 51 23", 3) // 4 (just after the "1")
+ */
+export function caretIndexAfterDigits(formatted: string, digitCount: number): number {
+  if (digitCount <= 0) return 0
+  let seen = 0
+  for (let index = 0; index < formatted.length; index++) {
+    if (/\d/.test(formatted[index])) {
+      seen++
+      if (seen === digitCount) return index + 1
+    }
+  }
+  return formatted.length
 }
