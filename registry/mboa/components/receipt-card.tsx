@@ -18,6 +18,17 @@ export interface ReceiptDetail {
   value: ReactNode
 }
 
+/** Parts of the receipt you can style. Each also has a `data-slot` attribute. */
+export interface ReceiptCardClassNames {
+  /** The checkmark icon. */
+  icon?: string
+  title?: string
+  /** The list of rows. */
+  list?: string
+  /** The Done button. */
+  done?: string
+}
+
 export interface ReceiptCardProps extends Omit<ComponentProps<"section">, "children"> {
   receipt: PaymentReceipt
   /** Extra rows, for example what was bought. Shown after the payment details. */
@@ -26,6 +37,8 @@ export interface ReceiptCardProps extends Omit<ComponentProps<"section">, "child
   onDone?: () => void
   country?: CountryConfig
   locale?: Locale
+  /** Class names for parts of the card. `className` styles the root. */
+  classNames?: ReceiptCardClassNames
 }
 
 /** A confirmation card for a successful payment: amount, method, reference and date. */
@@ -35,6 +48,7 @@ export function ReceiptCard({
   onDone,
   country: countryProp,
   locale: localeProp,
+  classNames,
   className,
   ...props
 }: ReceiptCardProps) {
@@ -54,13 +68,28 @@ export function ReceiptCard({
       {...props}
     >
       <div className="flex items-center gap-2">
-        <CircleCheck className="size-6 shrink-0 text-green-600 dark:text-green-500" aria-hidden />
-        <h3 id={titleId} className="font-semibold">
+        <CircleCheck
+          data-slot="receipt-card-icon"
+          // Uses your --success color if you define one, otherwise your primary color.
+          className={cn(
+            "size-6 shrink-0 text-[color:var(--success,var(--primary))]",
+            classNames?.icon
+          )}
+          aria-hidden
+        />
+        <h3
+          id={titleId}
+          data-slot="receipt-card-title"
+          className={cn("font-semibold", classNames?.title)}
+        >
           {t("receipt.title")}
         </h3>
       </div>
 
-      <dl className="grid grid-cols-[auto_1fr] gap-x-4 gap-y-2 text-sm">
+      <dl
+        data-slot="receipt-card-list"
+        className={cn("grid grid-cols-[auto_1fr] gap-x-4 gap-y-2 text-sm", classNames?.list)}
+      >
         <dt className="text-muted-foreground">{t("receipt.amount")}</dt>
         <dd className="font-semibold">
           <Currency amount={receipt.amount} currency={receipt.currency} locale={locale} />
@@ -91,7 +120,12 @@ export function ReceiptCard({
       </dl>
 
       {onDone && (
-        <Button type="button" onClick={onDone}>
+        <Button
+          type="button"
+          data-slot="receipt-card-done"
+          className={classNames?.done}
+          onClick={onDone}
+        >
           {t("receipt.done")}
         </Button>
       )}

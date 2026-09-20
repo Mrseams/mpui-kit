@@ -17,6 +17,22 @@ import {
 } from "@/lib/mboa/payment-methods"
 import { cn } from "@/lib/utils"
 
+/** Parts of the picker you can style. Each also has a `data-slot` attribute. */
+export interface PaymentMethodPickerClassNames {
+  legend?: string
+  /** The grid that holds the cards. */
+  options?: string
+  /** Each card. Style the selected one with `has-[:checked]:...`. */
+  option?: string
+  /** The name on each card. */
+  optionLabel?: string
+  /** The description on each card. */
+  optionDescription?: string
+  /** The wrapper of the phone field that appears for Mobile Money. */
+  phone?: string
+  error?: string
+}
+
 export interface PaymentMethodPickerProps extends Omit<
   ComponentProps<"fieldset">,
   "defaultValue" | "onChange"
@@ -41,6 +57,8 @@ export interface PaymentMethodPickerProps extends Omit<
   phoneError?: string
   /** Your own logos by operator id, shown instead of the color dot. */
   operatorLogos?: Record<string, ReactNode>
+  /** Class names for parts of the picker. `className` styles the fieldset. */
+  classNames?: PaymentMethodPickerClassNames
 }
 
 const icons = { card: CreditCard, cash: Banknote, mobile_money: Smartphone } as const
@@ -73,6 +91,7 @@ export function PaymentMethodPicker({
   error,
   phoneError,
   operatorLogos,
+  classNames,
   disabled,
   className,
   ...props
@@ -105,9 +124,17 @@ export function PaymentMethodPicker({
       className={cn("min-w-0 space-y-3", className)}
       {...props}
     >
-      <legend className="mb-2 text-sm font-medium">{legend ?? t("picker.legend")}</legend>
+      <legend
+        data-slot="payment-method-picker-legend"
+        className={cn("mb-2 text-sm font-medium", classNames?.legend)}
+      >
+        {legend ?? t("picker.legend")}
+      </legend>
 
-      <div className="grid gap-2 sm:grid-cols-2">
+      <div
+        data-slot="payment-method-picker-options"
+        className={cn("grid gap-2 sm:grid-cols-2", classNames?.options)}
+      >
         {methods.map((method) => {
           const methodOperator = country.operators.find((item) => item.id === method.operatorId)
           const Icon = icons[method.kind]
@@ -121,11 +148,13 @@ export function PaymentMethodPicker({
           return (
             <label
               key={method.id}
+              data-slot="payment-method-picker-option"
               className={cn(
                 "bg-background flex cursor-pointer items-start gap-3 rounded-lg border p-3 transition-colors",
                 "hover:bg-muted/50 has-[:checked]:border-primary has-[:checked]:bg-primary/5",
                 "has-[:focus-visible]:ring-ring/50 has-[:focus-visible]:ring-3",
-                "has-[:disabled]:cursor-not-allowed has-[:disabled]:opacity-50"
+                "has-[:disabled]:cursor-not-allowed has-[:disabled]:opacity-50",
+                classNames?.option
               )}
             >
               <input
@@ -149,8 +178,21 @@ export function PaymentMethodPicker({
                 )}
               </span>
               <span className="min-w-0">
-                <span className="block text-sm leading-tight font-medium">{label}</span>
-                <span className="text-muted-foreground block text-xs">{description}</span>
+                <span
+                  data-slot="payment-method-picker-option-label"
+                  className={cn("block text-sm leading-tight font-medium", classNames?.optionLabel)}
+                >
+                  {label}
+                </span>
+                <span
+                  data-slot="payment-method-picker-option-description"
+                  className={cn(
+                    "text-muted-foreground block text-xs",
+                    classNames?.optionDescription
+                  )}
+                >
+                  {description}
+                </span>
               </span>
             </label>
           )
@@ -164,6 +206,7 @@ export function PaymentMethodPicker({
           label={t("picker.phoneLabel", { operator: operator.name })}
           operator={operator.id}
           operatorLogos={operatorLogos}
+          className={classNames?.phone}
           error={phoneError}
           value={selection.phone}
           onChange={(phone) => update({ ...selection, phone })}
@@ -172,7 +215,12 @@ export function PaymentMethodPicker({
       )}
 
       {error && (
-        <p id={errorId} role="alert" className="text-destructive text-sm">
+        <p
+          id={errorId}
+          role="alert"
+          data-slot="payment-method-picker-error"
+          className={cn("text-destructive text-sm", classNames?.error)}
+        >
           {error}
         </p>
       )}

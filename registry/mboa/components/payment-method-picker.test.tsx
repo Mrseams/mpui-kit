@@ -197,6 +197,40 @@ describe("<PaymentMethodPicker /> controlled and defaults", () => {
   })
 })
 
+describe("<PaymentMethodPicker /> styling", () => {
+  it("lets you style each part with classNames and finds them by data-slot", () => {
+    const { container } = setup({
+      defaultValue: { methodId: "mtn", phone: "" },
+      error: "Pick one",
+      classNames: {
+        legend: "legend-x",
+        options: "options-x",
+        option: "option-x",
+        optionLabel: "label-x",
+        optionDescription: "desc-x",
+        phone: "phone-x",
+        error: "error-x",
+      },
+    })
+    const slot = (name: string) =>
+      container.querySelector(`[data-slot="payment-method-picker-${name}"]`)
+    expect(slot("legend")).toHaveClass("legend-x")
+    expect(slot("options")).toHaveClass("options-x")
+    expect(slot("option")).toHaveClass("option-x")
+    expect(slot("option-label")).toHaveClass("label-x")
+    expect(slot("option-description")).toHaveClass("desc-x")
+    expect(slot("error")).toHaveClass("error-x")
+    expect(container.querySelector('[data-slot="phone-input"]')).toHaveClass("phone-x")
+  })
+
+  it("applies option classes to every card", () => {
+    const { container } = setup({ classNames: { option: "option-x" } })
+    const cards = container.querySelectorAll('[data-slot="payment-method-picker-option"]')
+    expect(cards).toHaveLength(4)
+    for (const card of cards) expect(card).toHaveClass("option-x")
+  })
+})
+
 describe("<PaymentMethodPicker /> states", () => {
   it("shows an error and links it to the group", () => {
     setup({ error: "Choose a payment method to continue." })

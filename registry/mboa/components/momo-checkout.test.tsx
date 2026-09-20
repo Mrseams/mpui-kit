@@ -383,6 +383,63 @@ describe("<MomoCheckout /> timeout", () => {
   })
 })
 
+describe("<MomoCheckout /> styling", () => {
+  it("lets you style the form parts and finds them by data-slot", () => {
+    const { container } = setup({
+      summary: "3 nights",
+      classNames: {
+        title: "title-x",
+        summary: "summary-x",
+        total: "total-x",
+        amount: "amount-x",
+        form: "form-x",
+        submit: "submit-x",
+        picker: "picker-x",
+      },
+    })
+    const slot = (name: string) => container.querySelector(`[data-slot="momo-checkout-${name}"]`)
+    expect(slot("title")).toHaveClass("title-x")
+    expect(slot("summary")).toHaveClass("summary-x")
+    expect(slot("total")).toHaveClass("total-x")
+    expect(slot("amount")).toHaveClass("amount-x")
+    expect(slot("form")).toHaveClass("form-x")
+    expect(slot("submit")).toHaveClass("submit-x")
+    expect(container.querySelector('[data-slot="payment-method-picker"]')).toHaveClass("picker-x")
+  })
+
+  it("styles the prompt and the cancel button while waiting", async () => {
+    const onPay = vi.fn<OnPay>().mockResolvedValue(pending())
+    const { user, container } = setup({
+      onPay,
+      classNames: { prompt: "prompt-x", cancel: "cancel-x" },
+    })
+    await payWithMtn(user)
+    await advance(0)
+    expect(container.querySelector('[data-slot="ussd-prompt"]')).toHaveClass("prompt-x")
+    expect(container.querySelector('[data-slot="momo-checkout-cancel"]')).toHaveClass("cancel-x")
+  })
+
+  it("styles the receipt and the failure panel", async () => {
+    const success = setup({ classNames: { receipt: "receipt-x" } })
+    await success.user.click(radio(/Cash/))
+    await success.user.click(payButton())
+    await advance(0)
+    expect(success.container.querySelector('[data-slot="receipt-card"]')).toHaveClass("receipt-x")
+    success.unmount()
+
+    const failed = setup({
+      onPay: vi.fn<OnPay>().mockResolvedValue({ status: "failed" }),
+      classNames: { failure: "failure-x" },
+    })
+    await failed.user.click(radio(/Cash/))
+    await failed.user.click(payButton())
+    await advance(0)
+    expect(failed.container.querySelector('[data-slot="momo-checkout-failure"]')).toHaveClass(
+      "failure-x"
+    )
+  })
+})
+
 describe("<MomoCheckout /> callbacks", () => {
   it("calls onSuccess only once, even when the parent re-renders", async () => {
     const onSuccess = vi.fn()

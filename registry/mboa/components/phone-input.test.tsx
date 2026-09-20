@@ -98,6 +98,41 @@ describe("<PhoneInput /> typing", () => {
   })
 })
 
+describe("<PhoneInput /> styling", () => {
+  it("puts className on the outer wrapper, like the other components", () => {
+    const { container } = setup({ className: "wrapper-x" })
+    expect(container.querySelector('[data-slot="phone-input"]')).toHaveClass("wrapper-x")
+    expect(screen.getByRole("textbox")).not.toHaveClass("wrapper-x")
+  })
+
+  it("lets you style each part with classNames and finds them by data-slot", async () => {
+    const { user, input, container } = setup({
+      classNames: {
+        label: "label-x",
+        field: "field-x",
+        prefix: "prefix-x",
+        input: "input-x",
+        badge: "badge-x",
+        hint: "hint-x",
+      },
+    })
+    await user.type(input, "651")
+    const slot = (name: string) => container.querySelector(`[data-slot="phone-input-${name}"]`)
+    expect(slot("label")).toHaveClass("label-x")
+    expect(slot("field")).toHaveClass("field-x")
+    expect(slot("prefix")).toHaveClass("prefix-x")
+    expect(slot("input")).toHaveClass("input-x")
+    expect(input).toHaveClass("input-x")
+    expect(slot("badge")).toHaveClass("badge-x")
+    expect(slot("hint")).toHaveClass("hint-x")
+  })
+
+  it("styles the error through classNames.error", async () => {
+    const { container } = setup({ error: "Nope", classNames: { error: "error-x" } })
+    expect(container.querySelector('[data-slot="phone-input-error"]')).toHaveClass("error-x")
+  })
+})
+
 describe("<PhoneInput /> operator detection", () => {
   it("shows the operator badge once the prefix matches", async () => {
     const { user, input } = setup()

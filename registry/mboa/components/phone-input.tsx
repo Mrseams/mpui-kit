@@ -26,6 +26,21 @@ import {
 import { phoneErrorMessage } from "@/lib/mboa/phone-errors"
 import { cn } from "@/lib/utils"
 
+/** Parts of the field you can style. Each also has a `data-slot` attribute. */
+export interface PhoneInputClassNames {
+  label?: string
+  /** The box around the input, the +237 prefix and the operator badge. */
+  field?: string
+  /** The country calling code shown before the number. */
+  prefix?: string
+  /** The text input itself. */
+  input?: string
+  /** The box around the operator badge. */
+  badge?: string
+  hint?: string
+  error?: string
+}
+
 export interface PhoneInputProps extends Omit<
   ComponentProps<"input">,
   "value" | "defaultValue" | "onChange" | "type" | "size"
@@ -56,6 +71,8 @@ export interface PhoneInputProps extends Omit<
   operator?: string
   /** Your own logos by operator id, shown in the badge instead of the color dot. */
   operatorLogos?: Record<string, ReactNode>
+  /** Class names for parts of the field. `className` styles the outer wrapper. */
+  classNames?: PhoneInputClassNames
 }
 
 /**
@@ -77,6 +94,7 @@ export function PhoneInput({
   requireOperator,
   operator: requiredOperator,
   operatorLogos,
+  classNames,
   id: idProp,
   name,
   className,
@@ -169,17 +187,25 @@ export function PhoneInput({
       .join(" ") || undefined
 
   return (
-    <div data-slot="phone-input" className="space-y-1.5">
+    <div data-slot="phone-input" className={cn("space-y-1.5", className)}>
       {label !== false && (
-        <label htmlFor={id} className="text-sm leading-none font-medium">
+        <label
+          htmlFor={id}
+          data-slot="phone-input-label"
+          className={cn("text-sm leading-none font-medium", classNames?.label)}
+        >
           {label ?? t("phone.label")}
         </label>
       )}
 
-      <div className="relative">
+      <div data-slot="phone-input-field" className={cn("relative", classNames?.field)}>
         <span
           aria-hidden="true"
-          className="text-muted-foreground pointer-events-none absolute inset-y-0 left-3 flex items-center text-sm"
+          data-slot="phone-input-prefix"
+          className={cn(
+            "text-muted-foreground pointer-events-none absolute inset-y-0 left-3 flex items-center text-sm",
+            classNames?.prefix
+          )}
         >
           +{country.callingCode}
         </span>
@@ -195,10 +221,17 @@ export function PhoneInput({
           onBlur={handleBlur}
           aria-invalid={errorMessage ? true : undefined}
           aria-describedby={describedBy}
-          className={cn("pr-28 pl-14", className)}
+          data-slot="phone-input-input"
+          className={cn("pr-28 pl-14", classNames?.input)}
         />
         {detected && (
-          <div className="pointer-events-none absolute inset-y-0 right-2 flex items-center">
+          <div
+            data-slot="phone-input-badge"
+            className={cn(
+              "pointer-events-none absolute inset-y-0 right-2 flex items-center",
+              classNames?.badge
+            )}
+          >
             <OperatorBadge operator={detected} logo={operatorLogos?.[detected.id]} />
           </div>
         )}
@@ -208,12 +241,21 @@ export function PhoneInput({
       {name && <input type="hidden" name={name} value={validation.e164 ?? ""} />}
 
       {errorMessage ? (
-        <p id={errorId} role="alert" className="text-destructive text-sm">
+        <p
+          id={errorId}
+          role="alert"
+          data-slot="phone-input-error"
+          className={cn("text-destructive text-sm", classNames?.error)}
+        >
           {errorMessage}
         </p>
       ) : (
         visibleHint && (
-          <p id={hintId} className="text-muted-foreground text-xs">
+          <p
+            id={hintId}
+            data-slot="phone-input-hint"
+            className={cn("text-muted-foreground text-xs", classNames?.hint)}
+          >
             {visibleHint}
           </p>
         )

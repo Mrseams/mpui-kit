@@ -30,6 +30,32 @@ import {
 import { phoneErrorMessage } from "@/lib/mboa/phone-errors"
 import { cn } from "@/lib/utils"
 
+/** Parts of the checkout you can style. Each also has a `data-slot` attribute. */
+export interface MomoCheckoutClassNames {
+  /** The heading. */
+  title?: string
+  /** The summary under the heading. */
+  summary?: string
+  /** The row with the total. */
+  total?: string
+  /** The amount in the total row. */
+  amount?: string
+  /** The form around the method cards and the Pay button. */
+  form?: string
+  /** The Pay button. */
+  submit?: string
+  /** The payment method picker. */
+  picker?: string
+  /** The USSD prompt shown while waiting for approval. */
+  prompt?: string
+  /** The Cancel button shown while waiting. */
+  cancel?: string
+  /** The receipt after a successful payment. */
+  receipt?: string
+  /** The panel shown after a failure or a timeout. */
+  failure?: string
+}
+
 export interface MomoCheckoutProps
   extends
     Omit<ComponentProps<"div">, "children" | "title">,
@@ -61,6 +87,8 @@ export interface MomoCheckoutProps
   locale?: Locale
   /** Your own operator logos by operator id, shown instead of the color dot. */
   operatorLogos?: Record<string, ReactNode>
+  /** Class names for parts of the checkout. `className` styles the root. */
+  classNames?: MomoCheckoutClassNames
 }
 
 /**
@@ -89,6 +117,7 @@ export function MomoCheckout({
   country: countryProp,
   locale: localeProp,
   operatorLogos,
+  classNames,
   className,
   ...props
 }: MomoCheckoutProps) {
@@ -184,24 +213,48 @@ export function MomoCheckout({
       {...props}
     >
       <div className="space-y-3">
-        <h2 id={titleId} className="text-lg font-semibold">
+        <h2
+          id={titleId}
+          data-slot="momo-checkout-title"
+          className={cn("text-lg font-semibold", classNames?.title)}
+        >
           {title ?? t("checkout.title")}
         </h2>
-        {summary && <div className="text-muted-foreground text-sm">{summary}</div>}
-        <div className="flex items-baseline justify-between gap-4 border-y py-3">
+        {summary && (
+          <div
+            data-slot="momo-checkout-summary"
+            className={cn("text-muted-foreground text-sm", classNames?.summary)}
+          >
+            {summary}
+          </div>
+        )}
+        <div
+          data-slot="momo-checkout-total"
+          className={cn(
+            "flex items-baseline justify-between gap-4 border-y py-3",
+            classNames?.total
+          )}
+        >
           <span className="text-muted-foreground text-sm">{t("checkout.total")}</span>
           <Currency
             amount={amount}
             currency={currency}
             locale={locale}
-            className="text-2xl font-semibold"
+            data-slot="momo-checkout-amount"
+            className={cn("text-2xl font-semibold", classNames?.amount)}
           />
         </div>
       </div>
 
       {state.status === "idle" && (
-        <form onSubmit={handleSubmit} noValidate className="space-y-4">
+        <form
+          onSubmit={handleSubmit}
+          noValidate
+          data-slot="momo-checkout-form"
+          className={cn("space-y-4", classNames?.form)}
+        >
           <PaymentMethodPicker
+            className={classNames?.picker}
             country={country}
             locale={locale}
             methods={methods}
@@ -211,7 +264,12 @@ export function MomoCheckout({
             phoneError={phoneError}
             operatorLogos={operatorLogos}
           />
-          <Button type="submit" size="lg" className="w-full">
+          <Button
+            type="submit"
+            size="lg"
+            data-slot="momo-checkout-submit"
+            className={cn("w-full", classNames?.submit)}
+          >
             {t("checkout.pay", { amount: formatFcfa(amount, { locale, currency }) })}
           </Button>
         </form>
@@ -222,6 +280,7 @@ export function MomoCheckout({
           {resolved.method?.kind === "mobile_money" ? (
             <UssdPrompt
               key={state.attempt}
+              className={classNames?.prompt}
               country={country}
               locale={locale}
               code={state.ussdCode}
@@ -233,7 +292,13 @@ export function MomoCheckout({
               {t("checkout.sending")}
             </p>
           )}
-          <Button type="button" variant="outline" onClick={checkout.cancel}>
+          <Button
+            type="button"
+            variant="outline"
+            data-slot="momo-checkout-cancel"
+            className={classNames?.cancel}
+            onClick={checkout.cancel}
+          >
             {t("checkout.cancel")}
           </Button>
         </div>
@@ -243,6 +308,7 @@ export function MomoCheckout({
         <ReceiptCard
           ref={resultRef}
           tabIndex={-1}
+          className={classNames?.receipt}
           country={country}
           locale={locale}
           receipt={state.receipt}
@@ -257,7 +323,11 @@ export function MomoCheckout({
           tabIndex={-1}
           role="alert"
           aria-labelledby={resultTitleId}
-          className="border-destructive/40 bg-destructive/5 space-y-3 rounded-lg border p-4"
+          data-slot="momo-checkout-failure"
+          className={cn(
+            "border-destructive/40 bg-destructive/5 space-y-3 rounded-lg border p-4",
+            classNames?.failure
+          )}
         >
           <h3 id={resultTitleId} className="font-medium">
             {state.status === "failed" ? t("checkout.failedTitle") : t("checkout.timeoutTitle")}

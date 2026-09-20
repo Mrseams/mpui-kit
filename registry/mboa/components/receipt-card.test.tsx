@@ -112,6 +112,24 @@ describe("<ReceiptCard />", () => {
     expect(ref.current).toHaveClass("custom")
   })
 
+  it("uses your success color, falling back to the primary color, for the checkmark", () => {
+    setup()
+    const icon = document.querySelector('[data-slot="receipt-card-icon"]')
+    expect(icon?.getAttribute("class")).toContain("var(--success,var(--primary))")
+    expect(icon?.getAttribute("class")).not.toMatch(/green-d+/)
+  })
+
+  it("lets you style each part with classNames and finds them by data-slot", () => {
+    setup({
+      onDone: () => {},
+      classNames: { icon: "i-x", title: "t-x", list: "l-x", done: "d-x" },
+    })
+    expect(document.querySelector('[data-slot="receipt-card-icon"]')).toHaveClass("i-x")
+    expect(document.querySelector('[data-slot="receipt-card-title"]')).toHaveClass("t-x")
+    expect(document.querySelector('[data-slot="receipt-card-list"]')).toHaveClass("l-x")
+    expect(document.querySelector('[data-slot="receipt-card-done"]')).toHaveClass("d-x")
+  })
+
   it("shows an unformatted number as it is", () => {
     setup({ receipt: { ...receipt, phone: "not a number" } })
     expect(valueOf("Phone")).toBe("not a number")

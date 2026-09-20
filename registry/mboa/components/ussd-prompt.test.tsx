@@ -242,6 +242,41 @@ describe("<UssdPrompt /> copy", () => {
   })
 })
 
+describe("<UssdPrompt /> styling", () => {
+  it("lets you style each part with classNames and finds them by data-slot", () => {
+    const { container } = setup({
+      code: "*123#",
+      phone: "+237651234567",
+      expiresAt: START + 90_000,
+      classNames: {
+        dots: "dots-x",
+        title: "title-x",
+        phone: "phone-x",
+        code: "code-x",
+        status: "status-x",
+        countdown: "countdown-x",
+      },
+    })
+    const slot = (name: string) => container.querySelector(`[data-slot="ussd-prompt-${name}"]`)
+    expect(slot("dots")).toHaveClass("dots-x")
+    expect(slot("title")).toHaveClass("title-x")
+    expect(slot("phone")).toHaveClass("phone-x")
+    expect(slot("code")).toHaveClass("code-x")
+    expect(slot("status")).toHaveClass("status-x")
+    expect(slot("countdown")).toHaveClass("countdown-x")
+  })
+
+  it("styles the retry button after a timeout", () => {
+    const { container } = setup({
+      expiresAt: START + 3_000,
+      onRetry: () => {},
+      classNames: { retry: "retry-x" },
+    })
+    advance(3_000)
+    expect(container.querySelector('[data-slot="ussd-prompt-retry"]')).toHaveClass("retry-x")
+  })
+})
+
 describe("<UssdPrompt /> motion", () => {
   const dots = () =>
     Array.from(document.querySelectorAll("[data-slot=ussd-prompt] span.rounded-full"))

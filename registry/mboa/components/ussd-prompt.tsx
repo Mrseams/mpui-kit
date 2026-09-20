@@ -13,6 +13,23 @@ import type { Translator } from "@/lib/mboa/i18n"
 import { formatInternational, validatePhone } from "@/lib/mboa/phone"
 import { cn } from "@/lib/utils"
 
+/** Parts of the prompt you can style. Each also has a `data-slot` attribute. */
+export interface UssdPromptClassNames {
+  /** The three waiting dots. */
+  dots?: string
+  title?: string
+  /** The reminder of which number the request went to. */
+  phone?: string
+  /** The USSD code. */
+  code?: string
+  /** The waiting or timeout message. */
+  status?: string
+  /** The visible countdown. */
+  countdown?: string
+  /** The "Try again" button. */
+  retry?: string
+}
+
 export interface UssdPromptProps extends Omit<ComponentProps<"section">, "children"> {
   /**
    * The USSD code to dial if the prompt does not reach the phone, such as
@@ -30,6 +47,8 @@ export interface UssdPromptProps extends Omit<ComponentProps<"section">, "childr
   /** Only used to format `phone`. Defaults to the one in `MboaProvider`. */
   country?: CountryConfig
   locale?: Locale
+  /** Class names for parts of the prompt. `className` styles the root. */
+  classNames?: UssdPromptClassNames
 }
 
 /**
@@ -48,6 +67,7 @@ export function UssdPrompt({
   onExpire,
   country: countryProp,
   locale: localeProp,
+  classNames,
   className,
   onFocus,
   onBlur,
@@ -102,13 +122,20 @@ export function UssdPrompt({
       }}
     >
       <div className="flex items-start gap-3">
-        <WaitingDots active={!expired} />
+        <WaitingDots active={!expired} className={classNames?.dots} />
         <div className="min-w-0 space-y-1">
-          <h3 id={titleId} className="leading-tight font-medium">
+          <h3
+            id={titleId}
+            data-slot="ussd-prompt-title"
+            className={cn("leading-tight font-medium", classNames?.title)}
+          >
             {t("ussd.title")}
           </h3>
           {phone && (
-            <p className="text-muted-foreground text-sm">
+            <p
+              data-slot="ussd-prompt-phone"
+              className={cn("text-muted-foreground text-sm", classNames?.phone)}
+            >
               {t("ussd.sentTo", { phone: displayPhone(phone, country) })}
             </p>
           )}
@@ -125,7 +152,11 @@ export function UssdPrompt({
               </p>
               <code
                 aria-labelledby={codeLabelId}
-                className="block font-mono text-2xl font-semibold tracking-wide select-all"
+                data-slot="ussd-prompt-code"
+                className={cn(
+                  "block font-mono text-2xl font-semibold tracking-wide select-all",
+                  classNames?.code
+                )}
               >
                 {code}
               </code>
@@ -140,14 +171,22 @@ export function UssdPrompt({
         </div>
       )}
 
-      <p role="status" className="text-sm font-medium">
+      <p
+        role="status"
+        data-slot="ussd-prompt-status"
+        className={cn("text-sm font-medium", classNames?.status)}
+      >
         {expired ? t("ussd.timeout") : t("ussd.waiting")}
       </p>
 
       {!expired && expiresAt !== undefined && (
         <>
           {/* Read out only at milestones (see the live region below), not every second. */}
-          <p aria-hidden="true" className="text-muted-foreground text-sm tabular-nums">
+          <p
+            aria-hidden="true"
+            data-slot="ussd-prompt-countdown"
+            className={cn("text-muted-foreground text-sm tabular-nums", classNames?.countdown)}
+          >
             <span suppressHydrationWarning>
               {t("ussd.expiresIn", { time: formatCountdown(remaining) })}
             </span>
@@ -159,7 +198,13 @@ export function UssdPrompt({
       )}
 
       {expired && onRetry && (
-        <Button ref={retryRef} type="button" onClick={onRetry}>
+        <Button
+          ref={retryRef}
+          type="button"
+          data-slot="ussd-prompt-retry"
+          className={classNames?.retry}
+          onClick={onRetry}
+        >
           {t("ussd.retry")}
         </Button>
       )}
@@ -168,9 +213,13 @@ export function UssdPrompt({
 }
 
 /** Three dots that pulse while waiting. The pulse is skipped for users who prefer reduced motion. */
-function WaitingDots({ active }: { active: boolean }) {
+function WaitingDots({ active, className }: { active: boolean; className?: string }) {
   return (
-    <span aria-hidden="true" className="mt-2 flex shrink-0 gap-1">
+    <span
+      aria-hidden="true"
+      data-slot="ussd-prompt-dots"
+      className={cn("mt-2 flex shrink-0 gap-1", className)}
+    >
       {[0, 1, 2].map((index) => (
         <span
           key={index}
