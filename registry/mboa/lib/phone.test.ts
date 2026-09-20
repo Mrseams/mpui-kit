@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest"
 
-import { cm } from "@/registry/countries/cm"
-import type { CountryConfig } from "@/registry/countries/types"
+import { cm } from "@/lib/mboa/countries/cm"
+import type { CountryConfig } from "@/lib/mboa/countries/types"
 import {
   detectOperator,
   formatInternational,
@@ -10,7 +10,7 @@ import {
   parseNationalNumber,
   toE164,
   validatePhone,
-} from "@/registry/lib/phone"
+} from "@/lib/mboa/phone"
 
 // Synthetic country with a trunk prefix, to test behavior Cameroon does not use.
 const trunkCountry: CountryConfig = {

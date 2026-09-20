@@ -23,38 +23,48 @@ We use [Conventional Commits](https://www.conventionalcommits.org): `feat:`, `fi
 
 ## Project layout
 
-| Path                   | Purpose                                                                                   |
-| ---------------------- | ----------------------------------------------------------------------------------------- |
-| `registry/countries/`  | One file per country, plus `types.ts`.                                                    |
-| `registry/lib/`        | Framework-free logic (formatting, phone parsing, state machine, i18n). Fully unit-tested. |
-| `registry/components/` | Components distributed to users.                                                          |
-| `registry/blocks/`     | Larger compositions, such as `momo-checkout`.                                             |
-| `app/`                 | The docs site and landing page.                                                           |
-| `registry.json`        | The registry manifest. `shadcn build` turns it into `public/r/*.json`.                    |
+| Path                           | Purpose                                                                                   |
+| ------------------------------ | ----------------------------------------------------------------------------------------- |
+| `registry/mboa/lib/countries/` | One file per country, plus `types.ts`.                                                    |
+| `registry/mboa/lib/`           | Framework-free logic (formatting, phone parsing, state machine, i18n). Fully unit-tested. |
+| `registry/mboa/components/`    | Components and blocks distributed to users.                                               |
+| `app/`                         | The docs site and landing page.                                                           |
+| `registry.json`                | The registry manifest. `shadcn build` turns it into `public/r/*.json`.                    |
+
+### Import paths in registry files
+
+Files under `registry/mboa/` import each other with the path they will have in a user's project, not the path they have in this repo:
+
+```ts
+import { formatFcfa } from "@/lib/mboa/format-fcfa" // registry/mboa/lib/format-fcfa.ts here
+import { PhoneInput } from "@/components/mboa/phone-input" // registry/mboa/components/phone-input.tsx here
+```
+
+`tsconfig.json` and `vitest.config.mts` map these back to `registry/mboa/`. Every file in `registry.json` needs a matching `target` (for example `lib/mboa/format-fcfa.ts`), so the installed file lands where the imports expect it. Do not import from `@/registry/...`: the shadcn CLI would not rewrite that path for users.
 
 ## Add your country
 
 Adding a country touches data files only. No component changes are needed, because components read everything from a `CountryConfig`.
 
-1. **Copy the template.** Copy `registry/countries/cm.ts` to `registry/countries/<iso>.ts`, using the lowercase ISO 3166-1 alpha-2 code (for example `sn.ts`).
+1. **Copy the template.** Copy `registry/mboa/lib/countries/cm.ts` to `registry/mboa/lib/countries/<iso>.ts`, using the lowercase ISO 3166-1 alpha-2 code (for example `sn.ts`).
 
-2. **Fill in the config.** See `registry/countries/types.ts` for every field.
+2. **Fill in the config.** See `registry/mboa/lib/countries/types.ts` for every field.
 
    - `callingCode`, `nationalNumberLength` and `trunkPrefix` (only if people dial a leading digit domestically).
    - `groupSizes`: how the number is written, for example `[1, 2, 2, 2, 2]`. It must sum to `nationalNumberLength`.
    - `currency`: `XAF` or `XOF`.
    - `locales` and `defaultLocale`: `fr` and/or `en`.
-   - `operators`: `id`, `name`, a neutral `color`, and `prefixes`. Add `mobileMoneyName` only if the operator offers a mobile money wallet.
+   - `operators`: `id`, `name`, a neutral `color`, and `prefixes`. Add `mobileMoneyName` only if the operator offers a mobile money wallet. Regulators publish ranges, so use `prefixRange("650", "653")` from `prefix-range.ts` instead of typing every prefix.
    - `regions`: each region with a bilingual name and its main cities.
 
 3. **Use real sources, and be honest about them.** Take numbering plans from the national telecom regulator or the ITU, and say which source in your pull request. If you cannot confirm a prefix, add `// TODO: verify against <regulator> allocation` above it, as `cm.ts` does. Do not present unverified data as authoritative.
 
 4. **No logos or brand assets.** Operators are a name plus a neutral color. Do not add logos, brand-exact colors or trademarked images.
 
-5. **Register the country.** Add it to `registry/countries/index.ts`:
+5. **Register the country.** Add it to `registry/mboa/lib/countries/index.ts`:
 
    ```ts
-   import { sn } from "@/registry/countries/sn"
+   import { sn } from "@/lib/mboa/countries/sn"
    export const countries = { cm, sn } satisfies Record<string, CountryConfig>
    ```
 
@@ -62,7 +72,7 @@ Adding a country touches data files only. No component changes are needed, becau
 
 7. **Add a registry item.** In `registry.json`, add a `country-<iso>` entry modelled on `country-cm`, so people can install just that country.
 
-8. **Add tests for anything unusual.** If your country has a trunk prefix or an unusual number format, add a case in `registry/lib/phone.test.ts`.
+8. **Add tests for anything unusual.** If your country has a trunk prefix or an unusual number format, add a case in `registry/mboa/lib/phone.test.ts`.
 
 9. **Open the pull request.** Include your sources and note anything you could not verify.
 
@@ -75,9 +85,9 @@ Prefix or region corrections are welcome. Open a pull request (or a "Country dat
 - **Never hardcode a country.** Take a `country` prop or read from `MboaProvider`.
 - **UI only.** No real payment API calls. Accept async callbacks instead.
 - **Accessible by default.** Labels, keyboard navigation, `aria-live` for async states, and respect `prefers-reduced-motion`.
-- **Every user-facing string goes through `registry/lib/i18n.ts`,** in both French and English.
+- **Every user-facing string goes through `registry/mboa/lib/i18n.ts`,** in both French and English.
 - **Keep it light.** Avoid heavy dependencies and animation libraries. The audience often has slow connections and low-end phones.
-- **Test the logic.** Put logic in `registry/lib/` as pure functions and unit-test it.
+- **Test the logic.** Put logic in `registry/mboa/lib/` as pure functions and unit-test it.
 
 ## Reporting bugs
 

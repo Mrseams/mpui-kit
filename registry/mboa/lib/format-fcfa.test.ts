@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest"
 
-import { currencyLabel, formatFcfa, INVALID_AMOUNT } from "@/registry/lib/format-fcfa"
+import { currencyLabel, formatFcfa, INVALID_AMOUNT } from "@/lib/mboa/format-fcfa"
 
 const NBSP = " "
 

@@ -1,4 +1,4 @@
-import type { CurrencyCode, Locale } from "@/registry/countries/types"
+import type { CurrencyCode, Locale } from "@/lib/mboa/countries/types"
 
 export type CurrencyDisplay = "symbol" | "code" | "none"
 

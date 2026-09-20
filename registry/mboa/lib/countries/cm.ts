@@ -1,4 +1,4 @@
-import type { CountryConfig } from "@/registry/countries/types"
+import type { CountryConfig } from "@/lib/mboa/countries/types"
 
 export const cm: CountryConfig = {
   iso: "CM",

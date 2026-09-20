@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest"
 
-import { countries } from "@/registry/countries"
+import { countries } from "@/lib/mboa/countries"
 
 // Runs against every country in the index, so a contributor's new country is
 // checked automatically as soon as it is added to `countries/index.ts`.

@@ -57,7 +57,7 @@ Planned: landmark-based address input, OTP input, FCFA range slider, French date
 
 ## Design principles
 
-- **No hardcoded country.** Components take a `country` prop or read it from `MboaProvider`. Operators, prefixes, currency, locales and regions live in `registry/countries/<iso>.ts`.
+- **No hardcoded country.** Components take a `country` prop or read it from `MboaProvider`. Operators, prefixes, currency, locales and regions live in `registry/mboa/lib/countries/<iso>.ts`.
 - **UI only.** No payment API calls. Payment flows take async callbacks (`onPay`, `onCheckStatus`), so they work with any backend or aggregator.
 - **Accessible by default.** Labelled inputs, keyboard navigation, `aria-live` for payment states, `prefers-reduced-motion` respected.
 - **Bilingual.** Every string goes through a small FR/EN dictionary that you can override.

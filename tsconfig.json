@@ -19,6 +19,8 @@
       }
     ],
     "paths": {
+      "@/lib/mboa/*": ["./registry/mboa/lib/*"],
+      "@/components/mboa/*": ["./registry/mboa/components/*"],
       "@/*": ["./*"]
     }
   },

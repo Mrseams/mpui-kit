@@ -1,4 +1,4 @@
-import type { CountryConfig, OperatorConfig } from "@/registry/countries/types"
+import type { CountryConfig, OperatorConfig } from "@/lib/mboa/countries/types"
 
 export type PhoneIssue =
   "empty" | "invalid_chars" | "wrong_country" | "too_short" | "too_long" | "unknown_operator"

@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest"
 
-import { createTranslator, interpolate, messages, translate } from "@/registry/lib/i18n"
+import { createTranslator, interpolate, messages, translate } from "@/lib/mboa/i18n"
 
 const placeholders = (text: string) => (text.match(/\{\w+\}/g) ?? []).sort()
 

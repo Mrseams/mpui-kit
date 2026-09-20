@@ -1,4 +1,4 @@
-import type { CurrencyCode } from "@/registry/countries/types"
+import type { CurrencyCode } from "@/lib/mboa/countries/types"
 
 export interface PaymentReceipt {
   reference: string

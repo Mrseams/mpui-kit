@@ -1,5 +1,5 @@
-import { cm } from "@/registry/countries/cm"
-import type { CountryConfig } from "@/registry/countries/types"
+import { cm } from "@/lib/mboa/countries/cm"
+import type { CountryConfig } from "@/lib/mboa/countries/types"
 
 /**
  * Index of every country shipped in this repo. Used by the docs site and the

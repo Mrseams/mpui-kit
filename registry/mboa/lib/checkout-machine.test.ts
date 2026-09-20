@@ -9,7 +9,7 @@ import {
   type CheckoutEvent,
   type CheckoutState,
   type PaymentReceipt,
-} from "@/registry/lib/checkout-machine"
+} from "@/lib/mboa/checkout-machine"
 
 const T0 = 1_000_000
 const TIMEOUT = 120_000

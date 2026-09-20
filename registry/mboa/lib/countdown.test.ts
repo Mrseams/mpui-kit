@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest"
 
-import { formatCountdown } from "@/registry/lib/countdown"
+import { formatCountdown } from "@/lib/mboa/countdown"
 
 describe("formatCountdown", () => {
   it.each([

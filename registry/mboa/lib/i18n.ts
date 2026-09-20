@@ -1,4 +1,4 @@
-import type { Locale } from "@/registry/countries/types"
+import type { Locale } from "@/lib/mboa/countries/types"
 
 // English is the source of truth for the key set; French must provide every key
 // (enforced by the `Messages` type below and by i18n.test.ts).
