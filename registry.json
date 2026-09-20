@@ -125,6 +125,20 @@
           "target": "components/mboa/mboa-provider.tsx"
         }
       ]
+    },
+    {
+      "name": "currency",
+      "type": "registry:component",
+      "title": "Currency",
+      "description": "Displays an amount of CFA francs (XAF or XOF) with zero decimals and French spacing, for example 25 000 FCFA. Shows FCFA or the ISO code.",
+      "registryDependencies": ["@mboa/format-fcfa", "@mboa/mboa-provider", "@mboa/country-types"],
+      "files": [
+        {
+          "path": "registry/mboa/components/currency.tsx",
+          "type": "registry:component",
+          "target": "components/mboa/currency.tsx"
+        }
+      ]
     }
   ]
 }
