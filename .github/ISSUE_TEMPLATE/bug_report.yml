@@ -1,0 +1,38 @@
+name: Bug report
+description: Something does not work as documented
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Do not include real phone numbers, PINs or transaction details.
+  - type: input
+    id: component
+    attributes:
+      label: Component
+      placeholder: phone-input, momo-checkout, format-fcfa...
+    validations:
+      required: true
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened
+      description: What you did, what you expected, and what you saw instead.
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: Reproduction
+      description: A minimal code snippet or a link to a repo or sandbox.
+  - type: input
+    id: country
+    attributes:
+      label: Country and locale
+      placeholder: CM, fr
+  - type: input
+    id: environment
+    attributes:
+      label: Environment
+      description: Browser and device, Next.js and React versions.
+      placeholder: Chrome on Android 12, Next.js 15

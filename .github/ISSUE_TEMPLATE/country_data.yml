@@ -1,0 +1,40 @@
+name: Country data
+description: Request a new country or correct existing country data
+labels: [country-data]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Want to add the country yourself? See "Add your country" in CONTRIBUTING.md. A pull request is the fastest route.
+  - type: input
+    id: country
+    attributes:
+      label: Country
+      placeholder: Senegal (SN)
+    validations:
+      required: true
+  - type: dropdown
+    id: kind
+    attributes:
+      label: What is this about?
+      options:
+        - New country
+        - Operator prefix correction
+        - Region or city correction
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: details
+    attributes:
+      label: Details
+      description: What should change, and why.
+    validations:
+      required: true
+  - type: input
+    id: source
+    attributes:
+      label: Source
+      description: Link to the regulator's numbering plan or another reliable source.
+    validations:
+      required: true
