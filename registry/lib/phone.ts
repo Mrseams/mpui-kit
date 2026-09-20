@@ -1,12 +1,7 @@
 import type { CountryConfig, OperatorConfig } from "@/registry/countries/types"
 
 export type PhoneIssue =
-  | "empty"
-  | "invalid_chars"
-  | "wrong_country"
-  | "too_short"
-  | "too_long"
-  | "unknown_operator"
+  "empty" | "invalid_chars" | "wrong_country" | "too_short" | "too_long" | "unknown_operator"
 
 export interface PhoneValidation {
   valid: boolean
@@ -62,7 +57,10 @@ export function parseNationalNumber(raw: string, country: CountryConfig): Parsed
     return finish(rest.slice(callingCode.length))
   }
 
-  if (digits.startsWith(callingCode) && digits.length >= callingCode.length + nationalNumberLength) {
+  if (
+    digits.startsWith(callingCode) &&
+    digits.length >= callingCode.length + nationalNumberLength
+  ) {
     return finish(digits.slice(callingCode.length))
   }
 

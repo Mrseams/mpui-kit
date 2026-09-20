@@ -44,8 +44,15 @@ describe("checkoutReducer", () => {
   })
 
   it("stores the reference and USSD code for the current attempt", () => {
-    const state = run([submit, { type: "reference", attempt: 1, reference: "REF-1", ussdCode: "#150*50#" }])
-    expect(state).toMatchObject({ status: "awaiting_approval", reference: "REF-1", ussdCode: "#150*50#" })
+    const state = run([
+      submit,
+      { type: "reference", attempt: 1, reference: "REF-1", ussdCode: "#150*50#" },
+    ])
+    expect(state).toMatchObject({
+      status: "awaiting_approval",
+      reference: "REF-1",
+      ussdCode: "#150*50#",
+    })
   })
 
   it("keeps an earlier USSD code when a later reference event has none", () => {
@@ -64,7 +71,12 @@ describe("checkoutReducer", () => {
 
   it("awaiting_approval -> failed on decline, keeping the reason", () => {
     const state = run([submit, { type: "declined", attempt: 1, reason: "insufficient_funds" }])
-    expect(state).toEqual({ status: "failed", attempt: 1, timeoutMs: TIMEOUT, reason: "insufficient_funds" })
+    expect(state).toEqual({
+      status: "failed",
+      attempt: 1,
+      timeoutMs: TIMEOUT,
+      reason: "insufficient_funds",
+    })
   })
 
   describe("timeout", () => {
@@ -100,7 +112,11 @@ describe("checkoutReducer", () => {
     })
 
     it("timeout -> awaiting_approval with a new attempt", () => {
-      const state = run([submit, { type: "tick", now: T0 + TIMEOUT }, { type: "retry", now: T0 + TIMEOUT + 1 }])
+      const state = run([
+        submit,
+        { type: "tick", now: T0 + TIMEOUT },
+        { type: "retry", now: T0 + TIMEOUT + 1 },
+      ])
       expect(state).toMatchObject({ status: "awaiting_approval", attempt: 2 })
     })
 
@@ -121,11 +137,13 @@ describe("checkoutReducer", () => {
         { type: "declined", attempt: 1 },
         { type: "retry", now: T0 + 1 },
       ])
-      expect(checkoutReducer(secondAttempt, { type: "approved", attempt: 1, receipt })).toBe(secondAttempt)
-      expect(checkoutReducer(secondAttempt, { type: "declined", attempt: 1 })).toBe(secondAttempt)
-      expect(checkoutReducer(secondAttempt, { type: "reference", attempt: 1, reference: "OLD" })).toBe(
+      expect(checkoutReducer(secondAttempt, { type: "approved", attempt: 1, receipt })).toBe(
         secondAttempt
       )
+      expect(checkoutReducer(secondAttempt, { type: "declined", attempt: 1 })).toBe(secondAttempt)
+      expect(
+        checkoutReducer(secondAttempt, { type: "reference", attempt: 1, reference: "OLD" })
+      ).toBe(secondAttempt)
     })
 
     it("ignores a result from a cancelled attempt after a new submit", () => {

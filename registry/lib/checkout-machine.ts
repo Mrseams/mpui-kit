@@ -59,7 +59,13 @@ export type CheckoutEvent =
 export const initialCheckoutState: CheckoutState = { status: "idle", attempt: 0 }
 
 function begin(attempt: number, now: number, timeoutMs: number): CheckoutState {
-  return { status: "awaiting_approval", attempt, startedAt: now, expiresAt: now + timeoutMs, timeoutMs }
+  return {
+    status: "awaiting_approval",
+    attempt,
+    startedAt: now,
+    expiresAt: now + timeoutMs,
+    timeoutMs,
+  }
 }
 
 /**
@@ -97,7 +103,12 @@ export function checkoutReducer(state: CheckoutState, event: CheckoutEvent): Che
 
     case "declined":
       return state.status === "awaiting_approval" && event.attempt === state.attempt
-        ? { status: "failed", attempt: state.attempt, timeoutMs: state.timeoutMs, reason: event.reason }
+        ? {
+            status: "failed",
+            attempt: state.attempt,
+            timeoutMs: state.timeoutMs,
+            reason: event.reason,
+          }
         : state
 
     case "tick":
@@ -106,7 +117,9 @@ export function checkoutReducer(state: CheckoutState, event: CheckoutEvent): Che
         : state
 
     case "cancel":
-      return state.status === "awaiting_approval" ? { status: "idle", attempt: state.attempt } : state
+      return state.status === "awaiting_approval"
+        ? { status: "idle", attempt: state.attempt }
+        : state
 
     case "reset":
       return state.status === "idle" ? state : { status: "idle", attempt: state.attempt }

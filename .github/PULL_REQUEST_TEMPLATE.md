@@ -12,4 +12,3 @@
 - [ ] For country data: sources are linked below and unverified data is marked with a `TODO`
 
 ## Sources (country data only)
-

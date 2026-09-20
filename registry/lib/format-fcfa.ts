@@ -37,7 +37,10 @@ function getFormatter(locale: Locale, currency: CurrencyCode) {
 }
 
 /** Label shown next to an amount: "FCFA" or the ISO currency code. */
-export function currencyLabel(currency: CurrencyCode, display: Exclude<CurrencyDisplay, "none"> = "symbol") {
+export function currencyLabel(
+  currency: CurrencyCode,
+  display: Exclude<CurrencyDisplay, "none"> = "symbol"
+) {
   return display === "code" ? currency : "FCFA"
 }
 

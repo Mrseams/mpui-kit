@@ -5,6 +5,7 @@ Open-source [shadcn/ui](https://ui.shadcn.com) components for African markets: M
 Cameroon is the first supported country. Country data is pluggable, so adding another country is a pull request, not a fork. See [Add your country](./CONTRIBUTING.md#add-your-country).
 
 <!-- TODO: replace with a GIF of the momo-checkout demo -->
+
 > _GIF placeholder: live checkout demo (FR/EN toggle, phone approval, receipt)._
 
 > **Status: pre-release (0.1.0 in development).** The components below are being built one at a time. Nothing here is published yet, and the install URLs are placeholders until the docs site is deployed.
@@ -44,13 +45,13 @@ npx shadcn@latest add @mboa/momo-checkout
 
 Phase 1:
 
-| Name | Type | What it does |
-| --- | --- | --- |
-| `currency` | component + lib | Formats FCFA (XAF/XOF): zero decimals, French spacing (`25 000 FCFA`), `FCFA` or ISO code. |
-| `phone-input` | component | Detects the operator from the prefix as you type, validates length, returns E.164. Works with react-hook-form and zod. |
-| `payment-method-picker` | component | Selectable cards for Mobile Money operators, card and cash. Reveals the phone input inline. |
-| `ussd-prompt` | component | Approval code with copy button and `tel:` link, waiting animation, countdown and retry. |
-| `momo-checkout` | block | Full checkout: idle → awaiting approval → success / failed / timeout, plus a receipt card. |
+| Name                    | Type            | What it does                                                                                                           |
+| ----------------------- | --------------- | ---------------------------------------------------------------------------------------------------------------------- |
+| `currency`              | component + lib | Formats FCFA (XAF/XOF): zero decimals, French spacing (`25 000 FCFA`), `FCFA` or ISO code.                             |
+| `phone-input`           | component       | Detects the operator from the prefix as you type, validates length, returns E.164. Works with react-hook-form and zod. |
+| `payment-method-picker` | component       | Selectable cards for Mobile Money operators, card and cash. Reveals the phone input inline.                            |
+| `ussd-prompt`           | component       | Approval code with copy button and `tel:` link, waiting animation, countdown and retry.                                |
+| `momo-checkout`         | block           | Full checkout: idle → awaiting approval → success / failed / timeout, plus a receipt card.                             |
 
 Planned: landmark-based address input, OTP input, FCFA range slider, French date picker, WhatsApp button and chat widget, network banner, data-saver image, low-data mode provider, transaction timeline, listing card block, pricing table block.
 

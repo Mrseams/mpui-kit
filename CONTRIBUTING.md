@@ -23,14 +23,14 @@ We use [Conventional Commits](https://www.conventionalcommits.org): `feat:`, `fi
 
 ## Project layout
 
-| Path | Purpose |
-| --- | --- |
-| `registry/countries/` | One file per country, plus `types.ts`. |
-| `registry/lib/` | Framework-free logic (formatting, phone parsing, state machine, i18n). Fully unit-tested. |
-| `registry/components/` | Components distributed to users. |
-| `registry/blocks/` | Larger compositions, such as `momo-checkout`. |
-| `app/` | The docs site and landing page. |
-| `registry.json` | The registry manifest. `shadcn build` turns it into `public/r/*.json`. |
+| Path                   | Purpose                                                                                   |
+| ---------------------- | ----------------------------------------------------------------------------------------- |
+| `registry/countries/`  | One file per country, plus `types.ts`.                                                    |
+| `registry/lib/`        | Framework-free logic (formatting, phone parsing, state machine, i18n). Fully unit-tested. |
+| `registry/components/` | Components distributed to users.                                                          |
+| `registry/blocks/`     | Larger compositions, such as `momo-checkout`.                                             |
+| `app/`                 | The docs site and landing page.                                                           |
+| `registry.json`        | The registry manifest. `shadcn build` turns it into `public/r/*.json`.                    |
 
 ## Add your country
 
