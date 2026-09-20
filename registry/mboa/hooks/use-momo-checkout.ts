@@ -1,6 +1,6 @@
 "use client"
 
-import { useCallback, useEffect, useReducer, useRef } from "react"
+import { useCallback, useEffect, useReducer, useRef, useState } from "react"
 
 import {
   checkoutReducer,
@@ -16,6 +16,12 @@ export interface PaymentInput {
   methodId: string
   /** E.164 number, for Mobile Money. */
   phone?: string
+}
+
+/** A payment as it was when the user pressed Pay. The amount is fixed from that moment. */
+export interface StartedPayment extends PaymentInput {
+  amount: number
+  currency: CurrencyCode
 }
 
 export interface PaymentRequest extends PaymentInput {
@@ -61,6 +67,12 @@ export interface UseMomoCheckoutOptions {
 
 export interface MomoCheckout {
   state: CheckoutState
+  /**
+   * The payment in progress, with the amount and currency from when the user
+   * pressed Pay. Changing the `amount` option afterwards does not affect it.
+   * Null until the first payment starts.
+   */
+  payment: StartedPayment | null
   /** Starts a payment. Ignored unless the checkout is idle. */
   pay: (input: PaymentInput) => void
   /** Tries again after a failure or timeout, with the same payment details. */
@@ -106,7 +118,8 @@ export function useMomoCheckout(options: UseMomoCheckoutOptions): MomoCheckout {
 
   // Always read the latest callbacks without restarting an attempt in flight.
   const optionsRef = useRef(options)
-  const inputRef = useRef<PaymentInput | null>(null)
+  const inputRef = useRef<StartedPayment | null>(null)
+  const [payment, setPayment] = useState<StartedPayment | null>(null)
   // Set synchronously by pay(), so two clicks in the same tick cannot both get
   // through before React has re-rendered. Cleared once the checkout is idle again.
   const startedRef = useRef(false)
@@ -127,8 +140,11 @@ export function useMomoCheckout(options: UseMomoCheckoutOptions): MomoCheckout {
     const input = inputRef.current
     if (!input) return
 
-    async function run(input: PaymentInput) {
-      const { amount, currency, onPay } = optionsRef.current
+    async function run(input: StartedPayment) {
+      // The amount and currency are the ones from when the user pressed Pay,
+      // not the latest props: the customer approved that amount.
+      const { amount, currency } = input
+      const { onPay } = optionsRef.current
       const succeed = (reference: string) => {
         const receipt: PaymentReceipt = {
           reference,
@@ -211,7 +227,10 @@ export function useMomoCheckout(options: UseMomoCheckoutOptions): MomoCheckout {
     (input: PaymentInput) => {
       if (startedRef.current) return
       startedRef.current = true
-      inputRef.current = input
+      const { amount, currency } = optionsRef.current
+      const started: StartedPayment = { ...input, amount, currency }
+      inputRef.current = started
+      setPayment(started)
       dispatch({ type: "submit", now: Date.now(), timeoutMs })
     },
     [timeoutMs]
@@ -220,5 +239,5 @@ export function useMomoCheckout(options: UseMomoCheckoutOptions): MomoCheckout {
   const cancel = useCallback(() => dispatch({ type: "cancel" }), [])
   const reset = useCallback(() => dispatch({ type: "reset" }), [])
 
-  return { state, pay, retry, cancel, reset }
+  return { state, payment, pay, retry, cancel, reset }
 }

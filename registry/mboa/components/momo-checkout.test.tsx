@@ -440,6 +440,79 @@ describe("<MomoCheckout /> styling", () => {
   })
 })
 
+describe("<MomoCheckout /> while a payment is in progress", () => {
+  function withAmount(amount: number, onPay: OnPay) {
+    return (
+      <MboaProvider country={cm} locale="en">
+        <MomoCheckout amount={amount} pollIntervalMs={1_000} onPay={onPay} />
+      </MboaProvider>
+    )
+  }
+  const total = () => document.querySelector('[data-slot="momo-checkout-amount"]')?.textContent
+
+  it("keeps showing the amount the customer pressed Pay on", async () => {
+    const onPay = vi.fn<OnPay>().mockResolvedValue(pending())
+    const user = userEvent.setup({ delay: null })
+    const { rerender } = render(withAmount(25000, onPay))
+    await user.click(radio(/Cash/))
+    await user.click(payButton())
+    await advance(0)
+    expect(total()).toBe("25,000\u00a0FCFA")
+
+    rerender(withAmount(60000, onPay))
+    expect(total()).toBe("25,000\u00a0FCFA")
+  })
+
+  it("shows the receipt for the amount that was paid, not the new one", async () => {
+    const slow = deferred<PayResult>()
+    const onPay = vi.fn<OnPay>().mockReturnValue(slow.promise)
+    const user = userEvent.setup({ delay: null })
+    const { rerender } = render(withAmount(25000, onPay))
+    await user.click(radio(/Cash/))
+    await user.click(payButton())
+    await advance(0)
+
+    rerender(withAmount(60000, onPay))
+    slow.resolve({ status: "success", reference: "PAY-1" })
+    await advance(0)
+
+    const receipt = screen.getByRole("region", { name: "Payment received" })
+    expect(receipt).toHaveTextContent("25,000")
+    expect(receipt).not.toHaveTextContent("60,000")
+  })
+
+  it("shows the new amount again once back to the form", async () => {
+    const onPay = vi.fn<OnPay>().mockResolvedValue(pending())
+    const user = userEvent.setup({ delay: null })
+    const { rerender } = render(withAmount(25000, onPay))
+    await user.click(radio(/Cash/))
+    await user.click(payButton())
+    await advance(0)
+    rerender(withAmount(60000, onPay))
+
+    await user.click(screen.getByRole("button", { name: "Cancel" }))
+    expect(total()).toBe("60,000\u00a0FCFA")
+  })
+
+  it("reports each status change so the app can lock its own UI", async () => {
+    const onStatusChange = vi.fn()
+    const { user } = setup({ onStatusChange })
+    expect(onStatusChange).not.toHaveBeenCalled()
+
+    await user.click(radio(/Cash/))
+    await user.click(payButton())
+    await advance(0)
+
+    expect(onStatusChange.mock.calls.map((call) => call[0])).toEqual([
+      "awaiting_approval",
+      "success",
+    ])
+
+    await user.click(screen.getByRole("button", { name: "Done" }))
+    expect(onStatusChange).toHaveBeenLastCalledWith("idle")
+  })
+})
+
 describe("<MomoCheckout /> callbacks", () => {
   it("calls onSuccess only once, even when the parent re-renders", async () => {
     const onSuccess = vi.fn()

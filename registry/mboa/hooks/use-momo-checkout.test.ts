@@ -111,6 +111,56 @@ describe("starting a payment", () => {
   })
 })
 
+describe("the amount is fixed when the user presses Pay", () => {
+  it("exposes the payment with its amount and currency", async () => {
+    const { result } = setup(vi.fn<PayFn>().mockResolvedValue(pending()))
+    expect(result.current.payment).toBeNull()
+    act(() => result.current.pay(INPUT))
+    await advance(0)
+    expect(result.current.payment).toEqual({ ...INPUT, amount: 25000, currency: "XAF" })
+  })
+
+  it("pays and shows the receipt for the original amount if the option changes mid-payment", async () => {
+    const slow = deferred<PayResult>()
+    const onPay = vi.fn<PayFn>().mockReturnValue(slow.promise)
+    const { result, rerender } = setup(onPay)
+    act(() => result.current.pay(INPUT))
+    await advance(0)
+
+    rerender({ amount: 99000, currency: "XOF" })
+    slow.resolve({ status: "success", reference: "PAY-1" })
+    await advance(0)
+
+    expect(onPay.mock.calls[0][0]).toMatchObject({ amount: 25000, currency: "XAF" })
+    expect(result.current.state).toMatchObject({
+      status: "success",
+      receipt: { amount: 25000, currency: "XAF" },
+    })
+    expect(result.current.payment).toMatchObject({ amount: 25000, currency: "XAF" })
+  })
+
+  it("keeps the original amount for a retry, and takes the new one for a new payment", async () => {
+    const onPay = vi
+      .fn<PayFn>()
+      .mockResolvedValueOnce({ status: "failed" })
+      .mockResolvedValueOnce({ status: "failed" })
+      .mockResolvedValueOnce({ status: "success", reference: "PAY-3" })
+    const { result, rerender } = setup(onPay)
+
+    act(() => result.current.pay(INPUT))
+    await advance(0)
+    rerender({ amount: 40000 })
+    act(() => result.current.retry())
+    await advance(0)
+    expect(onPay.mock.calls[1][0].amount).toBe(25000)
+
+    act(() => result.current.reset())
+    act(() => result.current.pay(INPUT))
+    await advance(0)
+    expect(onPay.mock.calls[2][0].amount).toBe(40000)
+  })
+})
+
 describe("results from onPay", () => {
   it("succeeds straight away when onPay reports success, with a receipt", async () => {
     const onPay = vi.fn<PayFn>().mockResolvedValue({ status: "success", reference: "PAY-1" })

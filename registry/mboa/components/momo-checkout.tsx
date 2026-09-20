@@ -17,7 +17,7 @@ import { PaymentMethodPicker } from "@/components/mboa/payment-method-picker"
 import { ReceiptCard, type ReceiptDetail } from "@/components/mboa/receipt-card"
 import { UssdPrompt } from "@/components/mboa/ussd-prompt"
 import { useMomoCheckout, type UseMomoCheckoutOptions } from "@/hooks/mboa/use-momo-checkout"
-import type { PaymentReceipt } from "@/lib/mboa/checkout-machine"
+import type { CheckoutStatus, PaymentReceipt } from "@/lib/mboa/checkout-machine"
 import type { CountryConfig, CurrencyCode, Locale } from "@/lib/mboa/countries/types"
 import { formatFcfa } from "@/lib/mboa/format-fcfa"
 import {
@@ -83,6 +83,11 @@ export interface MomoCheckoutProps
   onFailure?: (reason?: string) => void
   /** Called when the user presses "Done" on the receipt. The checkout then starts over. */
   onDone?: () => void
+  /**
+   * Called whenever the checkout moves to a new state. Use it to lock the rest
+   * of your page, for example the order, while a payment is in progress.
+   */
+  onStatusChange?: (status: CheckoutStatus) => void
   country?: CountryConfig
   locale?: Locale
   /** Your own operator logos by operator id, shown instead of the color dot. */
@@ -114,6 +119,7 @@ export function MomoCheckout({
   onSuccess,
   onFailure,
   onDone,
+  onStatusChange,
   country: countryProp,
   locale: localeProp,
   operatorLogos,
@@ -135,7 +141,12 @@ export function MomoCheckout({
     timeoutMs,
     pollIntervalMs,
   })
-  const { state } = checkout
+  const { state, payment } = checkout
+  // While a payment is in progress, show the amount the customer pressed Pay
+  // on, even if the `amount` prop changes meanwhile.
+  const inProgress = state.status !== "idle" && payment !== null
+  const shownAmount = inProgress ? payment.amount : amount
+  const shownCurrency = inProgress ? payment.currency : currency
 
   const [selection, setSelection] = useState<PaymentSelection>(emptySelection)
   const [attempted, setAttempted] = useState(false)
@@ -146,9 +157,9 @@ export function MomoCheckout({
   const rootRef = useRef<HTMLDivElement>(null)
   const resultRef = useRef<HTMLElement>(null)
 
-  const callbacks = useRef({ onSuccess, onFailure })
+  const callbacks = useRef({ onSuccess, onFailure, onStatusChange })
   useEffect(() => {
-    callbacks.current = { onSuccess, onFailure }
+    callbacks.current = { onSuccess, onFailure, onStatusChange }
   })
 
   // Tell the app about results once, and move focus to where the user's
@@ -159,6 +170,7 @@ export function MomoCheckout({
     previousStatus.current = state.status
     if (state.status === previous) return
 
+    callbacks.current.onStatusChange?.(state.status)
     if (state.status === "success") callbacks.current.onSuccess?.(state.receipt)
     if (state.status === "failed") callbacks.current.onFailure?.(state.reason)
 
@@ -237,8 +249,8 @@ export function MomoCheckout({
         >
           <span className="text-muted-foreground text-sm">{t("checkout.total")}</span>
           <Currency
-            amount={amount}
-            currency={currency}
+            amount={shownAmount}
+            currency={shownCurrency}
             locale={locale}
             data-slot="momo-checkout-amount"
             className={cn("text-2xl font-semibold", classNames?.amount)}
