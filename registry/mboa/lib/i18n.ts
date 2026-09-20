@@ -31,8 +31,11 @@ const en = {
   "ussd.copy": "Copy code",
   "ussd.copied": "Code copied",
   "ussd.dial": "Dial now",
+  "ussd.sentTo": "Request sent to {phone}.",
   "ussd.waiting": "Waiting for your approval…",
   "ussd.expiresIn": "Expires in {time}",
+  "ussd.almostExpired": "Less than {time} left.",
+  "ussd.copyFailed": "Could not copy the code",
   "ussd.timeout": "The request expired.",
   "ussd.retry": "Try again",
 
@@ -98,8 +101,11 @@ const fr: Messages = {
   "ussd.copy": "Copier le code",
   "ussd.copied": "Code copié",
   "ussd.dial": "Composer maintenant",
+  "ussd.sentTo": "Demande envoyée au {phone}.",
   "ussd.waiting": "En attente de votre validation…",
   "ussd.expiresIn": "Expire dans {time}",
+  "ussd.almostExpired": "Il reste moins de {time}.",
+  "ussd.copyFailed": "Impossible de copier le code",
   "ussd.timeout": "La demande a expiré.",
   "ussd.retry": "Réessayer",
 
