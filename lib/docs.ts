@@ -30,7 +30,7 @@ export const componentDocs: DocEntry[] = [
     slug: "ussd-prompt",
     title: "USSD prompt",
     description: "Approval code with copy and dial actions, countdown and retry.",
-    status: "soon",
+    status: "ready",
   },
   {
     slug: "momo-checkout",

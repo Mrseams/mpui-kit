@@ -2,11 +2,14 @@
 
 import { useState } from "react"
 
+import { Button } from "@/components/ui/button"
+
 import { LocaleToggle } from "@/components/site/locale-toggle"
 import { Currency } from "@/components/mboa/currency"
 import { MboaProvider, useLocale, useT } from "@/components/mboa/mboa-provider"
 import { PaymentMethodPicker } from "@/components/mboa/payment-method-picker"
 import { PhoneInput } from "@/components/mboa/phone-input"
+import { UssdPrompt } from "@/components/mboa/ussd-prompt"
 import { cm } from "@/lib/mboa/countries/cm"
 import type { Locale } from "@/lib/mboa/countries/types"
 import { formatFcfa, type CurrencyDisplay } from "@/lib/mboa/format-fcfa"
@@ -30,6 +33,7 @@ export function Playground() {
         <FcfaSection />
         <PhoneSection />
         <PickerSection />
+        <UssdSection />
         <StringsSection />
       </div>
     </MboaProvider>
@@ -139,6 +143,24 @@ function PickerSection() {
         <dt className="text-muted-foreground">ready</dt>
         <dd className="font-mono">{String(resolved?.ready ?? false)}</dd>
       </dl>
+    </Section>
+  )
+}
+
+function UssdSection() {
+  const [expiresAt, setExpiresAt] = useState<number | null>(null)
+  const start = () => setExpiresAt(Date.now() + 20_000)
+
+  return (
+    <Section title="UssdPrompt">
+      <Button type="button" onClick={start}>
+        {expiresAt === null ? "Start a 20 second request" : "Restart"}
+      </Button>
+      {expiresAt !== null && (
+        <div className="max-w-md">
+          <UssdPrompt code="*123#" phone="+237651234567" expiresAt={expiresAt} onRetry={start} />
+        </div>
+      )}
     </Section>
   )
 }

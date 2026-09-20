@@ -243,6 +243,70 @@
           "target": "components/mboa/payment-method-picker.tsx"
         }
       ]
+    },
+    {
+      "name": "clipboard",
+      "type": "registry:lib",
+      "title": "copyToClipboard",
+      "description": "Copies text to the clipboard with a fallback for older Android WebViews and non-secure pages. Resolves to whether it worked; never throws.",
+      "files": [
+        {
+          "path": "registry/mboa/lib/clipboard.ts",
+          "type": "registry:lib",
+          "target": "lib/mboa/clipboard.ts"
+        }
+      ]
+    },
+    {
+      "name": "dial",
+      "type": "registry:lib",
+      "title": "dialHref",
+      "description": "Builds a tel: link for a USSD code with # percent-encoded, and refuses text that is not dialable.",
+      "files": [
+        {
+          "path": "registry/mboa/lib/dial.ts",
+          "type": "registry:lib",
+          "target": "lib/mboa/dial.ts"
+        }
+      ]
+    },
+    {
+      "name": "use-countdown",
+      "type": "registry:hook",
+      "title": "useCountdown",
+      "description": "Time left until a deadline, updated once per second from the real clock. Re-syncs when the tab becomes visible, for pages people leave to dial a USSD code.",
+      "registryDependencies": ["@mboa/countdown"],
+      "files": [
+        {
+          "path": "registry/mboa/hooks/use-countdown.ts",
+          "type": "registry:hook",
+          "target": "hooks/mboa/use-countdown.ts"
+        }
+      ]
+    },
+    {
+      "name": "ussd-prompt",
+      "type": "registry:component",
+      "title": "UssdPrompt",
+      "description": "Asks the user to approve a Mobile Money payment on their phone: approval code with copy and dial actions, an animated waiting state, a countdown and a retry button after the timeout.",
+      "registryDependencies": [
+        "button",
+        "@mboa/mboa-provider",
+        "@mboa/use-countdown",
+        "@mboa/countdown",
+        "@mboa/clipboard",
+        "@mboa/dial",
+        "@mboa/phone",
+        "@mboa/i18n",
+        "@mboa/country-types"
+      ],
+      "files": [
+        {
+          "path": "registry/mboa/components/ussd-prompt.tsx",
+          "type": "registry:component",
+          "target": "components/mboa/ussd-prompt.tsx"
+        }
+      ]
     }
   ]
 }
