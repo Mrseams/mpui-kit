@@ -208,6 +208,41 @@
           "target": "components/mboa/phone-input.tsx"
         }
       ]
+    },
+    {
+      "name": "payment-methods",
+      "type": "registry:lib",
+      "title": "Payment methods",
+      "description": "The payment methods a country offers (Mobile Money per operator, card, cash) and resolvePayment(), which tells you whether a selection is ready to pay.",
+      "registryDependencies": ["@mboa/country-types", "@mboa/phone"],
+      "files": [
+        {
+          "path": "registry/mboa/lib/payment-methods.ts",
+          "type": "registry:lib",
+          "target": "lib/mboa/payment-methods.ts"
+        }
+      ]
+    },
+    {
+      "name": "payment-method-picker",
+      "type": "registry:component",
+      "title": "PaymentMethodPicker",
+      "description": "Selectable cards for Mobile Money operators, card and cash. Choosing a Mobile Money option reveals a phone input for that operator. Built on native radio inputs.",
+      "dependencies": ["lucide-react"],
+      "registryDependencies": [
+        "@mboa/mboa-provider",
+        "@mboa/phone-input",
+        "@mboa/payment-methods",
+        "@mboa/country-types",
+        "@mboa/i18n"
+      ],
+      "files": [
+        {
+          "path": "registry/mboa/components/payment-method-picker.tsx",
+          "type": "registry:component",
+          "target": "components/mboa/payment-method-picker.tsx"
+        }
+      ]
     }
   ]
 }

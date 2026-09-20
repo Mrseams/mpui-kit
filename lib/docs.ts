@@ -24,7 +24,7 @@ export const componentDocs: DocEntry[] = [
     slug: "payment-method-picker",
     title: "Payment method picker",
     description: "Selectable cards for Mobile Money operators, card and cash.",
-    status: "soon",
+    status: "ready",
   },
   {
     slug: "ussd-prompt",

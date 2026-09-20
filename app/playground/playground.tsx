@@ -5,11 +5,17 @@ import { useState } from "react"
 import { LocaleToggle } from "@/components/site/locale-toggle"
 import { Currency } from "@/components/mboa/currency"
 import { MboaProvider, useLocale, useT } from "@/components/mboa/mboa-provider"
+import { PaymentMethodPicker } from "@/components/mboa/payment-method-picker"
 import { PhoneInput } from "@/components/mboa/phone-input"
 import { cm } from "@/lib/mboa/countries/cm"
 import type { Locale } from "@/lib/mboa/countries/types"
 import { formatFcfa, type CurrencyDisplay } from "@/lib/mboa/format-fcfa"
 import type { PhoneValidation } from "@/lib/mboa/phone"
+import {
+  emptySelection,
+  type PaymentSelection,
+  type ResolvedPayment,
+} from "@/lib/mboa/payment-methods"
 
 const inputClass =
   "border-input bg-background focus-visible:border-ring focus-visible:ring-ring/50 h-9 w-full rounded-lg border px-3 text-sm outline-none focus-visible:ring-3"
@@ -23,6 +29,7 @@ export function Playground() {
         <LocaleToggle locale={locale} onChange={setLocale} />
         <FcfaSection />
         <PhoneSection />
+        <PickerSection />
         <StringsSection />
       </div>
     </MboaProvider>
@@ -104,6 +111,33 @@ function PhoneSection() {
         <dd className="font-mono">{String(details?.valid ?? false)}</dd>
         <dt className="text-muted-foreground">issue</dt>
         <dd className="font-mono">{details?.issue ?? "—"}</dd>
+      </dl>
+    </Section>
+  )
+}
+
+function PickerSection() {
+  const [selection, setSelection] = useState<PaymentSelection>(emptySelection)
+  const [resolved, setResolved] = useState<ResolvedPayment | null>(null)
+
+  return (
+    <Section title="PaymentMethodPicker">
+      <div className="max-w-xl">
+        <PaymentMethodPicker
+          value={selection}
+          onChange={(next, result) => {
+            setSelection(next)
+            setResolved(result)
+          }}
+        />
+      </div>
+      <dl className="grid max-w-xl grid-cols-[6rem_1fr] gap-x-3 gap-y-1 text-sm" aria-live="polite">
+        <dt className="text-muted-foreground">methodId</dt>
+        <dd className="font-mono">{JSON.stringify(selection.methodId)}</dd>
+        <dt className="text-muted-foreground">e164</dt>
+        <dd className="font-mono">{resolved?.e164 ?? "—"}</dd>
+        <dt className="text-muted-foreground">ready</dt>
+        <dd className="font-mono">{String(resolved?.ready ?? false)}</dd>
       </dl>
     </Section>
   )
