@@ -18,7 +18,7 @@ export const componentDocs: DocEntry[] = [
     slug: "phone-input",
     title: "Phone input",
     description: "Detects the operator as you type, validates length and returns E.164.",
-    status: "soon",
+    status: "ready",
   },
   {
     slug: "payment-method-picker",

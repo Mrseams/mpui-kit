@@ -4,11 +4,12 @@ import { useState } from "react"
 
 import { LocaleToggle } from "@/components/site/locale-toggle"
 import { Currency } from "@/components/mboa/currency"
-import { MboaProvider, useCountry, useLocale, useT } from "@/components/mboa/mboa-provider"
+import { MboaProvider, useLocale, useT } from "@/components/mboa/mboa-provider"
+import { PhoneInput } from "@/components/mboa/phone-input"
 import { cm } from "@/lib/mboa/countries/cm"
 import type { Locale } from "@/lib/mboa/countries/types"
 import { formatFcfa, type CurrencyDisplay } from "@/lib/mboa/format-fcfa"
-import { formatInternational, validatePhone } from "@/lib/mboa/phone"
+import type { PhoneValidation } from "@/lib/mboa/phone"
 
 const inputClass =
   "border-input bg-background focus-visible:border-ring focus-visible:ring-ring/50 h-9 w-full rounded-lg border px-3 text-sm outline-none focus-visible:ring-3"
@@ -82,57 +83,27 @@ function FcfaSection() {
 }
 
 function PhoneSection() {
-  const country = useCountry()
-  const locale = useLocale()
-  const t = useT()
-  const [raw, setRaw] = useState("")
-
-  const result = validatePhone(raw, country)
-  const operator = result.operator
+  const [value, setValue] = useState("")
+  const [details, setDetails] = useState<PhoneValidation | null>(null)
 
   return (
-    <Section title="Phone parsing">
-      <div className="space-y-1">
-        <label htmlFor="pg-phone" className="text-sm font-medium">
-          {t("phone.label")} ({country.name[locale]})
-        </label>
-        <input
-          id="pg-phone"
-          className={inputClass}
-          type="tel"
-          inputMode="tel"
-          autoComplete="off"
-          placeholder="6 51 23 45 67"
-          value={raw}
-          onChange={(event) => setRaw(event.target.value)}
+    <Section title="PhoneInput">
+      <div className="max-w-sm">
+        <PhoneInput
+          value={value}
+          onChange={(next, result) => {
+            setValue(next)
+            setDetails(result)
+          }}
         />
-        <p className="text-muted-foreground text-xs">
-          {t("phone.hint", { length: country.nationalNumberLength })}
-        </p>
       </div>
-
-      <dl className="grid grid-cols-[8rem_1fr] gap-x-3 gap-y-1 text-sm" aria-live="polite">
-        <dt className="text-muted-foreground">Operator</dt>
-        <dd className="flex items-center gap-2">
-          {operator ? (
-            <>
-              <span
-                aria-hidden="true"
-                className="size-2.5 rounded-full"
-                style={{ backgroundColor: operator.color }}
-              />
-              {operator.name}
-            </>
-          ) : (
-            <span className="text-muted-foreground">{t("phone.operatorUnknown")}</span>
-          )}
-        </dd>
-        <dt className="text-muted-foreground">National</dt>
-        <dd>{result.national ? formatInternational(result.national, country) : "—"}</dd>
-        <dt className="text-muted-foreground">E.164</dt>
-        <dd>{result.e164 ?? "—"}</dd>
-        <dt className="text-muted-foreground">Status</dt>
-        <dd>{result.valid ? "valid" : (result.issue ?? "—")}</dd>
+      <dl className="grid max-w-sm grid-cols-[6rem_1fr] gap-x-3 gap-y-1 text-sm" aria-live="polite">
+        <dt className="text-muted-foreground">e164</dt>
+        <dd className="font-mono">{details?.e164 ?? "—"}</dd>
+        <dt className="text-muted-foreground">valid</dt>
+        <dd className="font-mono">{String(details?.valid ?? false)}</dd>
+        <dt className="text-muted-foreground">issue</dt>
+        <dd className="font-mono">{details?.issue ?? "—"}</dd>
       </dl>
     </Section>
   )

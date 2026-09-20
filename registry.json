@@ -139,6 +139,75 @@
           "target": "components/mboa/currency.tsx"
         }
       ]
+    },
+    {
+      "name": "phone-errors",
+      "type": "registry:lib",
+      "title": "Phone error messages",
+      "description": "Turns a phone validation issue into a translated, user-facing message in French or English.",
+      "registryDependencies": ["@mboa/country-types", "@mboa/i18n", "@mboa/phone"],
+      "files": [
+        {
+          "path": "registry/mboa/lib/phone-errors.ts",
+          "type": "registry:lib",
+          "target": "lib/mboa/phone-errors.ts"
+        }
+      ]
+    },
+    {
+      "name": "phone-schema",
+      "type": "registry:lib",
+      "title": "Phone zod schema",
+      "description": "createPhoneSchema(country) returns a zod schema that accepts what people type and outputs the E.164 number, with translated error messages.",
+      "dependencies": ["zod"],
+      "registryDependencies": [
+        "@mboa/country-types",
+        "@mboa/i18n",
+        "@mboa/phone",
+        "@mboa/phone-errors"
+      ],
+      "files": [
+        {
+          "path": "registry/mboa/lib/phone-schema.ts",
+          "type": "registry:lib",
+          "target": "lib/mboa/phone-schema.ts"
+        }
+      ]
+    },
+    {
+      "name": "operator-badge",
+      "type": "registry:component",
+      "title": "OperatorBadge",
+      "description": "A neutral badge for a mobile operator: a color dot (or your own logo) and the name. Ships no brand assets.",
+      "registryDependencies": ["@mboa/country-types"],
+      "files": [
+        {
+          "path": "registry/mboa/components/operator-badge.tsx",
+          "type": "registry:component",
+          "target": "components/mboa/operator-badge.tsx"
+        }
+      ]
+    },
+    {
+      "name": "phone-input",
+      "type": "registry:component",
+      "title": "PhoneInput",
+      "description": "A phone number field that groups digits as you type, detects the operator from the prefix, validates the length and returns the E.164 number. Works with react-hook-form and zod.",
+      "registryDependencies": [
+        "input",
+        "@mboa/operator-badge",
+        "@mboa/mboa-provider",
+        "@mboa/phone",
+        "@mboa/phone-errors",
+        "@mboa/country-types"
+      ],
+      "files": [
+        {
+          "path": "registry/mboa/components/phone-input.tsx",
+          "type": "registry:component",
+          "target": "components/mboa/phone-input.tsx"
+        }
+      ]
     }
   ]
 }
