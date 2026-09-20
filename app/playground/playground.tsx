@@ -2,7 +2,8 @@
 
 import { useState } from "react"
 
-import { Button } from "@/components/ui/button"
+import { LocaleToggle } from "@/components/site/locale-toggle"
+import { Currency } from "@/components/mboa/currency"
 import { MboaProvider, useCountry, useLocale, useT } from "@/components/mboa/mboa-provider"
 import { cm } from "@/lib/mboa/countries/cm"
 import type { Locale } from "@/lib/mboa/countries/types"
@@ -27,25 +28,6 @@ export function Playground() {
   )
 }
 
-function LocaleToggle({ locale, onChange }: { locale: Locale; onChange: (next: Locale) => void }) {
-  return (
-    <div role="group" aria-label="Language" className="flex items-center gap-2">
-      {(["fr", "en"] as const).map((option) => (
-        <Button
-          key={option}
-          type="button"
-          size="sm"
-          variant={locale === option ? "default" : "outline"}
-          aria-pressed={locale === option}
-          onClick={() => onChange(option)}
-        >
-          {option.toUpperCase()}
-        </Button>
-      ))}
-    </div>
-  )
-}
-
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <section className="space-y-3 rounded-lg border p-4">
@@ -56,15 +38,13 @@ function Section({ title, children }: { title: string; children: React.ReactNode
 }
 
 function FcfaSection() {
-  const country = useCountry()
-  const locale = useLocale()
   const [amount, setAmount] = useState("25000")
   const [display, setDisplay] = useState<CurrencyDisplay>("symbol")
 
   const value = amount.trim() === "" ? Number.NaN : Number(amount)
 
   return (
-    <Section title="formatFcfa">
+    <Section title="Currency">
       <div className="grid gap-3 sm:grid-cols-2">
         <div className="space-y-1">
           <label htmlFor="pg-amount" className="text-sm font-medium">
@@ -95,7 +75,7 @@ function FcfaSection() {
         </div>
       </div>
       <p className="text-2xl font-semibold" aria-live="polite">
-        {formatFcfa(value, { locale, currency: country.currency, display })}
+        <Currency amount={value} display={display} />
       </p>
     </Section>
   )

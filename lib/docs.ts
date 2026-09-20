@@ -12,7 +12,7 @@ export const componentDocs: DocEntry[] = [
     slug: "currency",
     title: "Currency",
     description: "Formats FCFA amounts with zero decimals and French spacing.",
-    status: "soon",
+    status: "ready",
   },
   {
     slug: "phone-input",
