@@ -1,0 +1,227 @@
+"use client"
+
+import {
+  useId,
+  useLayoutEffect,
+  useRef,
+  useState,
+  type ChangeEvent,
+  type ComponentProps,
+  type FocusEvent,
+  type ReactNode,
+} from "react"
+
+import { Input } from "@/components/ui/input"
+import { OperatorBadge } from "@/components/mboa/operator-badge"
+import { useCountry, useLocale, useT } from "@/components/mboa/mboa-provider"
+import type { CountryConfig, Locale } from "@/lib/mboa/countries/types"
+import {
+  caretIndexAfterDigits,
+  countDigits,
+  formatNational,
+  normalizePhoneInput,
+  validatePhone,
+  type PhoneValidation,
+} from "@/lib/mboa/phone"
+import { phoneErrorMessage } from "@/lib/mboa/phone-errors"
+import { cn } from "@/lib/utils"
+
+export interface PhoneInputProps extends Omit<
+  ComponentProps<"input">,
+  "value" | "defaultValue" | "onChange" | "type" | "size"
+> {
+  /**
+   * The national number as digits, without spaces or country code, e.g.
+   * "651234567". An E.164 value such as "+237651234567" is also accepted.
+   */
+  value?: string
+  defaultValue?: string
+  /**
+   * Called on every change with the national digits and the validation result.
+   * `details.e164` is the E.164 number once the number is valid.
+   */
+  onChange?: (value: string, details: PhoneValidation) => void
+  /** Country to use. Defaults to the one in `MboaProvider`. */
+  country?: CountryConfig
+  locale?: Locale
+  /** Visible label. Pass `false` to hide it, and then provide `aria-label`. */
+  label?: string | false
+  /** Helper text under the input. Pass `false` to hide it. */
+  hint?: string | false
+  /** An error message from your form library. Overrides the built-in one. */
+  error?: string
+  /** Reject numbers whose prefix matches no known operator. */
+  requireOperator?: boolean
+  /** Id of the operator the number must belong to, e.g. "mtn". */
+  operator?: string
+  /** Your own logos by operator id, shown in the badge instead of the color dot. */
+  operatorLogos?: Record<string, ReactNode>
+}
+
+/**
+ * A phone number field for a country: groups digits as you type, detects the
+ * operator from the prefix, validates the length and gives you the E.164 number.
+ *
+ * With react-hook-form, use `Controller`, not `register`.
+ */
+export function PhoneInput({
+  value: valueProp,
+  defaultValue,
+  onChange,
+  onBlur,
+  country: countryProp,
+  locale: localeProp,
+  label,
+  hint,
+  error,
+  requireOperator,
+  operator: requiredOperator,
+  operatorLogos,
+  id: idProp,
+  name,
+  className,
+  ref,
+  "aria-describedby": describedByProp,
+  ...props
+}: PhoneInputProps) {
+  const country = useCountry(countryProp)
+  const locale = useLocale(localeProp)
+  const t = useT(locale)
+
+  const generatedId = useId()
+  const id = idProp ?? generatedId
+  const hintId = `${id}-hint`
+  const errorId = `${id}-error`
+
+  const isControlled = valueProp !== undefined
+  const [innerValue, setInnerValue] = useState(() =>
+    normalizePhoneInput(defaultValue ?? "", country)
+  )
+  const [touched, setTouched] = useState(false)
+
+  const national = normalizePhoneInput(isControlled ? valueProp : innerValue, country)
+  const formatted = formatNational(national, country)
+  const validationOptions = { requireOperator, operator: requiredOperator }
+  const validation = validatePhone(national, country, validationOptions)
+  const detected = validation.operator
+
+  const builtinError =
+    touched && !validation.valid && validation.issue && (national.length > 0 || props.required)
+      ? phoneErrorMessage(validation.issue, {
+          country,
+          locale,
+          t,
+          operator: requiredOperator,
+        })
+      : undefined
+  const errorMessage = error ?? builtinError
+
+  const inputRef = useRef<HTMLInputElement | null>(null)
+  const pendingCaretDigits = useRef<number | null>(null)
+
+  // After digits are re-grouped, put the caret back after the same digit.
+  useLayoutEffect(() => {
+    const input = inputRef.current
+    const digits = pendingCaretDigits.current
+    pendingCaretDigits.current = null
+    if (input && digits !== null && document.activeElement === input) {
+      const position = caretIndexAfterDigits(input.value, digits)
+      input.setSelectionRange(position, position)
+    }
+  })
+
+  function setRefs(node: HTMLInputElement | null) {
+    inputRef.current = node
+    if (typeof ref === "function") ref(node)
+    else if (ref) ref.current = node
+  }
+
+  function handleChange(event: ChangeEvent<HTMLInputElement>) {
+    const text = event.target.value
+    const caret = event.target.selectionStart ?? text.length
+    let next = normalizePhoneInput(text, country)
+    let digitsBeforeCaret = countDigits(text.slice(0, caret))
+
+    // Only re-grouping (no paste, no country code, no trimming) keeps the caret in place.
+    const onlyRegrouped = !text.includes("+") && text.replace(/\D/g, "") === next
+
+    if (next === national && text.length < formatted.length && digitsBeforeCaret > 0) {
+      // The user deleted a separator. Delete the digit before it instead, so backspace never stalls.
+      next = next.slice(0, digitsBeforeCaret - 1) + next.slice(digitsBeforeCaret)
+      digitsBeforeCaret -= 1
+    }
+
+    pendingCaretDigits.current = onlyRegrouped ? digitsBeforeCaret : null
+    if (!isControlled) setInnerValue(next)
+    onChange?.(next, validatePhone(next, country, validationOptions))
+  }
+
+  function handleBlur(event: FocusEvent<HTMLInputElement>) {
+    setTouched(true)
+    onBlur?.(event)
+  }
+
+  const visibleHint =
+    hint === undefined ? t("phone.hint", { length: country.nationalNumberLength }) : hint
+  const describedBy =
+    [errorMessage ? errorId : visibleHint ? hintId : undefined, describedByProp]
+      .filter(Boolean)
+      .join(" ") || undefined
+
+  return (
+    <div data-slot="phone-input" className="space-y-1.5">
+      {label !== false && (
+        <label htmlFor={id} className="text-sm leading-none font-medium">
+          {label ?? t("phone.label")}
+        </label>
+      )}
+
+      <div className="relative">
+        <span
+          aria-hidden="true"
+          className="text-muted-foreground pointer-events-none absolute inset-y-0 left-3 flex items-center text-sm"
+        >
+          +{country.callingCode}
+        </span>
+        <Input
+          {...props}
+          ref={setRefs}
+          id={id}
+          type="tel"
+          inputMode="tel"
+          autoComplete="tel-national"
+          value={formatted}
+          onChange={handleChange}
+          onBlur={handleBlur}
+          aria-invalid={errorMessage ? true : undefined}
+          aria-describedby={describedBy}
+          className={cn("pr-28 pl-14", className)}
+        />
+        {detected && (
+          <div className="pointer-events-none absolute inset-y-0 right-2 flex items-center">
+            <OperatorBadge operator={detected} logo={operatorLogos?.[detected.id]} />
+          </div>
+        )}
+      </div>
+
+      {/* Submits the E.164 number with native forms, whatever the visible grouping. */}
+      {name && <input type="hidden" name={name} value={validation.e164 ?? ""} />}
+
+      {errorMessage ? (
+        <p id={errorId} role="alert" className="text-destructive text-sm">
+          {errorMessage}
+        </p>
+      ) : (
+        visibleHint && (
+          <p id={hintId} className="text-muted-foreground text-xs">
+            {visibleHint}
+          </p>
+        )
+      )}
+
+      <span className="sr-only" aria-live="polite">
+        {detected ? t("phone.operatorDetected", { operator: detected.name }) : ""}
+      </span>
+    </div>
+  )
+}
