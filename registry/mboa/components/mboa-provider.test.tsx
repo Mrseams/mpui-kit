@@ -15,9 +15,11 @@ import type { CountryConfig } from "@/lib/mboa/countries/types"
 
 const other: CountryConfig = { ...cm, iso: "ZZ", defaultLocale: "en" }
 
-const withProvider =
-  (props: Omit<MboaProviderProps, "children">) =>
-  ({ children }: { children: ReactNode }) => <MboaProvider {...props}>{children}</MboaProvider>
+function withProvider(props: Omit<MboaProviderProps, "children">) {
+  return function Wrapper({ children }: { children: ReactNode }) {
+    return <MboaProvider {...props}>{children}</MboaProvider>
+  }
+}
 
 afterEach(() => {
   vi.restoreAllMocks()
