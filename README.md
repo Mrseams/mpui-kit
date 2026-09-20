@@ -16,13 +16,13 @@ Generic checkout components assume cards, `$` and 10-digit US phone numbers. In 
 
 ## Install
 
-Components are distributed through a shadcn registry. Install one directly by URL:
+Components are distributed through a shadcn registry. Register the `@mboa` namespace once:
 
 ```bash
-npx shadcn@latest add https://<your-docs-domain>/r/currency.json
+npx shadcn@latest registry add @mboa=https://<your-docs-domain>/r/{name}.json
 ```
 
-Or register the `@mboa` namespace once in your `components.json`:
+or add it to your `components.json` yourself:
 
 ```json
 {
@@ -32,14 +32,17 @@ Or register the `@mboa` namespace once in your `components.json`:
 }
 ```
 
-and then install by name:
+Then install by name. Shared pieces, such as the country types, are installed automatically:
 
 ```bash
 npx shadcn@latest add @mboa/currency
+npx shadcn@latest add @mboa/country-cm
 npx shadcn@latest add @mboa/momo-checkout
 ```
 
-`<your-docs-domain>` is a placeholder until the site is deployed.
+Files are added under `lib/mboa/` and `components/mboa/` (or `src/lib/mboa/` and `src/components/mboa/` if your project uses `src/`).
+
+The namespace is required because items depend on each other by `@mboa/<name>`. `<your-docs-domain>` is a placeholder until the site is deployed.
 
 ## Components
 

@@ -1,0 +1,116 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry.json",
+  "name": "mboa",
+  "homepage": "https://mboa-ui.vercel.app",
+  "items": [
+    {
+      "name": "country-types",
+      "type": "registry:lib",
+      "title": "Country types",
+      "description": "The CountryConfig type and shared locale and currency types. Required by every country and by components that read country data.",
+      "files": [
+        {
+          "path": "registry/mboa/lib/countries/types.ts",
+          "type": "registry:lib",
+          "target": "lib/mboa/countries/types.ts"
+        }
+      ]
+    },
+    {
+      "name": "prefix-range",
+      "type": "registry:lib",
+      "title": "Prefix range",
+      "description": "prefixRange() expands a regulator's numeric range, such as 650 to 653, into individual phone prefixes.",
+      "files": [
+        {
+          "path": "registry/mboa/lib/countries/prefix-range.ts",
+          "type": "registry:lib",
+          "target": "lib/mboa/countries/prefix-range.ts"
+        }
+      ]
+    },
+    {
+      "name": "country-cm",
+      "type": "registry:lib",
+      "title": "Cameroon",
+      "description": "Country data for Cameroon: operators and prefixes, XAF currency, FR/EN locales, regions and cities. Prefixes are community data, not an authoritative source.",
+      "registryDependencies": ["@mboa/country-types", "@mboa/prefix-range"],
+      "files": [
+        {
+          "path": "registry/mboa/lib/countries/cm.ts",
+          "type": "registry:lib",
+          "target": "lib/mboa/countries/cm.ts"
+        }
+      ]
+    },
+    {
+      "name": "i18n",
+      "type": "registry:lib",
+      "title": "FR/EN dictionary",
+      "description": "Small French and English dictionary and translator used by every mboa-ui component. Supports overriding any string.",
+      "registryDependencies": ["@mboa/country-types"],
+      "files": [
+        {
+          "path": "registry/mboa/lib/i18n.ts",
+          "type": "registry:lib",
+          "target": "lib/mboa/i18n.ts"
+        }
+      ]
+    },
+    {
+      "name": "format-fcfa",
+      "type": "registry:lib",
+      "title": "formatFcfa",
+      "description": "Formats CFA franc amounts (XAF and XOF) with zero decimals and French spacing, for example 25 000 FCFA.",
+      "registryDependencies": ["@mboa/country-types"],
+      "files": [
+        {
+          "path": "registry/mboa/lib/format-fcfa.ts",
+          "type": "registry:lib",
+          "target": "lib/mboa/format-fcfa.ts"
+        }
+      ]
+    },
+    {
+      "name": "phone",
+      "type": "registry:lib",
+      "title": "Phone utilities",
+      "description": "Parses local and international phone numbers, detects the operator from the prefix, validates length and returns E.164.",
+      "registryDependencies": ["@mboa/country-types"],
+      "files": [
+        {
+          "path": "registry/mboa/lib/phone.ts",
+          "type": "registry:lib",
+          "target": "lib/mboa/phone.ts"
+        }
+      ]
+    },
+    {
+      "name": "countdown",
+      "type": "registry:lib",
+      "title": "formatCountdown",
+      "description": "Formats a duration in milliseconds as m:ss for countdown timers.",
+      "files": [
+        {
+          "path": "registry/mboa/lib/countdown.ts",
+          "type": "registry:lib",
+          "target": "lib/mboa/countdown.ts"
+        }
+      ]
+    },
+    {
+      "name": "checkout-machine",
+      "type": "registry:lib",
+      "title": "Checkout state machine",
+      "description": "Pure reducer for the payment flow: idle, awaiting approval, success, failed and timeout, with retry and stale-result protection.",
+      "registryDependencies": ["@mboa/country-types"],
+      "files": [
+        {
+          "path": "registry/mboa/lib/checkout-machine.ts",
+          "type": "registry:lib",
+          "target": "lib/mboa/checkout-machine.ts"
+        }
+      ]
+    }
+  ]
+}
