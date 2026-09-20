@@ -1,3 +1,4 @@
+import { prefixRange } from "@/lib/mboa/countries/prefix-range"
 import type { CountryConfig } from "@/lib/mboa/countries/types"
 
 export const cm: CountryConfig = {
@@ -16,7 +17,17 @@ export const cm: CountryConfig = {
       mobileMoneyName: "MTN Mobile Money",
       color: "#f5c518",
       // TODO: verify against current ART allocation
-      prefixes: ["650", "651", "652", "653", "654", "67", "680", "681", "682", "683"],
+      // Ranges supplied by the maintainer on 2026-09-20.
+      prefixes: [
+        ...prefixRange("650", "653"),
+        ...prefixRange("6540", "6545"),
+        "65460",
+        "65468",
+        ...prefixRange("6547", "6549"),
+        ...prefixRange("680", "683"),
+        // TODO: "67" was not in the supplied ranges; kept from earlier data, still unverified.
+        "67",
+      ],
     },
     {
       id: "orange",
@@ -24,7 +35,16 @@ export const cm: CountryConfig = {
       mobileMoneyName: "Orange Money",
       color: "#ff7900",
       // TODO: verify against current ART allocation
-      prefixes: ["655", "656", "657", "658", "659", "69"],
+      // Ranges supplied by the maintainer on 2026-09-20.
+      prefixes: [
+        ...prefixRange("655", "659"),
+        ...prefixRange("686", "687"),
+        ...prefixRange("6880", "6888"), // 688 0XX XXX to 688 8XX XXX
+        ...prefixRange("68890", "68895"), // 688 90X XXX to 688 95X XXX
+        ...prefixRange("688960", "688964"), // 688 960 XXX to 688 964 XXX
+        // TODO: "69" was not in the supplied ranges; kept from earlier data, still unverified.
+        "69",
+      ],
     },
     {
       id: "nexttel",
@@ -38,7 +58,8 @@ export const cm: CountryConfig = {
       name: "Camtel",
       color: "#2563eb",
       // TODO: verify against current ART allocation
-      prefixes: ["62"],
+      // Ranges supplied by the maintainer on 2026-09-20.
+      prefixes: [...prefixRange("620", "621"), "6220", "6225"],
     },
   ],
   // TODO: verify region and city lists (spelling, completeness)
