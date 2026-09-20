@@ -205,6 +205,15 @@ describe("<PaymentMethodPicker /> states", () => {
     expect(screen.getByRole("group").getAttribute("aria-describedby")).toBe(alert.id)
   })
 
+  it("shows an error for the phone field", async () => {
+    setup({
+      defaultValue: { methodId: "mtn", phone: "" },
+      phoneError: "Enter a phone number.",
+    })
+    expect(screen.getByRole("alert")).toHaveTextContent("Enter a phone number.")
+    expect(screen.getByLabelText("MTN number")).toHaveAttribute("aria-invalid", "true")
+  })
+
   it("disables every card and the phone field", async () => {
     setup({ disabled: true, defaultValue: { methodId: "mtn", phone: "" } })
     for (const item of screen.getAllByRole("radio")) expect(item).toBeDisabled()

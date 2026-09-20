@@ -1,9 +1,11 @@
 import { describe, expect, it } from "vitest"
 
 import { cm } from "@/lib/mboa/countries/cm"
+import { createTranslator } from "@/lib/mboa/i18n"
 import {
   defaultPaymentMethods,
   emptySelection,
+  paymentMethodLabel,
   resolvePayment,
   type PaymentMethod,
 } from "@/lib/mboa/payment-methods"
@@ -87,5 +89,29 @@ describe("resolvePayment", () => {
   it("works with custom methods", () => {
     const custom: PaymentMethod[] = [{ id: "wallet", kind: "mobile_money", operatorId: "orange" }]
     expect(resolvePayment({ methodId: "wallet", phone: "655123456" }, custom, cm).ready).toBe(true)
+  })
+})
+
+describe("paymentMethodLabel", () => {
+  const en = createTranslator("en")
+  const fr = createTranslator("fr")
+
+  it("uses the wallet name for Mobile Money operators", () => {
+    expect(paymentMethodLabel("mtn", cm, en)).toBe("MTN Mobile Money")
+    expect(paymentMethodLabel("orange", cm, fr)).toBe("Orange Money")
+  })
+
+  it("falls back to the operator name when it has no wallet name", () => {
+    expect(paymentMethodLabel("nexttel", cm, en)).toBe("Nexttel")
+  })
+
+  it("translates card and cash", () => {
+    expect(paymentMethodLabel("card", cm, en)).toBe("Bank card")
+    expect(paymentMethodLabel("card", cm, fr)).toBe("Carte bancaire")
+    expect(paymentMethodLabel("cash", cm, fr)).toBe("Espèces")
+  })
+
+  it("returns a custom id as it is", () => {
+    expect(paymentMethodLabel("voucher", cm, en)).toBe("voucher")
   })
 })

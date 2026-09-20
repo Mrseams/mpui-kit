@@ -39,16 +39,20 @@ const en = {
   "ussd.timeout": "The request expired.",
   "ussd.retry": "Try again",
 
+  "checkout.title": "Checkout",
   "checkout.total": "Total",
   "checkout.pay": "Pay {amount}",
   "checkout.selectMethod": "Choose a payment method to continue.",
   "checkout.sending": "Sending the request…",
   "checkout.cancel": "Cancel",
+  "checkout.retry": "Try again",
   "checkout.changeMethod": "Change payment method",
   "checkout.failedTitle": "Payment not completed",
   "checkout.failedBody": "The payment was declined or could not be processed.",
   "checkout.timeoutTitle": "Request expired",
   "checkout.timeoutBody": "We did not receive your approval in time.",
+  "checkout.timeoutNote":
+    "Already approved the payment on your phone? Check your transaction history before trying again, so you are not charged twice.",
 
   "receipt.title": "Payment received",
   "receipt.reference": "Reference",
@@ -109,16 +113,20 @@ const fr: Messages = {
   "ussd.timeout": "La demande a expiré.",
   "ussd.retry": "Réessayer",
 
+  "checkout.title": "Paiement",
   "checkout.total": "Total",
   "checkout.pay": "Payer {amount}",
   "checkout.selectMethod": "Choisissez un moyen de paiement pour continuer.",
   "checkout.sending": "Envoi de la demande…",
   "checkout.cancel": "Annuler",
+  "checkout.retry": "Réessayer",
   "checkout.changeMethod": "Changer de moyen de paiement",
   "checkout.failedTitle": "Paiement non abouti",
   "checkout.failedBody": "Le paiement a été refusé ou n'a pas pu être traité.",
   "checkout.timeoutTitle": "Demande expirée",
   "checkout.timeoutBody": "Nous n'avons pas reçu votre validation à temps.",
+  "checkout.timeoutNote":
+    "Vous avez déjà validé le paiement sur votre téléphone ? Vérifiez l'historique de vos transactions avant de réessayer, pour ne pas payer deux fois.",
 
   "receipt.title": "Paiement reçu",
   "receipt.reference": "Référence",

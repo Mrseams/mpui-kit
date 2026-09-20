@@ -1,4 +1,5 @@
 import type { CountryConfig, OperatorConfig } from "@/lib/mboa/countries/types"
+import type { Translator } from "@/lib/mboa/i18n"
 import { validatePhone, type PhoneValidation } from "@/lib/mboa/phone"
 
 export type PaymentMethodKind = "mobile_money" | "card" | "cash"
@@ -77,4 +78,21 @@ export function resolvePayment(
   const operator = country.operators.find((item) => item.id === method.operatorId) ?? null
   const phone = validatePhone(selection.phone, country, { operator: method.operatorId })
   return { method, operator, phone, e164: phone.e164, ready: phone.valid }
+}
+
+/**
+ * A readable name for a payment method id: the wallet name for a Mobile Money
+ * operator ("MTN Mobile Money"), "Bank card" or "Cash", or the id itself for
+ * anything custom.
+ */
+export function paymentMethodLabel(
+  methodId: string,
+  country: CountryConfig,
+  t: Translator
+): string {
+  const operator = country.operators.find((item) => item.id === methodId)
+  if (operator) return operator.mobileMoneyName ?? operator.name
+  if (methodId === "card") return t("picker.card")
+  if (methodId === "cash") return t("picker.cash")
+  return methodId
 }

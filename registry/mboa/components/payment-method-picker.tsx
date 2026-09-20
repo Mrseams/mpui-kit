@@ -37,6 +37,8 @@ export interface PaymentMethodPickerProps extends Omit<
   legend?: string
   /** Error to show under the cards, for example "Choose a payment method". */
   error?: string
+  /** Error for the phone field of the chosen Mobile Money method. Overrides its built-in error. */
+  phoneError?: string
   /** Your own logos by operator id, shown instead of the color dot. */
   operatorLogos?: Record<string, ReactNode>
 }
@@ -69,6 +71,7 @@ export function PaymentMethodPicker({
   locale: localeProp,
   legend,
   error,
+  phoneError,
   operatorLogos,
   disabled,
   className,
@@ -161,6 +164,7 @@ export function PaymentMethodPicker({
           label={t("picker.phoneLabel", { operator: operator.name })}
           operator={operator.id}
           operatorLogos={operatorLogos}
+          error={phoneError}
           value={selection.phone}
           onChange={(phone) => update({ ...selection, phone })}
           disabled={disabled}
