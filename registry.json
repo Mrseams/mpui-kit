@@ -111,6 +111,20 @@
           "target": "lib/mboa/checkout-machine.ts"
         }
       ]
+    },
+    {
+      "name": "mboa-provider",
+      "type": "registry:component",
+      "title": "MboaProvider",
+      "description": "Context provider for country data, UI language and string overrides, plus the useCountry, useLocale and useT hooks used by every mboa-ui component.",
+      "registryDependencies": ["@mboa/country-types", "@mboa/i18n"],
+      "files": [
+        {
+          "path": "registry/mboa/components/mboa-provider.tsx",
+          "type": "registry:component",
+          "target": "components/mboa/mboa-provider.tsx"
+        }
+      ]
     }
   ]
 }
