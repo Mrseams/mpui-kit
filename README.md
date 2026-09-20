@@ -79,6 +79,7 @@ pnpm dev             # docs site at http://localhost:3000
 pnpm test            # unit tests
 pnpm lint
 pnpm typecheck
+pnpm registry:check  # checks registry.json against the source files
 pnpm registry:build  # runs `shadcn build` into public/r
 ```
 

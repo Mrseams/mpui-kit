@@ -37,6 +37,9 @@ jobs:
       - name: Test
         run: pnpm test
 
+      - name: Check registry
+        run: pnpm registry:check
+
       - name: Build registry
         run: pnpm registry:build
 

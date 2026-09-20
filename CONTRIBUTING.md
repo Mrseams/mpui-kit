@@ -12,7 +12,7 @@ pnpm dev
 Before opening a pull request, run:
 
 ```bash
-pnpm lint && pnpm typecheck && pnpm test && pnpm registry:build
+pnpm lint && pnpm typecheck && pnpm test && pnpm registry:check && pnpm registry:build
 ```
 
 CI runs the same commands.
@@ -41,6 +41,8 @@ import { PhoneInput } from "@/components/mboa/phone-input" // registry/mboa/comp
 ```
 
 `tsconfig.json` and `vitest.config.mts` map these back to `registry/mboa/`. Every file in `registry.json` needs a matching `target` (for example `lib/mboa/format-fcfa.ts`), so the installed file lands where the imports expect it. Do not import from `@/registry/...`: the shadcn CLI would not rewrite that path for users.
+
+`pnpm registry:check` verifies this for you. For every item it checks that each import is provided by the item or its dependencies, that npm packages are listed in `dependencies`, that shadcn primitives are listed in `registryDependencies`, and that no source file is left out of the registry. Run it after adding or changing a file.
 
 ## Add your country
 

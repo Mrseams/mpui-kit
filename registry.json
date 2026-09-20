@@ -214,7 +214,7 @@
       "type": "registry:lib",
       "title": "Payment methods",
       "description": "The payment methods a country offers (Mobile Money per operator, card, cash) and resolvePayment(), which tells you whether a selection is ready to pay.",
-      "registryDependencies": ["@mboa/country-types", "@mboa/phone"],
+      "registryDependencies": ["@mboa/country-types", "@mboa/i18n", "@mboa/phone"],
       "files": [
         {
           "path": "registry/mboa/lib/payment-methods.ts",

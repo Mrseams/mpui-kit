@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "pnpm registry:build && next build",
+    "build": "pnpm registry:check && pnpm registry:build && next build",
     "start": "next start",
     "lint": "eslint",
     "typecheck": "next typegen && tsc --noEmit",
@@ -12,7 +12,8 @@
     "test:watch": "vitest",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "registry:build": "shadcn build"
+    "registry:build": "shadcn build",
+    "registry:check": "node scripts/check-registry.mjs"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.9.1",
