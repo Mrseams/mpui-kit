@@ -37,7 +37,7 @@ export const cm: CountryConfig = {
       // TODO: verify against current ART allocation
       // Ranges supplied by the maintainer on 2026-09-20.
       prefixes: [
-        ...prefixRange("655", "659"),
+        ...prefixRange("655", "659"), // maintainer confirmed these are Orange, not MTN
         ...prefixRange("686", "687"),
         ...prefixRange("6880", "6888"), // 688 0XX XXX to 688 8XX XXX
         ...prefixRange("68890", "68895"), // 688 90X XXX to 688 95X XXX
