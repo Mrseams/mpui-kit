@@ -33,6 +33,13 @@ describe("detectOperator", () => {
     ["655123456", "orange"],
     ["661234567", "nexttel"],
     ["621234567", "camtel"],
+    // 67x and 69x, supplied on 2026-09-21
+    ["670123456", "mtn"],
+    ["671234567", "mtn"],
+    ["679123456", "mtn"],
+    ["690123456", "orange"],
+    ["691234567", "orange"],
+    ["699123456", "orange"],
   ])("detects %s as %s", (national, id) => {
     expect(detectOperator(national, cm)?.id).toBe(id)
   })
@@ -66,15 +73,16 @@ describe("detectOperator", () => {
   })
 
   it.each([
-    "654612345", // 65461 is not allocated
-    "654691234", // 65469 is not allocated
-    "688965123", // 688 965 is not allocated
-    "688969123", // 688 969 is not allocated
-    "688991234", // 688 99X is not allocated
-    "622112345", // 6221 is not allocated
-    "623123456", // 623 is not allocated
-    "671234567", // 67x is not in the supplied ranges
-    "691234567", // 69x is not in the supplied ranges
+    "654612345", // 65461 is not in the supplied ranges
+    "654691234", // 65469 is not in the supplied ranges
+    "688965123", // 688 965 is not in the supplied ranges
+    "688969123", // 688 969 is not in the supplied ranges
+    "688991234", // 688 99X is not in the supplied ranges
+    "622112345", // 6221 is not in the supplied ranges
+    "623123456", // 623 is not in the supplied ranges
+    "684123456", // 684 is not in the supplied ranges (MTN ends at 683)
+    "685123456", // 685 is not in the supplied ranges
+    "689123456", // 689 is not in the supplied ranges (Orange 688 is split; 690 starts the next block)
   ])("returns null for %s, which is outside the supplied ranges", (national) => {
     expect(detectOperator(national, cm)).toBeNull()
   })

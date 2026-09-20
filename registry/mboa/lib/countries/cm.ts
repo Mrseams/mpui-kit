@@ -17,14 +17,15 @@ export const cm: CountryConfig = {
       mobileMoneyName: "MTN Mobile Money",
       color: "#f5c518",
       // TODO: verify against current ART allocation
-      // Ranges supplied by the maintainer on 2026-09-20.
+      // Ranges supplied by the maintainer on 2026-09-20 and 2026-09-21.
       prefixes: [
         ...prefixRange("650", "653"),
         ...prefixRange("6540", "6545"),
         "65460",
         "65468",
         ...prefixRange("6547", "6549"),
-        ...prefixRange("680", "683"),
+        ...prefixRange("670", "679"), // "670 to 680" was supplied on 2026-09-21
+        ...prefixRange("680", "683"), // so 670-683 is contiguous
       ],
     },
     {
@@ -33,13 +34,14 @@ export const cm: CountryConfig = {
       mobileMoneyName: "Orange Money",
       color: "#ff7900",
       // TODO: verify against current ART allocation
-      // Ranges supplied by the maintainer on 2026-09-20.
+      // Ranges supplied by the maintainer on 2026-09-20 and 2026-09-21.
       prefixes: [
         ...prefixRange("655", "659"), // maintainer confirmed these are Orange, not MTN
         ...prefixRange("686", "687"),
         ...prefixRange("6880", "6888"), // 688 0XX XXX to 688 8XX XXX
         ...prefixRange("68890", "68895"), // 688 90X XXX to 688 95X XXX
         ...prefixRange("688960", "688964"), // 688 960 XXX to 688 964 XXX
+        ...prefixRange("690", "699"),
       ],
     },
     {
