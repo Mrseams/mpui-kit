@@ -97,6 +97,18 @@ const props: PropRow[] = [
     description: "Disables every card and the phone field.",
   },
   {
+    name: "phoneError",
+    type: "string",
+    description:
+      "Error for the phone field of the chosen Mobile Money method. Overrides its built-in error.",
+  },
+  {
+    name: "classNames",
+    type: "{ legend, options, option, optionLabel, optionDescription, phone, error }",
+    description:
+      "Class names for parts of the picker. Style the selected card with has-[:checked]:... in option. Each part also has a data-slot attribute.",
+  },
+  {
     name: "...props",
     type: "ComponentProps<'fieldset'>",
     description: "Other fieldset props, such as className.",

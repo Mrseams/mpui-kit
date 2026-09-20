@@ -126,6 +126,17 @@ const props: PropRow[] = [
       "Adds a hidden field with this name that holds the E.164 number, so native form posts get it whatever the visible grouping.",
   },
   {
+    name: "className",
+    type: "string",
+    description: "Styles the outer wrapper. Use classNames.input for the text input.",
+  },
+  {
+    name: "classNames",
+    type: "{ label, field, prefix, input, badge, hint, error }",
+    description:
+      "Class names for parts of the field. Each part also has a data-slot attribute, such as phone-input-input.",
+  },
+  {
     name: "...props",
     type: "ComponentProps<'input'>",
     description: "Other input props (disabled, required, autoFocus, ref...) go to the text input.",

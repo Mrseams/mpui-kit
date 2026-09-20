@@ -75,6 +75,12 @@ const props: PropRow[] = [
     description: "Language of the prompt.",
   },
   {
+    name: "classNames",
+    type: "{ dots, title, phone, code, status, countdown, retry }",
+    description:
+      "Class names for parts of the prompt. Each part also has a data-slot attribute, such as ussd-prompt-code.",
+  },
+  {
     name: "...props",
     type: "ComponentProps<'section'>",
     description: "Other section props, such as className.",

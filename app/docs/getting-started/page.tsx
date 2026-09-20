@@ -1,4 +1,5 @@
 import type { Metadata } from "next"
+import Link from "next/link"
 
 import { CodeBlock } from "@/components/site/code-block"
 import { registryUrlTemplate } from "@/lib/site"
@@ -29,6 +30,32 @@ export default function GettingStarted() {
           Add the registry to a project that already uses shadcn/ui, then install what you need.
         </p>
       </header>
+
+      <section aria-labelledby="requirements" className="space-y-3">
+        <h2 id="requirements" className="text-xl font-semibold">
+          Requirements
+        </h2>
+        <ul className="text-muted-foreground list-disc space-y-1 pl-5">
+          <li>
+            <strong>Tailwind CSS v4</strong>. The components are styled with Tailwind classes.
+          </li>
+          <li>
+            <strong>shadcn/ui</strong>, set up with CSS variables (
+            <code>npx shadcn@latest init</code>
+            ), so the theme tokens the components read exist.
+          </li>
+          <li>
+            <strong>React 19</strong>. Several components take <code>ref</code> as a normal prop.
+          </li>
+        </ul>
+        <p className="text-muted-foreground">
+          Because they use your tokens, the components follow your theme and dark mode. See{" "}
+          <Link href="/docs/theming" className="underline underline-offset-4">
+            Theming
+          </Link>
+          .
+        </p>
+      </section>
 
       <section className="space-y-3">
         <h2 className="text-xl font-semibold">1. Register the namespace</h2>

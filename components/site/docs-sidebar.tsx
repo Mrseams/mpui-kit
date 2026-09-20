@@ -22,6 +22,11 @@ export function DocsSidebar() {
             Getting started
           </Link>
         </li>
+        <li>
+          <Link href="/docs/theming" className="hover:bg-muted block rounded-md px-2 py-1.5">
+            Theming
+          </Link>
+        </li>
       </ul>
 
       <p className="text-muted-foreground mb-2 px-2 text-xs font-medium tracking-wide uppercase">

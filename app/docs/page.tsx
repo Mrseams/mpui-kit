@@ -23,6 +23,13 @@ export default function DocsIndex() {
           <li>UI only. Payment flows take async callbacks, so they work with any backend.</li>
           <li>Accessible by default, and bilingual FR/EN.</li>
           <li>Light. Built for slow connections and low-end phones.</li>
+          <li>
+            Themeable. They read your shadcn tokens, so they follow your theme and dark mode. See{" "}
+            <Link href="/docs/theming" className="underline underline-offset-4">
+              Theming
+            </Link>
+            .
+          </li>
         </ul>
       </section>
 

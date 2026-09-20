@@ -44,6 +44,14 @@ Files are added under `lib/mboa/` and `components/mboa/` (or `src/lib/mboa/` and
 
 The namespace is required because items depend on each other by `@mboa/<name>`. `<your-docs-domain>` is a placeholder until the site is deployed.
 
+## Requirements
+
+- **Tailwind CSS v4.** The components are styled with Tailwind classes. An app without Tailwind gets no styling from them.
+- **shadcn/ui** set up with CSS variables (`npx shadcn@latest init`), so the theme tokens the components read exist.
+- **React 19.** Several components take `ref` as a normal prop.
+
+Because they use your tokens, the components follow your theme, radius and dark mode. Larger components also take a `classNames` prop and mark every part with a `data-slot` attribute. See the Theming page in the docs.
+
 ## Components
 
 Phase 1:

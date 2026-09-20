@@ -163,6 +163,17 @@ const props: PropRow[] = [
     type: "Record<string, ReactNode>",
     description: "Your own operator logos by id, shown instead of the color dot.",
   },
+  {
+    name: "className",
+    type: "string",
+    description: "Styles the root of the checkout.",
+  },
+  {
+    name: "classNames",
+    type: "{ title, summary, total, amount, form, submit, picker, prompt, cancel, receipt, failure }",
+    description:
+      "Class names for parts of the checkout. Each part also has a data-slot attribute, such as momo-checkout-submit.",
+  },
 ]
 
 const receiptProps: PropRow[] = [
@@ -188,6 +199,12 @@ const receiptProps: PropRow[] = [
     type: "CountryConfig / “fr” | “en”",
     default: "from MboaProvider",
     description: "Used to name the method and format the phone and date.",
+  },
+  {
+    name: "classNames",
+    type: "{ icon, title, list, done }",
+    description:
+      "Class names for parts of the card. The checkmark uses your --success color if you define one, otherwise --primary.",
   },
   {
     name: "...props",
