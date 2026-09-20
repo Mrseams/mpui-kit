@@ -12,7 +12,7 @@ pnpm dev
 Before opening a pull request, run:
 
 ```bash
-pnpm lint && pnpm typecheck && pnpm test && pnpm registry:check && pnpm registry:build
+pnpm lint && pnpm typecheck && pnpm test && pnpm registry:check && pnpm build && pnpm size
 ```
 
 CI runs the same commands.
@@ -81,6 +81,10 @@ Adding a country touches data files only. No component changes are needed, becau
 ### Correcting existing data
 
 Prefix or region corrections are welcome. Open a pull request (or a "Country data" issue) with a link to the source that shows the current allocation.
+
+## Keeping it light
+
+The audience often has slow connections and low-end phones. `pnpm size` (run it after `pnpm build`) checks how much JavaScript each docs page loads up front against a budget, and that the landing page demo stays lazy. If your change goes over a budget, look for something to remove or load later before raising the budget.
 
 ## Guidelines for components
 

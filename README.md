@@ -89,6 +89,8 @@ pnpm lint
 pnpm typecheck
 pnpm registry:check  # checks registry.json against the source files
 pnpm registry:build  # runs `shadcn build` into public/r
+pnpm build           # checks the registry, builds it, then builds the site
+pnpm size            # checks the JavaScript each page loads, after a build
 ```
 
 ## Disclaimer

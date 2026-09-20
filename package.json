@@ -13,7 +13,8 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "registry:build": "shadcn build",
-    "registry:check": "node scripts/check-registry.mjs"
+    "registry:check": "node scripts/check-registry.mjs",
+    "size": "node scripts/check-size.mjs"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.9.1",

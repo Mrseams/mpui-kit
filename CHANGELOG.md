@@ -14,4 +14,7 @@ Initial release. Phase 1.
 - `<PhoneInput />`, `<PaymentMethodPicker />`, `<UssdPrompt />`.
 - `momo-checkout` block with an idle → awaiting approval → success / failed / timeout state machine and a receipt card.
 - FR/EN dictionary and `MboaProvider`.
-- Docs site with a live checkout demo.
+- Docs site with a landing page and a live apartment-booking demo (priced per night in FCFA, a mocked `onPay` that simulates the phone approval delay, and a FR/EN toggle), a playground, and a docs page for every component.
+- A Theming guide. Larger components take `classNames` and mark every part with a `data-slot` attribute; the receipt checkmark uses `--success` or `--primary`.
+- A dark mode toggle that follows the system until you choose, and Poppins as the site font, self-hosted.
+- `pnpm registry:check` to verify that every registry item ships what it imports, and `pnpm size` to keep the pages light.
