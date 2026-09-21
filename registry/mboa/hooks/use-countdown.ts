@@ -1,8 +1,8 @@
 "use client"
 
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useState, useSyncExternalStore } from "react"
 
-import { msUntilNextSecond } from "@/lib/mboa/countdown"
+import { createCountdown } from "@/lib/mboa/core/countdown-controller"
 
 interface UseCountdownOptions {
   /** Called once when the countdown reaches zero. */
@@ -18,50 +18,27 @@ interface UseCountdownOptions {
  * matters here: people leave the page to dial a USSD code, and mobile browsers
  * pause background tabs. The countdown re-syncs as soon as the tab is visible
  * again.
+ *
+ * A thin layer over `createCountdown`, which works in any framework.
  */
 export function useCountdown(
   expiresAt: number | null,
   { onExpire }: UseCountdownOptions = {}
 ): number {
-  const [now, setNow] = useState(() => Date.now())
-  const onExpireRef = useRef(onExpire)
+  const [countdown] = useState(() => createCountdown({ expiresAt, onExpire }))
 
   useEffect(() => {
-    onExpireRef.current = onExpire
+    countdown.setOnExpire(onExpire)
   })
-
   useEffect(() => {
-    if (expiresAt === null) return
+    countdown.setExpiresAt(expiresAt)
+  }, [countdown, expiresAt])
+  useEffect(() => () => countdown.destroy(), [countdown])
 
-    let timer: ReturnType<typeof setTimeout> | undefined
-    let expired = false
-
-    function tick() {
-      clearTimeout(timer)
-      const current = Date.now()
-      setNow(current)
-      const remaining = (expiresAt as number) - current
-      if (remaining <= 0) {
-        if (!expired) {
-          expired = true
-          onExpireRef.current?.()
-        }
-        return
-      }
-      timer = setTimeout(tick, msUntilNextSecond(remaining))
-    }
-
-    function onVisibilityChange() {
-      if (document.visibilityState === "visible") tick()
-    }
-
-    tick()
-    document.addEventListener("visibilitychange", onVisibilityChange)
-    return () => {
-      clearTimeout(timer)
-      document.removeEventListener("visibilitychange", onVisibilityChange)
-    }
-  }, [expiresAt])
-
-  return expiresAt === null ? 0 : Math.max(0, expiresAt - now)
+  const remainingMs = useSyncExternalStore(
+    countdown.subscribe,
+    () => countdown.getSnapshot().remainingMs,
+    () => countdown.getSnapshot().remainingMs
+  )
+  return expiresAt === null ? 0 : remainingMs
 }

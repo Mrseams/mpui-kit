@@ -1,28 +1,13 @@
 "use client"
 
-import {
-  useId,
-  useLayoutEffect,
-  useRef,
-  useState,
-  type ChangeEvent,
-  type ComponentProps,
-  type FocusEvent,
-  type ReactNode,
-} from "react"
+import { useCallback, useId, type ComponentProps, type ReactNode } from "react"
 
 import { Input } from "@/components/ui/input"
 import { OperatorBadge } from "@/components/mboa/operator-badge"
 import { useCountry, useLocale, useT } from "@/components/mboa/mboa-provider"
+import { usePhoneField } from "@/hooks/mboa/use-phone-field"
 import type { CountryConfig, Locale } from "@/lib/mboa/countries/types"
-import {
-  caretIndexAfterDigits,
-  countDigits,
-  formatNational,
-  normalizePhoneInput,
-  validatePhone,
-  type PhoneValidation,
-} from "@/lib/mboa/phone"
+import type { PhoneValidation } from "@/lib/mboa/phone"
 import { phoneErrorMessage } from "@/lib/mboa/phone-errors"
 import { cn } from "@/lib/utils"
 
@@ -111,17 +96,28 @@ export function PhoneInput({
   const hintId = `${id}-hint`
   const errorId = `${id}-error`
 
-  const isControlled = valueProp !== undefined
-  const [innerValue, setInnerValue] = useState(() =>
-    normalizePhoneInput(defaultValue ?? "", country)
-  )
-  const [touched, setTouched] = useState(false)
-
-  const national = normalizePhoneInput(isControlled ? valueProp : innerValue, country)
-  const formatted = formatNational(national, country)
-  const validationOptions = { requireOperator, operator: requiredOperator }
-  const validation = validatePhone(national, country, validationOptions)
+  // All the behaviour (grouping, caret, validation, operator) is in the headless hook.
+  const field = usePhoneField({
+    country,
+    value: valueProp,
+    defaultValue,
+    onChange,
+    requireOperator,
+    operator: requiredOperator,
+  })
+  const { national, validation, touched, inputRef } = field
   const detected = validation.operator
+  const inputProps = field.getInputProps({ onBlur })
+
+  // The field needs the input element for the caret, and you may want it too.
+  const setRefs = useCallback(
+    (node: HTMLInputElement | null) => {
+      inputRef(node)
+      if (typeof ref === "function") ref(node)
+      else if (ref) ref.current = node
+    },
+    [inputRef, ref]
+  )
 
   const builtinError =
     touched && !validation.valid && validation.issue && (national.length > 0 || props.required)
@@ -133,51 +129,6 @@ export function PhoneInput({
         })
       : undefined
   const errorMessage = error ?? builtinError
-
-  const inputRef = useRef<HTMLInputElement | null>(null)
-  const pendingCaretDigits = useRef<number | null>(null)
-
-  // After digits are re-grouped, put the caret back after the same digit.
-  useLayoutEffect(() => {
-    const input = inputRef.current
-    const digits = pendingCaretDigits.current
-    pendingCaretDigits.current = null
-    if (input && digits !== null && document.activeElement === input) {
-      const position = caretIndexAfterDigits(input.value, digits)
-      input.setSelectionRange(position, position)
-    }
-  })
-
-  function setRefs(node: HTMLInputElement | null) {
-    inputRef.current = node
-    if (typeof ref === "function") ref(node)
-    else if (ref) ref.current = node
-  }
-
-  function handleChange(event: ChangeEvent<HTMLInputElement>) {
-    const text = event.target.value
-    const caret = event.target.selectionStart ?? text.length
-    let next = normalizePhoneInput(text, country)
-    let digitsBeforeCaret = countDigits(text.slice(0, caret))
-
-    // Only re-grouping (no paste, no country code, no trimming) keeps the caret in place.
-    const onlyRegrouped = !text.includes("+") && text.replace(/\D/g, "") === next
-
-    if (next === national && text.length < formatted.length && digitsBeforeCaret > 0) {
-      // The user deleted a separator. Delete the digit before it instead, so backspace never stalls.
-      next = next.slice(0, digitsBeforeCaret - 1) + next.slice(digitsBeforeCaret)
-      digitsBeforeCaret -= 1
-    }
-
-    pendingCaretDigits.current = onlyRegrouped ? digitsBeforeCaret : null
-    if (!isControlled) setInnerValue(next)
-    onChange?.(next, validatePhone(next, country, validationOptions))
-  }
-
-  function handleBlur(event: FocusEvent<HTMLInputElement>) {
-    setTouched(true)
-    onBlur?.(event)
-  }
 
   const visibleHint =
     hint === undefined ? t("phone.hint", { length: country.nationalNumberLength }) : hint
@@ -211,14 +162,9 @@ export function PhoneInput({
         </span>
         <Input
           {...props}
+          {...inputProps}
           ref={setRefs}
           id={id}
-          type="tel"
-          inputMode="tel"
-          autoComplete="tel-national"
-          value={formatted}
-          onChange={handleChange}
-          onBlur={handleBlur}
           aria-invalid={errorMessage ? true : undefined}
           aria-describedby={describedBy}
           data-slot="phone-input-input"

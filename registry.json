@@ -197,6 +197,7 @@
         "input",
         "@mboa/operator-badge",
         "@mboa/mboa-provider",
+        "@mboa/use-phone-field",
         "@mboa/phone",
         "@mboa/phone-errors",
         "@mboa/country-types"
@@ -274,8 +275,8 @@
       "name": "use-countdown",
       "type": "registry:hook",
       "title": "useCountdown",
-      "description": "Time left until a deadline, updated once per second from the real clock. Re-syncs when the tab becomes visible, for pages people leave to dial a USSD code.",
-      "registryDependencies": ["@mboa/countdown"],
+      "description": "Time left until a deadline as a React hook: a thin layer over the framework-free countdown controller.",
+      "registryDependencies": ["@mboa/countdown-controller"],
       "files": [
         {
           "path": "registry/mboa/hooks/use-countdown.ts",
@@ -413,6 +414,48 @@
           "path": "registry/mboa/lib/core/checkout-controller.ts",
           "type": "registry:lib",
           "target": "lib/mboa/core/checkout-controller.ts"
+        }
+      ]
+    },
+    {
+      "name": "phone-field",
+      "type": "registry:lib",
+      "title": "Phone field core",
+      "description": "The behaviour of a phone number field with no UI framework in it: grouping digits as you type, keeping the caret in place, deleting a digit when Backspace lands on a space, detecting the operator and validating.",
+      "registryDependencies": ["@mboa/core-store", "@mboa/phone", "@mboa/country-types"],
+      "files": [
+        {
+          "path": "registry/mboa/lib/core/phone-field.ts",
+          "type": "registry:lib",
+          "target": "lib/mboa/core/phone-field.ts"
+        }
+      ]
+    },
+    {
+      "name": "countdown-controller",
+      "type": "registry:lib",
+      "title": "Countdown controller",
+      "description": "A countdown with no UI framework in it. It ticks exactly on the second, works the time left out from the real clock, and re-checks when the page becomes visible again.",
+      "registryDependencies": ["@mboa/core-store", "@mboa/countdown"],
+      "files": [
+        {
+          "path": "registry/mboa/lib/core/countdown-controller.ts",
+          "type": "registry:lib",
+          "target": "lib/mboa/core/countdown-controller.ts"
+        }
+      ]
+    },
+    {
+      "name": "use-phone-field",
+      "type": "registry:hook",
+      "title": "usePhoneField",
+      "description": "A headless phone field for React: all the behaviour of PhoneInput with none of its markup. Spread getInputProps() on any input.",
+      "registryDependencies": ["@mboa/phone-field", "@mboa/phone", "@mboa/country-types"],
+      "files": [
+        {
+          "path": "registry/mboa/hooks/use-phone-field.ts",
+          "type": "registry:hook",
+          "target": "hooks/mboa/use-phone-field.ts"
         }
       ]
     }
