@@ -1,0 +1,47 @@
+{
+  "name": "@mboa/core",
+  "version": "0.1.0",
+  "description": "Framework-free core of mboa-ui: a Mobile Money checkout controller, phone number and FCFA helpers, and FR/EN strings for African markets. Works with React, Vue, Svelte or plain JavaScript.",
+  "private": true,
+  "type": "module",
+  "license": "MIT",
+  "sideEffects": false,
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      }
+    }
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "keywords": [
+    "mobile-money",
+    "fcfa",
+    "xaf",
+    "xof",
+    "africa",
+    "cameroon",
+    "checkout",
+    "phone-number",
+    "headless",
+    "framework-agnostic"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

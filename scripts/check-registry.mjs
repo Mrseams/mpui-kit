@@ -30,7 +30,7 @@ const error = (message) => errors.push(message)
 // Packages every project that can use this registry already has.
 const ASSUMED_PACKAGES = new Set(["react", "react-dom", "next"])
 // Files that are part of the repo but deliberately not distributed.
-const NOT_DISTRIBUTED = [/\.test\.tsx?$/, /countries\/index\.ts$/]
+const NOT_DISTRIBUTED = [/\.test\.tsx?$/, /countries\/index\.ts$/, /lib\/core\/index\.ts$/]
 
 const stripExtension = (path) => path.replace(/\.(tsx?|jsx?)$/, "")
 

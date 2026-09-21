@@ -1,0 +1,300 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>mboa core en JavaScript simple</title>
+    <style>
+      :root {
+        color-scheme: light dark;
+        font-family: system-ui, sans-serif;
+      }
+      body {
+        margin: 0;
+        padding: 1rem;
+      }
+      main {
+        max-width: 28rem;
+        margin: 0 auto;
+        display: grid;
+        gap: 1rem;
+      }
+      h1 {
+        font-size: 1.25rem;
+        margin: 0;
+      }
+      p {
+        margin: 0;
+      }
+      .muted {
+        opacity: 0.7;
+        font-size: 0.875rem;
+      }
+      label {
+        font-weight: 600;
+        font-size: 0.875rem;
+      }
+      .field {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-top: 0.25rem;
+      }
+      .field input[type="tel"] {
+        flex: 1;
+        padding: 0.5rem;
+        font: inherit;
+      }
+      fieldset {
+        border: 1px solid currentColor;
+        border-radius: 0.5rem;
+        opacity: 0.9;
+      }
+      fieldset label {
+        font-weight: 400;
+        display: block;
+        padding: 0.25rem 0;
+      }
+      button {
+        padding: 0.6rem 1rem;
+        font: inherit;
+        cursor: pointer;
+      }
+      button[hidden],
+      dl[hidden] {
+        display: none;
+      }
+      #error {
+        color: crimson;
+        min-height: 1.25rem;
+      }
+      #panel {
+        border: 1px solid currentColor;
+        border-radius: 0.5rem;
+        padding: 1rem;
+        display: grid;
+        gap: 0.5rem;
+      }
+      dl {
+        display: grid;
+        grid-template-columns: auto 1fr;
+        gap: 0.25rem 1rem;
+        margin: 0;
+      }
+      dd {
+        margin: 0;
+        text-align: right;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>mboa core, sans framework</h1>
+      <p class="muted">
+        Cette page n'utilise aucun framework : juste le paquet <code>@mboa/core</code> et le DOM. Le
+        paiement est simulé : rien n'est envoyé.
+      </p>
+
+      <form id="form" novalidate>
+        <label for="phone">Numéro de téléphone</label>
+        <div class="field">
+          <span aria-hidden="true">+237</span>
+          <input id="phone" type="tel" inputmode="tel" autocomplete="tel-national" />
+          <strong id="operator" aria-live="polite"></strong>
+        </div>
+        <p id="error" role="alert"></p>
+
+        <fieldset>
+          <legend>Moyen de paiement</legend>
+          <label><input type="radio" name="method" value="mtn" checked /> MTN Mobile Money</label>
+          <label><input type="radio" name="method" value="orange" /> Orange Money</label>
+          <label><input type="radio" name="method" value="cash" /> Espèces</label>
+        </fieldset>
+
+        <p style="margin-top: 1rem"><button id="pay" type="submit">Payer</button></p>
+      </form>
+
+      <section id="panel" aria-live="polite" hidden>
+        <p id="state"></p>
+        <p id="code" class="muted"></p>
+        <p id="countdown" class="muted"></p>
+        <dl id="receipt" hidden></dl>
+        <p>
+          <button id="cancel" type="button" hidden>Annuler</button>
+          <button id="retry" type="button" hidden>Réessayer</button>
+          <button id="done" type="button" hidden>Terminé</button>
+        </p>
+      </section>
+    </main>
+
+    <script type="module">
+      import {
+        cm,
+        createCheckoutController,
+        createCountdown,
+        createPhoneField,
+        createTranslator,
+        formatCountdown,
+        formatFcfa,
+        paymentMethodLabel,
+        phoneErrorMessage,
+        resolvePayment,
+        defaultPaymentMethods,
+      } from "./mboa-core.js"
+
+      const AMOUNT = 25000
+      const t = createTranslator("fr")
+      const $ = (id) => document.getElementById(id)
+      const methods = defaultPaymentMethods(cm)
+
+      $("pay").textContent = t("checkout.pay", { amount: formatFcfa(AMOUNT, { locale: "fr" }) })
+
+      // --- The phone field: grouping, caret, operator, validation. No framework.
+      const field = createPhoneField({ country: cm })
+      const phone = $("phone")
+
+      phone.addEventListener("input", () => {
+        const { formatted, caretIndex } = field.input(
+          phone.value,
+          phone.selectionStart ?? undefined
+        )
+        phone.value = formatted
+        if (caretIndex !== null) phone.setSelectionRange(caretIndex, caretIndex)
+      })
+      phone.addEventListener("blur", () => field.blur())
+
+      const selectedMethod = () => document.querySelector('input[name="method"]:checked').value
+      const selection = () => ({ methodId: selectedMethod(), phone: field.getSnapshot().national })
+
+      function renderField() {
+        const { operator, validation, touched } = field.getSnapshot()
+        $("operator").textContent = operator ? operator.name : ""
+        const needsPhone = selectedMethod() !== "cash"
+        const problem = touched && needsPhone && !validation.valid && validation.issue
+        $("error").textContent = problem
+          ? phoneErrorMessage(validation.issue, {
+              country: cm,
+              locale: "fr",
+              t,
+              operator: selectedMethod(),
+            })
+          : ""
+      }
+      field.subscribe(renderField)
+      document.querySelectorAll('input[name="method"]').forEach((radio) => {
+        radio.addEventListener("change", () => {
+          field.setOptions({
+            operator: ["mtn", "orange"].includes(selectedMethod()) ? selectedMethod() : undefined,
+          })
+          renderField()
+        })
+      })
+      field.setOptions({ operator: "mtn" })
+
+      // --- The payment flow: a fake backend that "approves" after a few seconds.
+      const startedAt = new Map()
+      const checkout = createCheckoutController({
+        amount: AMOUNT,
+        currency: "XAF",
+        timeoutMs: 20_000,
+        pollIntervalMs: 1_000,
+        async onPay({ methodId }) {
+          await new Promise((done) => setTimeout(done, 500))
+          if (methodId === "cash") return { status: "success", reference: "VANILLA-CASH" }
+          startedAt.set("V-1", Date.now())
+          return { status: "pending", reference: "V-1", ussdCode: "*123#" }
+        },
+        async onCheckStatus(reference) {
+          return Date.now() - startedAt.get(reference) > 4_000
+            ? { status: "success" }
+            : { status: "pending" }
+        },
+      })
+
+      let countdown = null
+      let countdownFor = null
+
+      function render() {
+        const { state } = checkout.getSnapshot()
+        const idle = state.status === "idle"
+        $("form").hidden = !idle
+        $("panel").hidden = idle
+        $("cancel").hidden = state.status !== "awaiting_approval"
+        $("retry").hidden = !(state.status === "failed" || state.status === "timeout")
+        $("done").hidden = state.status !== "success"
+        $("receipt").hidden = state.status !== "success"
+
+        // A countdown for each attempt, built on the same subscribe API.
+        if (state.status === "awaiting_approval" && countdownFor !== state.expiresAt) {
+          countdown?.destroy()
+          countdownFor = state.expiresAt
+          countdown = createCountdown({ expiresAt: state.expiresAt })
+          countdown.subscribe(() => {
+            $("countdown").textContent = t("ussd.expiresIn", {
+              time: formatCountdown(countdown.getSnapshot().remainingMs),
+            })
+          })
+          $("countdown").textContent = t("ussd.expiresIn", {
+            time: formatCountdown(countdown.getSnapshot().remainingMs),
+          })
+        }
+        if (state.status !== "awaiting_approval") {
+          countdown?.destroy()
+          countdown = null
+          countdownFor = null
+          $("countdown").textContent = ""
+        }
+
+        $("code").textContent =
+          state.status === "awaiting_approval" && state.ussdCode
+            ? `${t("ussd.codeLabel")} : ${state.ussdCode}`
+            : ""
+
+        $("state").textContent =
+          state.status === "awaiting_approval"
+            ? t("ussd.waiting")
+            : state.status === "success"
+              ? t("receipt.title")
+              : state.status === "failed"
+                ? t("checkout.failedTitle")
+                : state.status === "timeout"
+                  ? t("checkout.timeoutTitle")
+                  : ""
+
+        if (state.status === "success") {
+          const { receipt } = state
+          const rows = [
+            [t("receipt.amount"), formatFcfa(receipt.amount, { locale: "fr" })],
+            [t("receipt.method"), paymentMethodLabel(receipt.methodId, cm, t)],
+            [t("receipt.reference"), receipt.reference],
+          ]
+          $("receipt").replaceChildren(
+            ...rows.flatMap(([label, value]) => {
+              const dt = document.createElement("dt")
+              const dd = document.createElement("dd")
+              dt.textContent = label
+              dd.textContent = value
+              return [dt, dd]
+            })
+          )
+        }
+      }
+      checkout.subscribe(render)
+      render()
+
+      $("form").addEventListener("submit", (event) => {
+        event.preventDefault()
+        field.blur()
+        const resolved = resolvePayment(selection(), methods, cm)
+        if (!resolved.ready) {
+          phone.focus()
+          return
+        }
+        checkout.pay({ methodId: resolved.method.id, phone: resolved.e164 ?? undefined })
+      })
+      $("cancel").addEventListener("click", () => checkout.cancel())
+      $("retry").addEventListener("click", () => checkout.retry())
+      $("done").addEventListener("click", () => checkout.reset())
+    </script>
+  </body>
+</html>

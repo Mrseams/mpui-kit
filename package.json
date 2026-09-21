@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "pnpm registry:check && pnpm registry:build && next build",
+    "build": "pnpm registry:check && pnpm registry:build && pnpm core:build && pnpm core:check && pnpm core:example && next build",
     "start": "next start",
     "lint": "eslint",
     "typecheck": "next typegen && tsc --noEmit",
@@ -14,7 +14,10 @@
     "format:check": "prettier --check .",
     "registry:build": "shadcn build",
     "registry:check": "node scripts/check-registry.mjs",
-    "size": "node scripts/check-size.mjs"
+    "size": "node scripts/check-size.mjs",
+    "core:build": "tsup --config packages/core/tsup.config.ts && node scripts/finish-core-build.mjs",
+    "core:check": "node scripts/check-core-package.mjs",
+    "core:example": "node scripts/copy-core-example.mjs"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.9.1",
@@ -45,6 +48,7 @@
     "prettier-plugin-tailwindcss": "^0.8.1",
     "shadcn": "^4.21.0",
     "tailwindcss": "^4",
+    "tsup": "^8.5.1",
     "typescript": "^5",
     "vitest": "^5.0.1"
   },
