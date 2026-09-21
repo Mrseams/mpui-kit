@@ -1,4 +1,5 @@
 import type { Metadata } from "next"
+import Link from "next/link"
 
 import { CheckoutDemo } from "@/app/docs/components/momo-checkout/checkout-demo"
 import { CodeBlock } from "@/components/site/code-block"
@@ -37,6 +38,7 @@ const contract = `// What onPay receives
 interface PaymentRequest {
   methodId: string       // "mtn", "orange", "card", "cash"...
   phone?: string         // E.164, for Mobile Money
+  payload?: unknown      // an opaque token from a method panel: a card token, a PayPal order id
   amount: number
   currency: "XAF" | "XOF"
   attempt: number        // 1, then 2, 3... after each retry
@@ -120,6 +122,33 @@ const props: PropRow[] = [
     description: "Payment methods to offer.",
   },
   {
+    name: "panels",
+    type: "Record<string, MethodPanel>",
+    description:
+      "Your own panel for a payment method, by method id: where you host your provider’s card fields or PayPal buttons. The panel hands back an opaque token, which reaches onPay as payload. Card details never enter mboa-ui. See the card and PayPal guide.",
+  },
+  {
+    name: "methodIcons",
+    type: "Record<string, ReactNode>",
+    description: "Your own icons by method id. mboa-ui ships no brand logos.",
+  },
+  {
+    name: "submitLabel",
+    type: "string",
+    default: "“Pay {amount}”",
+    description: "Text for the Pay button.",
+  },
+  {
+    name: "submitDisabled",
+    type: "boolean",
+    description: "Disables the Pay button, for example until your terms are accepted.",
+  },
+  {
+    name: "footer",
+    type: "ReactNode",
+    description: "Shown under the Pay button, for example a link to your terms.",
+  },
+  {
     name: "receiptDetails",
     type: "{ label: string; value: ReactNode }[]",
     description: "Extra rows on the receipt, for example what was bought.",
@@ -170,7 +199,7 @@ const props: PropRow[] = [
   },
   {
     name: "classNames",
-    type: "{ title, summary, total, amount, form, submit, picker, prompt, cancel, receipt, failure }",
+    type: "{ title, summary, total, amount, form, submit, picker, prompt, cancel, receipt, failure, footer }",
     description:
       "Class names for parts of the checkout. Each part also has a data-slot attribute, such as momo-checkout-submit.",
   },
@@ -263,6 +292,25 @@ export default function MomoCheckoutPage() {
           any provider or aggregator.
         </p>
         <CodeBlock label="onPay and onCheckStatus types" code={contract} />
+      </section>
+
+      <section aria-labelledby="more-methods" className="space-y-3">
+        <h2 id="more-methods" className="text-xl font-semibold">
+          Cards, PayPal and other methods
+        </h2>
+        <p className="text-muted-foreground max-w-prose">
+          Add any method with a <code>kind</code> of <code>&quot;other&quot;</code> (or{" "}
+          <code>&quot;card&quot;</code>), then give it a panel to host your provider&apos;s own
+          fields or buttons. Card details never enter mboa-ui: the panel returns a token and the
+          checkout passes it to <code>onPay</code> as <code>payload</code>.{" "}
+          <Link
+            href="/docs/guides/card-and-paypal"
+            className="text-foreground underline underline-offset-4"
+          >
+            Read the card and PayPal guide
+          </Link>
+          .
+        </p>
       </section>
 
       <section aria-labelledby="states" className="space-y-3">

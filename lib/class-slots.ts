@@ -31,6 +31,7 @@ export const classSlots: ClassSlots[] = [
       "cancel",
       "receipt",
       "failure",
+      "footer",
     ],
     forwarded: ["picker", "prompt", "receipt"],
   },

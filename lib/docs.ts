@@ -40,4 +40,23 @@ export const componentDocs: DocEntry[] = [
   },
 ]
 
+export interface GuideEntry {
+  href: string
+  title: string
+  description: string
+}
+
+export const guideDocs: GuideEntry[] = [
+  {
+    href: "/docs/guides/card-and-paypal",
+    title: "Card and PayPal",
+    description: "Host your provider’s card fields or PayPal buttons in the checkout.",
+  },
+  {
+    href: "/docs/headless",
+    title: "Headless and framework-free",
+    description: "Use the checkout logic with Vue, Svelte or plain JavaScript.",
+  },
+]
+
 export const componentHref = (slug: string) => `/docs/components/${slug}`

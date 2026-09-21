@@ -1,6 +1,6 @@
 import Link from "next/link"
 
-import { componentDocs, componentHref } from "@/lib/docs"
+import { componentDocs, componentHref, guideDocs } from "@/lib/docs"
 
 export function DocsSidebar() {
   return (
@@ -27,6 +27,19 @@ export function DocsSidebar() {
             Theming
           </Link>
         </li>
+      </ul>
+
+      <p className="text-muted-foreground mb-2 px-2 text-xs font-medium tracking-wide uppercase">
+        Guides
+      </p>
+      <ul className="mb-6 space-y-1">
+        {guideDocs.map((guide) => (
+          <li key={guide.href}>
+            <Link href={guide.href} className="hover:bg-muted block rounded-md px-2 py-1.5">
+              {guide.title}
+            </Link>
+          </li>
+        ))}
       </ul>
 
       <p className="text-muted-foreground mb-2 px-2 text-xs font-medium tracking-wide uppercase">

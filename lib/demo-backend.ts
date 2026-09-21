@@ -43,8 +43,12 @@ export function createDemoBackend({
     await wait(latencyMs, request.signal)
     const reference = `DEMO-${String(++counter).padStart(4, "0")}`
 
-    // Card and cash settle straight away in the demo.
-    if (request.methodId === "card" || request.methodId === "cash") {
+    // Card, cash and anything with a payload (a token from a method panel) settle straight away in the demo.
+    if (
+      request.methodId === "card" ||
+      request.methodId === "cash" ||
+      request.payload !== undefined
+    ) {
       return { status: "success", reference }
     }
 

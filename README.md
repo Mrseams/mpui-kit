@@ -57,13 +57,18 @@ Because they use your tokens, the components follow your theme, radius and dark 
 
 Phase 1:
 
-| Name                    | Type            | What it does                                                                                                           |
-| ----------------------- | --------------- | ---------------------------------------------------------------------------------------------------------------------- |
-| `currency`              | component + lib | Formats FCFA (XAF/XOF): zero decimals, French spacing (`25 000 FCFA`), `FCFA` or ISO code.                             |
-| `phone-input`           | component       | Detects the operator from the prefix as you type, validates length, returns E.164. Works with react-hook-form and zod. |
-| `payment-method-picker` | component       | Selectable cards for Mobile Money operators, card and cash. Reveals the phone input inline.                            |
-| `ussd-prompt`           | component       | Approval code with copy button and `tel:` link, waiting animation, countdown and retry.                                |
-| `momo-checkout`         | block           | Full checkout: idle → awaiting approval → success / failed / timeout, plus a receipt card.                             |
+| Name                    | Type            | What it does                                                                                                                      |
+| ----------------------- | --------------- | --------------------------------------------------------------------------------------------------------------------------------- |
+| `currency`              | component + lib | Formats FCFA (XAF/XOF): zero decimals, French spacing (`25 000 FCFA`), `FCFA` or ISO code.                                        |
+| `phone-input`           | component       | Detects the operator from the prefix as you type, validates length, returns E.164. Works with react-hook-form and zod.            |
+| `payment-method-picker` | component       | Selectable cards for Mobile Money operators, card and cash. Reveals the phone input inline.                                       |
+| `ussd-prompt`           | component       | Approval code with copy button and `tel:` link, waiting animation, countdown and retry.                                           |
+| `momo-checkout`         | block           | Full checkout: idle → awaiting approval → success / failed / timeout, plus a receipt card. Host card or PayPal fields in a panel. |
+| `method-panel`          | types           | The contract for a payment method's panel. Card details never enter mboa-ui: your provider's fields return a token.               |
+
+### Headless and framework-free
+
+The logic is separate from the UI. `registry/mboa/lib/core` has no React and no dependencies, and `@mboa/core` (not published yet) is built from it, so you can use the checkout controller, phone field and countdown with Vue, Svelte or plain JavaScript. See [packages/core](./packages/core/README.md) and the Headless guide in the docs.
 
 Planned: landmark-based address input, OTP input, FCFA range slider, French date picker, WhatsApp button and chat widget, network banner, data-saver image, low-data mode provider, transaction timeline, listing card block, pricing table block.
 

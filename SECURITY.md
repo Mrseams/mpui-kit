@@ -20,7 +20,7 @@ That shapes what counts as a vulnerability here:
 
 ## Card and PayPal payments
 
-The components never collect card numbers. To take cards or PayPal, use your provider's own hosted fields or buttons, so card data goes straight from the customer to the provider and never passes through your page or your server. Do not build a card form out of plain inputs.
+The components never collect card numbers. To take cards or PayPal, use your provider's own hosted fields or buttons, so card data goes straight from the customer to the provider and never passes through your page or your server. Do not build a card form out of plain inputs. In the checkout, the `panels` prop is where those fields go: the panel returns an opaque token, and only that token reaches `onPay` as `payload`.
 
 ## Supported versions
 

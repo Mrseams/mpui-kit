@@ -2,7 +2,7 @@
 
 Everything between "the code works" and "people can install it, and the Vercel Open Source Program can find a healthy project". Written on 2026-09-21. Program details below were read from the live pages that day and may have changed: re-check them before you apply.
 
-**Suggested order:** 1 Blockers → 2 GitHub → 3 Vercel → 4 Real install test → 5 shadcn directory → 6 Vercel Open Source Program → 7 After launch.
+**Suggested order:** 1 Blockers → 2 GitHub → 3 Vercel → 4 Real install test → 5 shadcn directory → 6 npm package → 7 Vercel Open Source Program → 8 After launch.
 
 ---
 
@@ -18,6 +18,8 @@ Everything between "the code works" and "people can install it, and the Vercel O
   - [ ] `OWNER` in `.github/ISSUE_TEMPLATE/config.yml`
 - [ ] **Record the README demo GIF** (there is a placeholder). A short clip of the booking demo, French to English, paying with Mobile Money.
 - [ ] **Have the wording reviewed.** The copy was drafted with AI assistance. The French strings in particular deserve a native speaker's review (`registry/mboa/lib/i18n.ts`, `lib/booking.ts`).
+- [ ] **Verify the card and PayPal guide against the real services.** The Stripe Elements and PayPal Buttons code in `app/docs/guides/card-and-paypal/page.tsx` is a sketch that was never run against either. Build a small working example with each, in test mode, fix the code on the page, and then remove the "not run" wording. Also check which currencies each provider can charge: the guide only says to check.
+- [ ] **Have the Vue and Svelte sketches tried** by someone who uses them (`app/docs/headless/page.tsx`, `packages/core/README.md`). They are marked as not run.
 - [ ] **Run `git log` and check the author and email** on every commit are the ones you want public.
 
 ## 2. GitHub
@@ -74,7 +76,21 @@ From <https://ui.shadcn.com/docs/registry/registry-index> (read 2026-09-21):
 - [ ] Edit `apps/v4/registry/directory.json` in <https://github.com/shadcn-ui/ui>, run `pnpm validate:registries` there, and open a pull request.
 - [ ] After it merges, the registry is published and **Registry Health** monitoring starts, so keep the URLs stable.
 
-## 6. Vercel Open Source Program
+## 6. Publish `@mboa/core` to npm
+
+It is built and checked here (`pnpm core:build && pnpm core:check`: imports as ESM and CommonJS, no React inside, about 8.6 kB gzipped) but `packages/core/package.json` still says `"private": true`. The docs and READMEs say "not published yet".
+
+- [ ] **Choose the package name and the scope.** `@mboa/core` needs an npm organisation called `mboa`. Check it is free at <https://www.npmjs.com/org/create>. If not, pick another scope and change the name in `packages/core/package.json`, the README, the docs and `public/examples/vanilla.html`.
+- [ ] Turn on two-factor authentication for your npm account, and use a granular access token for CI, never your password.
+- [ ] Fill in `repository`, `homepage` and `bugs` in `packages/core/package.json` once the GitHub URL exists.
+- [ ] Decide the version. The registry and the package share the source, so start both at `0.1.0` and say in the CHANGELOG which one changed.
+- [ ] Set `"private": false`, then run `pnpm core:build && pnpm core:check` and `cd packages/core && npm pack --dry-run`. Read the file list: only `dist`, the README and the LICENSE should be in it.
+- [ ] Install the packed file (`npm pack`) in an empty project and import it from both an ESM and a CommonJS file.
+- [ ] Publish with provenance from CI (`npm publish --provenance --access public`), so the package links to the commit that built it.
+- [ ] After it is live, update the "not published yet" wording in `README.md`, `packages/core/README.md`, `app/docs/headless/page.tsx` and the CHANGELOG.
+- [ ] Decide how the registry copy and the npm copy stay in step, so a fix to one reaches the other.
+
+## 7. Vercel Open Source Program
 
 From <https://vercel.com/open-source-program> (read 2026-09-21). **The page said applications were currently closed**, and mentioned a Spring 2026 cohort, with no date for the next one. Check it again.
 
@@ -101,12 +117,12 @@ The page does not say how to apply or what the form asks, so **do not prepare an
 - [ ] A visible roadmap: the Phase 2 items are already in the README ("Planned").
 - [ ] Contributors: a good-first-issue or two, and at least one person other than you who has added a country.
 
-## 7. After launch
+## 8. After launch
 
 - [ ] Watch issues and discussions daily for the first two weeks. Fast, friendly replies matter more than anything else for a small project.
 - [ ] Keep `pnpm registry:check` and `pnpm size` in CI so the registry and the page weight cannot drift.
 - [ ] Decide on Phase 2 in order of demand: OTP input, landmark-based address input, FCFA range slider, French date picker, and the rest of the planned list.
-- [ ] Decide on the two larger design questions: a framework-agnostic core, and a way to add card and PayPal payment methods to the checkout.
+- [ ] Consider more payment panels as documented examples once they are tested against the real services (for example Mobile Money aggregators that host their own widget).
 
 ---
 
@@ -115,4 +131,5 @@ The page does not say how to apply or what the form asks, so **do not prepare an
 - Cameroon prefix and region data is community data, not an authoritative source. Operator detection is a hint. Never route money by it.
 - The components are UI only. They never call a payment API, so your backend must confirm every payment before you deliver anything.
 - Requires Tailwind CSS v4, shadcn/ui and React 19.
-- The components never collect card numbers. See [SECURITY.md](./SECURITY.md).
+- The components never collect card numbers. A payment method's panel hosts your provider's own fields, and only a token reaches your code. See [SECURITY.md](./SECURITY.md).
+- The card and PayPal examples are sketches, not tested against those services.

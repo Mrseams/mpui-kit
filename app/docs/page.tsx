@@ -1,7 +1,7 @@
 import type { Metadata } from "next"
 import Link from "next/link"
 
-import { componentDocs, componentHref } from "@/lib/docs"
+import { componentDocs, componentHref, guideDocs } from "@/lib/docs"
 
 export const metadata: Metadata = { title: "Introduction" }
 
@@ -30,6 +30,20 @@ export default function DocsIndex() {
             </Link>
             .
           </li>
+        </ul>
+      </section>
+
+      <section className="space-y-3">
+        <h2 className="text-xl font-semibold">Guides</h2>
+        <ul className="divide-y rounded-lg border">
+          {guideDocs.map((guide) => (
+            <li key={guide.href} className="p-4">
+              <Link href={guide.href} className="font-medium hover:underline">
+                {guide.title}
+              </Link>
+              <p className="text-muted-foreground text-sm">{guide.description}</p>
+            </li>
+          ))}
         </ul>
       </section>
 

@@ -33,6 +33,13 @@ describe("createDemoBackend", () => {
     await expect(promise).resolves.toEqual({ status: "success", reference: "DEMO-0001" })
   })
 
+  it("settles a method that carries a payload straight away, as a wallet would", async () => {
+    const { onPay } = setup("approve")
+    const promise = onPay({ ...request("wallet"), payload: { orderId: "ORDER-1" } })
+    await vi.advanceTimersByTimeAsync(600)
+    await expect(promise).resolves.toEqual({ status: "success", reference: "DEMO-0001" })
+  })
+
   it("starts Mobile Money as pending with a made-up USSD code", async () => {
     const { onPay } = setup("approve")
     const promise = onPay(request("mtn"))
