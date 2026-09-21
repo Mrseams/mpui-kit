@@ -70,6 +70,11 @@ export default function ThemingPage() {
           <li>
             <strong>React 19.</strong> Several components take <code>ref</code> as a normal prop.
           </li>
+          <li>
+            <strong>tw-animate-css.</strong> for the entrance animations (<code>shadcn init</code>{" "}
+            installs it). Without it they are skipped, and motion is off for users who ask for
+            reduced motion.
+          </li>
         </ul>
       </section>
 

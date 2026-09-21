@@ -47,6 +47,11 @@ export default function GettingStarted() {
           <li>
             <strong>React 19</strong>. Several components take <code>ref</code> as a normal prop.
           </li>
+          <li>
+            <strong>tw-animate-css</strong> for the entrance animations (<code>shadcn init</code>{" "}
+            installs it). Without it they are skipped, and motion is off for users who ask for
+            reduced motion.
+          </li>
         </ul>
         <p className="text-muted-foreground">
           Because they use your tokens, the components follow your theme and dark mode. See{" "}

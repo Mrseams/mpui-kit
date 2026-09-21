@@ -49,6 +49,7 @@ The namespace is required because items depend on each other by `@mboa/<name>`. 
 - **Tailwind CSS v4.** The components are styled with Tailwind classes. An app without Tailwind gets no styling from them.
 - **shadcn/ui** set up with CSS variables (`npx shadcn@latest init`), so the theme tokens the components read exist.
 - **React 19.** Several components take `ref` as a normal prop.
+- **`tw-animate-css`** for the entrance animations. `shadcn init` installs it. Without it the animations are simply skipped and nothing else changes. All motion is off for users who ask for reduced motion.
 
 Because they use your tokens, the components follow your theme, radius and dark mode. Larger components also take a `classNames` prop and mark every part with a `data-slot` attribute. See the Theming page in the docs.
 
