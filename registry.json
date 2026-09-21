@@ -228,7 +228,7 @@
       "name": "payment-method-picker",
       "type": "registry:component",
       "title": "PaymentMethodPicker",
-      "description": "Selectable cards for Mobile Money operators, card and cash. Choosing a Mobile Money option reveals a phone input for that operator. Built on native radio inputs.",
+      "description": "Selectable cards for Mobile Money operators, card, cash and methods you add. Choosing Mobile Money reveals a phone input; any method can show your own panel. Built on native radio inputs.",
       "dependencies": ["lucide-react"],
       "registryDependencies": [
         "@mboa/mboa-provider",
@@ -363,14 +363,29 @@
       ]
     },
     {
+      "name": "method-panel",
+      "type": "registry:component",
+      "title": "MethodPanel",
+      "description": "Types for hosting your payment provider's card or PayPal fields inside the checkout. Card details never enter mboa-ui: the panel returns an opaque token.",
+      "registryDependencies": ["@mboa/country-types", "@mboa/payment-methods"],
+      "files": [
+        {
+          "path": "registry/mboa/components/method-panel.ts",
+          "type": "registry:component",
+          "target": "components/mboa/method-panel.ts"
+        }
+      ]
+    },
+    {
       "name": "momo-checkout",
       "type": "registry:block",
       "title": "Mobile Money checkout",
-      "description": "A complete Mobile Money checkout: choose a method, enter a number, approve on the phone, then see a receipt. You provide onPay and onCheckStatus; it never talks to a provider itself.",
+      "description": "A complete checkout: choose Mobile Money, card or any method you add, then approve and see a receipt. Host your provider's card or PayPal fields in a panel. You provide onPay and onCheckStatus; it never talks to a provider itself and never sees card details.",
       "registryDependencies": [
         "button",
         "@mboa/currency",
         "@mboa/mboa-provider",
+        "@mboa/method-panel",
         "@mboa/payment-method-picker",
         "@mboa/receipt-card",
         "@mboa/ussd-prompt",

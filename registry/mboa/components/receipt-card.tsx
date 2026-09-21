@@ -37,6 +37,8 @@ export interface ReceiptCardProps extends Omit<ComponentProps<"section">, "child
   details?: ReceiptDetail[]
   /** Adds a "Done" button that calls this. */
   onDone?: () => void
+  /** What to call the payment method. Defaults to a name worked out from the method id. */
+  methodLabel?: string
   country?: CountryConfig
   locale?: Locale
   /** Class names for parts of the card. `className` styles the root. */
@@ -52,6 +54,7 @@ export function ReceiptCard({
   receipt,
   details,
   onDone,
+  methodLabel,
   country: countryProp,
   locale: localeProp,
   classNames,
@@ -112,7 +115,9 @@ export function ReceiptCard({
         data-slot="receipt-card-list"
         className={cn("divide-y border-y text-sm", classNames?.list)}
       >
-        <Row label={t("receipt.method")}>{paymentMethodLabel(receipt.methodId, country, t)}</Row>
+        <Row label={t("receipt.method")}>
+          {methodLabel ?? paymentMethodLabel(receipt.methodId, country, t)}
+        </Row>
         {phoneText && <Row label={t("receipt.phone")}>{phoneText}</Row>}
         <Row label={t("receipt.reference")} mono>
           {receipt.reference}

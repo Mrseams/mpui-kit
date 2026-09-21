@@ -46,6 +46,9 @@ const en = {
   "checkout.sending": "Sending the request…",
   "checkout.cancel": "Cancel",
   "checkout.retry": "Try again",
+  "checkout.completePayment": "Complete the payment details to continue.",
+  "checkout.paymentDetailsError":
+    "We could not read the payment details. Check them and try again.",
   "checkout.changeMethod": "Change payment method",
   "checkout.failedTitle": "Payment not completed",
   "checkout.failedBody": "The payment was declined or could not be processed.",
@@ -120,6 +123,9 @@ const fr: Messages = {
   "checkout.sending": "Envoi de la demande…",
   "checkout.cancel": "Annuler",
   "checkout.retry": "Réessayer",
+  "checkout.completePayment": "Complétez les informations de paiement pour continuer.",
+  "checkout.paymentDetailsError":
+    "Nous n'avons pas pu lire les informations de paiement. Vérifiez-les et réessayez.",
   "checkout.changeMethod": "Changer de moyen de paiement",
   "checkout.failedTitle": "Paiement non abouti",
   "checkout.failedBody": "Le paiement a été refusé ou n'a pas pu être traité.",

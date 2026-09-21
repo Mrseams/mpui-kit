@@ -2,7 +2,8 @@ import type { CountryConfig, OperatorConfig } from "@/lib/mboa/countries/types"
 import type { Translator } from "@/lib/mboa/i18n"
 import { validatePhone, type PhoneValidation } from "@/lib/mboa/phone"
 
-export type PaymentMethodKind = "mobile_money" | "card" | "cash"
+/** "other" is for anything else you offer, such as PayPal or a voucher. */
+export type PaymentMethodKind = "mobile_money" | "card" | "cash" | "other"
 
 export interface PaymentMethod {
   /** Unique id. For Mobile Money this is the operator id, e.g. "mtn". */

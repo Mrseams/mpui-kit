@@ -2,6 +2,7 @@
 
 import { CircleAlert, Clock } from "lucide-react"
 import {
+  useCallback,
   useEffect,
   useId,
   useRef,
@@ -13,6 +14,7 @@ import {
 
 import { Button } from "@/components/ui/button"
 import { Currency } from "@/components/mboa/currency"
+import type { MethodPanel } from "@/components/mboa/method-panel"
 import { useCountry, useLocale, useT } from "@/components/mboa/mboa-provider"
 import { PaymentMethodPicker } from "@/components/mboa/payment-method-picker"
 import { ReceiptCard, type ReceiptDetail } from "@/components/mboa/receipt-card"
@@ -55,6 +57,8 @@ export interface MomoCheckoutClassNames {
   receipt?: string
   /** The panel shown after a failure or a timeout. */
   failure?: string
+  /** The row under the Pay button, from `footer`. */
+  footer?: string
 }
 
 export interface MomoCheckoutProps
@@ -71,6 +75,22 @@ export interface MomoCheckoutProps
   summary?: ReactNode
   /** Payment methods to offer. Defaults to the country's Mobile Money operators, card and cash. */
   methods?: PaymentMethod[]
+  /**
+   * Your own panel for a payment method, by method id: where you host your
+   * payment provider's card fields or buttons (Stripe, PayPal, ...). It replaces
+   * the built-in content for that method. Card details never enter mboa-ui;
+   * the panel hands back an opaque token that reaches `onPay` as `payload`.
+   * See `MethodPanel`.
+   */
+  panels?: Record<string, MethodPanel>
+  /** Your own icons by method id, for example a wallet's logo. mboa-ui ships no brand logos. */
+  methodIcons?: Record<string, ReactNode>
+  /** Text for the Pay button. Defaults to "Pay {amount}". */
+  submitLabel?: string
+  /** Disables the Pay button, for example until the customer accepts your terms. */
+  submitDisabled?: boolean
+  /** Shown under the Pay button, for example a link to your terms or a security note. */
+  footer?: ReactNode
   /** Extra rows on the receipt, for example what was bought. */
   receiptDetails?: ReceiptDetail[]
   /**
@@ -115,6 +135,11 @@ export function MomoCheckout({
   title,
   summary,
   methods: methodsProp,
+  panels,
+  methodIcons,
+  submitLabel,
+  submitDisabled,
+  footer,
   receiptDetails,
   failureMessages,
   onSuccess,
@@ -152,6 +177,31 @@ export function MomoCheckout({
   const [selection, setSelection] = useState<PaymentSelection>(emptySelection)
   const [attempted, setAttempted] = useState(false)
   const resolved = resolvePayment(selection, methods, country)
+
+  // The state of the selected method's panel, if it has one. The panel reports
+  // it through the callbacks below; card details themselves never come here.
+  const panel = resolved.method ? panels?.[resolved.method.id] : undefined
+  const [panelState, setPanelState] = useState<{ ready: boolean; error?: string }>({
+    ready: false,
+  })
+  const [collecting, setCollecting] = useState(false)
+  const collectRef = useRef<(() => Promise<unknown>) | null>(null)
+
+  const setPanelReady = useCallback(
+    (ready: boolean) => {
+      setPanelState((previous) => (previous.ready === ready ? previous : { ...previous, ready }))
+    },
+    [setPanelState]
+  )
+  const setPanelError = useCallback(
+    (error: string | undefined) => {
+      setPanelState((previous) => (previous.error === error ? previous : { ...previous, error }))
+    },
+    [setPanelState]
+  )
+  const setPanelCollect = useCallback((collect: (() => Promise<unknown>) | null) => {
+    collectRef.current = collect
+  }, [])
 
   const titleId = useId()
   const resultTitleId = useId()
@@ -196,13 +246,63 @@ export function MomoCheckout({
         })
       : undefined
 
-  function handleSubmit(event: FormEvent) {
+  // What a panel that submits by itself needs: the latest method and `pay`.
+  const latest = useRef({ methodId: resolved.method?.id, pay: checkout.pay })
+  useEffect(() => {
+    latest.current = { methodId: resolved.method?.id, pay: checkout.pay }
+  })
+  const submitFromPanel = useCallback((payload?: unknown) => {
+    const { methodId, pay } = latest.current
+    if (methodId) pay({ methodId, payload })
+  }, [])
+
+  function handleMethodChange(next: PaymentSelection) {
+    if (next.methodId !== selection.methodId) {
+      // A different method has its own panel: start it clean.
+      collectRef.current = null
+      setPanelState({ ready: false })
+    }
+    setSelection(next)
+  }
+
+  async function handleSubmit(event: FormEvent) {
     event.preventDefault()
+    if (collecting) return
     setAttempted(true)
-    if (!resolved.method || !resolved.ready) {
+    if (!resolved.method) {
+      rootRef.current?.querySelector<HTMLElement>('input[type="radio"]')?.focus()
+      return
+    }
+
+    if (panel) {
+      // The panel replaces the built-in fields, so it decides when we are ready.
+      if (!panelState.ready) return
+      const methodId = resolved.method.id
+      let payload: unknown
+      if (collectRef.current) {
+        setCollecting(true)
+        setPanelError(undefined)
+        try {
+          payload = await collectRef.current()
+        } catch {
+          setCollecting(false)
+          // Keep the panel's own message if it gave one; otherwise say something generic.
+          setPanelState((previous) =>
+            previous.error ? previous : { ...previous, error: t("checkout.paymentDetailsError") }
+          )
+          return
+        }
+        setCollecting(false)
+        // The customer may have changed method while the token was being made.
+        if (latest.current.methodId !== methodId) return
+      }
+      checkout.pay({ methodId, payload })
+      return
+    }
+
+    if (!resolved.ready) {
       // Send the user to the first thing that needs fixing.
-      const invalid = resolved.method ? 'input[type="tel"]' : 'input[type="radio"]'
-      rootRef.current?.querySelector<HTMLElement>(invalid)?.focus()
+      rootRef.current?.querySelector<HTMLElement>('input[type="tel"]')?.focus()
       return
     }
     checkout.pay({ methodId: resolved.method.id, phone: resolved.e164 ?? undefined })
@@ -275,19 +375,63 @@ export function MomoCheckout({
             locale={locale}
             methods={methods}
             value={selection}
-            onChange={(next) => setSelection(next)}
+            onChange={handleMethodChange}
             error={methodError}
             phoneError={phoneError}
             operatorLogos={operatorLogos}
+            methodIcons={methodIcons}
+            disabled={collecting}
+            renderPanel={(method) => {
+              const methodPanel = panels?.[method.id]
+              if (!methodPanel) return undefined
+              const PanelComponent = methodPanel.component
+              const message =
+                panelState.error ??
+                (attempted && !panelState.ready ? t("checkout.completePayment") : undefined)
+              return (
+                <div data-slot="momo-checkout-panel" className="space-y-2">
+                  <PanelComponent
+                    key={method.id}
+                    method={method}
+                    amount={amount}
+                    currency={currency}
+                    locale={locale}
+                    country={country}
+                    disabled={collecting}
+                    setReady={setPanelReady}
+                    setCollect={setPanelCollect}
+                    submit={submitFromPanel}
+                    setError={setPanelError}
+                  />
+                  {message && (
+                    <p role="alert" className="text-destructive text-sm">
+                      {message}
+                    </p>
+                  )}
+                </div>
+              )
+            }}
           />
-          <Button
-            type="submit"
-            size="lg"
-            data-slot="momo-checkout-submit"
-            className={cn("w-full", classNames?.submit)}
-          >
-            {t("checkout.pay", { amount: formatFcfa(amount, { locale, currency }) })}
-          </Button>
+          {panel?.submit !== "panel" && (
+            <Button
+              type="submit"
+              size="lg"
+              disabled={submitDisabled || collecting}
+              data-slot="momo-checkout-submit"
+              className={cn("w-full", classNames?.submit)}
+            >
+              {submitLabel ??
+                t("checkout.pay", { amount: formatFcfa(amount, { locale, currency }) })}
+            </Button>
+          )}
+          {footer && (
+            <div
+              data-slot="momo-checkout-footer"
+              className={cn("text-muted-foreground text-center text-xs", classNames?.footer)}
+            >
+              {footer}
+            </div>
+          )}
         </form>
       )}
 
@@ -329,6 +473,7 @@ export function MomoCheckout({
           country={country}
           locale={locale}
           receipt={state.receipt}
+          methodLabel={methods.find((method) => method.id === state.receipt.methodId)?.label}
           details={receiptDetails}
           onDone={handleDone}
         />

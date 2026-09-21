@@ -1,6 +1,6 @@
 "use client"
 
-import { Banknote, Check, CreditCard, Smartphone } from "lucide-react"
+import { Banknote, Check, CreditCard, Smartphone, Wallet } from "lucide-react"
 import { useId, useState, type ComponentProps, type ReactNode } from "react"
 
 import { useCountry, useLocale, useT } from "@/components/mboa/mboa-provider"
@@ -57,17 +57,31 @@ export interface PaymentMethodPickerProps extends Omit<
   phoneError?: string
   /** Your own logos by operator id, shown instead of the color dot. */
   operatorLogos?: Record<string, ReactNode>
+  /**
+   * Renders your own panel under the cards for a method, such as your payment
+   * provider's card fields. Return nothing to use the built-in content (the
+   * phone field for Mobile Money).
+   */
+  renderPanel?: (method: PaymentMethod) => ReactNode
+  /** Your own icons by method id, for example a wallet's logo. mboa-ui ships no brand logos. */
+  methodIcons?: Record<string, ReactNode>
   /** Class names for parts of the picker. `className` styles the fieldset. */
   classNames?: PaymentMethodPickerClassNames
 }
 
-const icons = { card: CreditCard, cash: Banknote, mobile_money: Smartphone } as const
+const icons = {
+  card: CreditCard,
+  cash: Banknote,
+  mobile_money: Smartphone,
+  other: Wallet,
+} as const
 
 const labelKeys: Record<"card" | "cash", MessageKey> = {
   card: "picker.card",
   cash: "picker.cash",
 }
-const descriptionKeys: Record<PaymentMethod["kind"], MessageKey> = {
+// "other" has no built-in description: pass `description` on the method.
+const descriptionKeys: Partial<Record<PaymentMethod["kind"], MessageKey>> = {
   mobile_money: "picker.mobileMoneyDescription",
   card: "picker.cardDescription",
   cash: "picker.cashDescription",
@@ -91,6 +105,8 @@ export function PaymentMethodPicker({
   error,
   phoneError,
   operatorLogos,
+  renderPanel,
+  methodIcons,
   classNames,
   disabled,
   className,
@@ -115,6 +131,7 @@ export function PaymentMethodPicker({
   }
 
   const operator = resolved.operator
+  const customPanel = resolved.method ? renderPanel?.(resolved.method) : undefined
 
   return (
     <fieldset
@@ -142,8 +159,12 @@ export function PaymentMethodPicker({
             method.label ??
             (method.kind === "mobile_money"
               ? (methodOperator?.mobileMoneyName ?? methodOperator?.name ?? method.id)
-              : t(labelKeys[method.kind]))
-          const description = method.description ?? t(descriptionKeys[method.kind])
+              : method.kind === "card" || method.kind === "cash"
+                ? t(labelKeys[method.kind])
+                : method.id)
+          const descriptionKey = descriptionKeys[method.kind]
+          const description = method.description ?? (descriptionKey ? t(descriptionKey) : "")
+          const customIcon = methodIcons?.[method.id]
 
           return (
             <label
@@ -168,16 +189,17 @@ export function PaymentMethodPicker({
                 className="sr-only"
               />
               <span className="mt-0.5 flex size-5 shrink-0 items-center justify-center" aria-hidden>
-                {method.kind === "mobile_money" && methodOperator ? (
-                  (operatorLogos?.[methodOperator.id] ?? (
-                    <span
-                      className="size-3 rounded-full"
-                      style={{ backgroundColor: methodOperator.color }}
-                    />
-                  ))
-                ) : (
-                  <Icon className="text-muted-foreground size-5" />
-                )}
+                {customIcon ??
+                  (method.kind === "mobile_money" && methodOperator ? (
+                    (operatorLogos?.[methodOperator.id] ?? (
+                      <span
+                        className="size-3 rounded-full"
+                        style={{ backgroundColor: methodOperator.color }}
+                      />
+                    ))
+                  ) : (
+                    <Icon className="text-muted-foreground size-5" />
+                  ))}
               </span>
               <span className="min-w-0 flex-1">
                 <span
@@ -186,15 +208,17 @@ export function PaymentMethodPicker({
                 >
                   {label}
                 </span>
-                <span
-                  data-slot="payment-method-picker-option-description"
-                  className={cn(
-                    "text-muted-foreground block text-xs",
-                    classNames?.optionDescription
-                  )}
-                >
-                  {description}
-                </span>
+                {description && (
+                  <span
+                    data-slot="payment-method-picker-option-description"
+                    className={cn(
+                      "text-muted-foreground block text-xs",
+                      classNames?.optionDescription
+                    )}
+                  >
+                    {description}
+                  </span>
+                )}
               </span>
               {/* A tick that pops in when the card is chosen, so the choice is clear. */}
               <span
@@ -208,21 +232,31 @@ export function PaymentMethodPicker({
         })}
       </div>
 
-      {resolved.method?.kind === "mobile_money" && operator && (
-        <div className="motion-safe:animate-in motion-safe:fade-in motion-safe:slide-in-from-top-1 motion-safe:duration-200">
-          <PhoneInput
-            country={country}
-            locale={locale}
-            label={t("picker.phoneLabel", { operator: operator.name })}
-            operator={operator.id}
-            operatorLogos={operatorLogos}
-            className={classNames?.phone}
-            error={phoneError}
-            value={selection.phone}
-            onChange={(phone) => update({ ...selection, phone })}
-            disabled={disabled}
-          />
+      {customPanel ? (
+        <div
+          data-slot="payment-method-picker-panel"
+          className="motion-safe:animate-in motion-safe:fade-in motion-safe:slide-in-from-top-1 motion-safe:duration-200"
+        >
+          {customPanel}
         </div>
+      ) : (
+        resolved.method?.kind === "mobile_money" &&
+        operator && (
+          <div className="motion-safe:animate-in motion-safe:fade-in motion-safe:slide-in-from-top-1 motion-safe:duration-200">
+            <PhoneInput
+              country={country}
+              locale={locale}
+              label={t("picker.phoneLabel", { operator: operator.name })}
+              operator={operator.id}
+              operatorLogos={operatorLogos}
+              className={classNames?.phone}
+              error={phoneError}
+              value={selection.phone}
+              onChange={(phone) => update({ ...selection, phone })}
+              disabled={disabled}
+            />
+          </div>
+        )
       )}
 
       {error && (
