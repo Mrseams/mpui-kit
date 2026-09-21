@@ -2,6 +2,8 @@
 
 Thanks for helping. The most valuable contribution is often data: a new country, or a correction to an existing one.
 
+By taking part you agree to follow the [Code of Conduct](./CODE_OF_CONDUCT.md). To report a security problem, see [SECURITY.md](./SECURITY.md).
+
 ## Setup
 
 ```bash
