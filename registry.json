@@ -327,8 +327,8 @@
       "name": "use-momo-checkout",
       "type": "registry:hook",
       "title": "useMomoCheckout",
-      "description": "Runs the Mobile Money payment flow: calls your onPay, polls onCheckStatus while the user approves on their phone, times out, and cleans up. Drives the checkout state machine.",
-      "registryDependencies": ["@mboa/checkout-machine", "@mboa/country-types"],
+      "description": "The payment flow as a React hook: a thin layer over the framework-free checkout controller.",
+      "registryDependencies": ["@mboa/checkout-controller", "@mboa/checkout-machine"],
       "files": [
         {
           "path": "registry/mboa/hooks/use-momo-checkout.ts",
@@ -388,6 +388,33 @@
         }
       ],
       "dependencies": ["lucide-react"]
+    },
+    {
+      "name": "core-store",
+      "type": "registry:lib",
+      "title": "Core store",
+      "description": "A tiny observable store (getState, setState, subscribe). It is all a UI framework adapter needs: it fits React's useSyncExternalStore, a Vue ref, a Svelte store or a plain render function.",
+      "files": [
+        {
+          "path": "registry/mboa/lib/core/store.ts",
+          "type": "registry:lib",
+          "target": "lib/mboa/core/store.ts"
+        }
+      ]
+    },
+    {
+      "name": "checkout-controller",
+      "type": "registry:lib",
+      "title": "Checkout controller",
+      "description": "The Mobile Money payment flow with no UI framework in it: it calls your onPay, polls onCheckStatus, times out, retries and cleans up, and lets any UI subscribe to its state.",
+      "registryDependencies": ["@mboa/core-store", "@mboa/checkout-machine", "@mboa/country-types"],
+      "files": [
+        {
+          "path": "registry/mboa/lib/core/checkout-controller.ts",
+          "type": "registry:lib",
+          "target": "lib/mboa/core/checkout-controller.ts"
+        }
+      ]
     }
   ]
 }
