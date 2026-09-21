@@ -5,7 +5,7 @@
  */
 export interface ClassSlots {
   component: string
-  /** Source file under registry/mboa/components/. */
+  /** Source file under registry/mpkit/components/. */
   file: string
   /** Prefix of the data-slot attributes, such as "phone-input". */
   slotPrefix: string

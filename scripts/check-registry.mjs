@@ -5,14 +5,14 @@
  *
  * For every item it verifies that:
  *  - each file exists and has a target,
- *  - each @mboa/<name> dependency exists,
- *  - each import of another registry file (@/lib/mboa/..., @/components/mboa/...,
- *    @/hooks/mboa/...) is provided by the item or one of its dependencies,
+ *  - each @mpkit/<name> dependency exists,
+ *  - each import of another registry file (@/lib/mpkit/..., @/components/mpkit/...,
+ *    @/hooks/mpkit/...) is provided by the item or one of its dependencies,
  *  - each shadcn primitive it imports (@/components/ui/<name>) is a registryDependency,
  *  - each npm package it imports is in `dependencies` (react and next excepted),
  *  - no file is imported through @/registry/... or a relative path.
  * It also checks that no two items write the same target, and that every source
- * file under registry/mboa/ is registered (tests and the countries index excepted).
+ * file under registry/mpkit/ is registered (tests and the countries index excepted).
  *
  * Usage: node scripts/check-registry.mjs [path/to/registry.json]
  */
@@ -34,11 +34,11 @@ const NOT_DISTRIBUTED = [/\.test\.tsx?$/, /countries\/index\.ts$/, /lib\/core\/i
 
 const stripExtension = (path) => path.replace(/\.(tsx?|jsx?)$/, "")
 
-/** Names of the @mboa items an item depends on, directly. */
-function mboaDependencies(item) {
+/** Names of the @mpkit items an item depends on, directly. */
+function mpkitDependencies(item) {
   return (item.registryDependencies ?? [])
-    .filter((name) => name.startsWith("@mboa/"))
-    .map((name) => name.slice("@mboa/".length))
+    .filter((name) => name.startsWith("@mpkit/"))
+    .map((name) => name.slice("@mpkit/".length))
 }
 
 /** An item plus everything it pulls in, following registryDependencies. */
@@ -46,7 +46,7 @@ function closure(name, seen = new Set()) {
   if (seen.has(name)) return seen
   seen.add(name)
   const item = items.get(name)
-  if (item) for (const dependency of mboaDependencies(item)) closure(dependency, seen)
+  if (item) for (const dependency of mpkitDependencies(item)) closure(dependency, seen)
   return seen
 }
 
@@ -92,7 +92,7 @@ for (const item of registry.items) {
   )
 
   for (const dependency of item.registryDependencies ?? []) {
-    if (dependency.startsWith("@mboa/") && !items.has(dependency.slice("@mboa/".length))) {
+    if (dependency.startsWith("@mpkit/") && !items.has(dependency.slice("@mpkit/".length))) {
       error(`${item.name}: depends on unknown item ${dependency}`)
     }
   }
@@ -104,10 +104,10 @@ for (const item of registry.items) {
       const where = `${item.name} (${file.path})`
 
       if (specifier.startsWith("@/registry/")) {
-        error(`${where}: imports ${specifier}; use the installed path (@/lib/mboa/...) instead`)
+        error(`${where}: imports ${specifier}; use the installed path (@/lib/mpkit/...) instead`)
       } else if (specifier.startsWith(".")) {
         error(`${where}: relative import ${specifier}; use an @/... path so the CLI can rewrite it`)
-      } else if (/^@\/(lib|components|hooks)\/mboa\//.test(specifier)) {
+      } else if (/^@\/(lib|components|hooks)\/mpkit\//.test(specifier)) {
         const key = specifier.slice(2)
         if (!providedTargets.has(key)) {
           error(
@@ -136,7 +136,7 @@ for (const item of registry.items) {
     }
   }
 
-  for (const dependency of mboaDependencies(item)) {
+  for (const dependency of mpkitDependencies(item)) {
     if (!imported.has(dependency) && items.has(dependency)) {
       // Not an error: a dependency can be needed for types or kept for clarity.
       warnings.push(`${item.name}: no direct import from ${dependency}`)
@@ -156,8 +156,8 @@ const registered = new Set(
     (item.files ?? []).map((file) => file.path.replaceAll("\\", "/"))
   )
 )
-if (existsSync("registry/mboa")) {
-  for (const path of walk("registry/mboa").map((file) =>
+if (existsSync("registry/mpkit")) {
+  for (const path of walk("registry/mpkit").map((file) =>
     relative(".", file).replaceAll("\\", "/")
   )) {
     if (NOT_DISTRIBUTED.some((pattern) => pattern.test(path))) continue

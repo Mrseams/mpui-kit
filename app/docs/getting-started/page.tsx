@@ -6,16 +6,16 @@ import { registryUrlTemplate } from "@/lib/site"
 
 export const metadata: Metadata = { title: "Getting started" }
 
-const providerExample = `import { MboaProvider } from "@/components/mboa/mboa-provider"
-import { cm } from "@/lib/mboa/countries/cm"
+const providerExample = `import { MpKitProvider } from "@/components/mpkit/mpkit-provider"
+import { cm } from "@/lib/mpkit/countries/cm"
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="fr">
       <body>
-        <MboaProvider country={cm} locale="fr">
+        <MpKitProvider country={cm} locale="fr">
           {children}
-        </MboaProvider>
+        </MpKitProvider>
       </body>
     </html>
   )
@@ -65,11 +65,11 @@ export default function GettingStarted() {
       <section className="space-y-3">
         <h2 className="text-xl font-semibold">1. Register the namespace</h2>
         <p className="text-muted-foreground">
-          Items depend on each other through the <code>@mboa</code> namespace, so register it once.
+          Items depend on each other through the <code>@mpkit</code> namespace, so register it once.
         </p>
         <CodeBlock
-          label="Register the mboa namespace"
-          code={`npx shadcn@latest registry add @mboa=${registryUrlTemplate}`}
+          label="Register the mpkit namespace"
+          code={`npx shadcn@latest registry add @mpkit=${registryUrlTemplate}`}
         />
       </section>
 
@@ -77,22 +77,22 @@ export default function GettingStarted() {
         <h2 className="text-xl font-semibold">2. Add a country and the provider</h2>
         <p className="text-muted-foreground">
           Components never assume a country. They read it from a prop or from{" "}
-          <code>MboaProvider</code>. Shared pieces, such as the country types, are installed
+          <code>MpKitProvider</code>. Shared pieces, such as the country types, are installed
           automatically.
         </p>
         <CodeBlock
           label="Install a country and the provider"
-          code="npx shadcn@latest add @mboa/country-cm @mboa/mboa-provider"
+          code="npx shadcn@latest add @mpkit/country-cm @mpkit/mpkit-provider"
         />
         <p className="text-muted-foreground">
-          Files land in <code>lib/mboa/</code> and <code>components/mboa/</code>, or under{" "}
+          Files land in <code>lib/mpkit/</code> and <code>components/mpkit/</code>, or under{" "}
           <code>src/</code> if your project uses it.
         </p>
       </section>
 
       <section className="space-y-3">
         <h2 className="text-xl font-semibold">3. Wrap your app</h2>
-        <CodeBlock label="MboaProvider example" code={providerExample} />
+        <CodeBlock label="MpKitProvider example" code={providerExample} />
       </section>
 
       <section className="space-y-3">

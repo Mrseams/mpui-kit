@@ -1,4 +1,4 @@
-import type { PayResult, StatusResult, PaymentRequest } from "@/hooks/mboa/use-momo-checkout"
+import type { PayResult, StatusResult, PaymentRequest } from "@/hooks/mpkit/use-momo-checkout"
 
 /**
  * A fake payment backend for the docs demos. It makes no network calls: it

@@ -6,9 +6,9 @@ import type { PropRow } from "@/components/site/props-table"
 
 export const metadata: Metadata = { title: "Currency" }
 
-const usage = `import { Currency } from "@/components/mboa/currency"
+const usage = `import { Currency } from "@/components/mpkit/currency"
 
-// Inside <MboaProvider country={cm}>
+// Inside <MpKitProvider country={cm}>
 <Currency amount={25000} />                  // 25 000 FCFA
 <Currency amount={25000} display="code" />   // 25 000 XAF
 <Currency amount={25000} locale="en" />      // 25,000 FCFA
@@ -17,7 +17,7 @@ const usage = `import { Currency } from "@/components/mboa/currency"
 <Currency amount={25000} currency="XOF" display="code" />
 
 // Outside components, use the function directly
-import { formatFcfa } from "@/lib/mboa/format-fcfa"
+import { formatFcfa } from "@/lib/mpkit/format-fcfa"
 formatFcfa(25000) // "25 000 FCFA"`
 
 const props: PropRow[] = [
@@ -42,13 +42,13 @@ const props: PropRow[] = [
   {
     name: "country",
     type: "CountryConfig",
-    default: "MboaProvider's country",
+    default: "MpKitProvider's country",
     description: "Country to take the currency from.",
   },
   {
     name: "locale",
     type: '"fr" | "en"',
-    default: "MboaProvider's locale, then “fr”",
+    default: "MpKitProvider's locale, then “fr”",
     description: "Digit grouping. French gives 25 000, English gives 25,000.",
   },
   {

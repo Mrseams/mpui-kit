@@ -11,8 +11,8 @@ export default function DocsIndex() {
       <header className="space-y-3">
         <h1 className="text-3xl font-semibold tracking-tight">Introduction</h1>
         <p className="text-muted-foreground max-w-prose">
-          mboa-ui is a shadcn/ui registry for African markets. You copy components into your
-          project, like the rest of shadcn/ui, and own the code.
+          MP Kit is a shadcn/ui registry for African markets. You copy components into your project,
+          like the rest of shadcn/ui, and own the code.
         </p>
       </header>
 
@@ -71,7 +71,7 @@ export default function DocsIndex() {
       </section>
 
       <p className="text-muted-foreground text-sm">
-        mboa-ui is an independent project, not affiliated with any mobile network operator or mobile
+        MP Kit is an independent project, not affiliated with any mobile network operator or mobile
         money provider.
       </p>
     </article>

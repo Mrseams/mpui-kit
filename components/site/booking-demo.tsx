@@ -4,14 +4,14 @@ import { useId, useState } from "react"
 
 import { LocaleToggle } from "@/components/site/locale-toggle"
 import { Button } from "@/components/ui/button"
-import { Currency } from "@/components/mboa/currency"
-import { MboaProvider } from "@/components/mboa/mboa-provider"
-import { MomoCheckout } from "@/components/mboa/momo-checkout"
+import { Currency } from "@/components/mpkit/currency"
+import { MpKitProvider } from "@/components/mpkit/mpkit-provider"
+import { MomoCheckout } from "@/components/mpkit/momo-checkout"
 import { bookingCopy, bookingTotal, clampNights, listing } from "@/lib/booking"
 import { createDemoBackend, type DemoScenario } from "@/lib/demo-backend"
-import type { CheckoutStatus } from "@/lib/mboa/checkout-machine"
-import { cm } from "@/lib/mboa/countries/cm"
-import type { Locale } from "@/lib/mboa/countries/types"
+import type { CheckoutStatus } from "@/lib/mpkit/checkout-machine"
+import { cm } from "@/lib/mpkit/countries/cm"
+import type { Locale } from "@/lib/mpkit/countries/types"
 
 const SCENARIOS: DemoScenario[] = ["approve", "decline", "timeout", "error"]
 
@@ -40,7 +40,7 @@ export function BookingDemo() {
   const total = bookingTotal(nights)
 
   return (
-    <MboaProvider country={cm} locale={locale}>
+    <MpKitProvider country={cm} locale={locale}>
       <div className="space-y-4">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <p className="text-muted-foreground text-sm">{copy.fakeNote}</p>
@@ -173,7 +173,7 @@ export function BookingDemo() {
           </div>
         </details>
       </div>
-    </MboaProvider>
+    </MpKitProvider>
   )
 }
 

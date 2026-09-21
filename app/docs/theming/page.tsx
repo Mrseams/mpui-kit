@@ -183,7 +183,7 @@ export default function ThemingPage() {
         <p className="text-muted-foreground max-w-prose">
           Like the rest of shadcn/ui, the components are copied into your project, so anything the
           two levels above do not cover you can change directly. Text sizes and spacing are plain
-          Tailwind classes in the files under <code>components/mboa/</code>.
+          Tailwind classes in the files under <code>components/mpkit/</code>.
         </p>
       </section>
     </article>

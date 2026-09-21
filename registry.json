@@ -1,7 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry.json",
-  "name": "mboa",
-  "homepage": "https://mboa-ui.vercel.app",
+  "name": "mpkit",
+  "homepage": "https://mp-kit.vercel.app",
   "items": [
     {
       "name": "country-types",
@@ -10,9 +10,9 @@
       "description": "The CountryConfig type and shared locale and currency types. Required by every country and by components that read country data.",
       "files": [
         {
-          "path": "registry/mboa/lib/countries/types.ts",
+          "path": "registry/mpkit/lib/countries/types.ts",
           "type": "registry:lib",
-          "target": "lib/mboa/countries/types.ts"
+          "target": "lib/mpkit/countries/types.ts"
         }
       ]
     },
@@ -23,9 +23,9 @@
       "description": "prefixRange() expands a regulator's numeric range, such as 650 to 653, into individual phone prefixes.",
       "files": [
         {
-          "path": "registry/mboa/lib/countries/prefix-range.ts",
+          "path": "registry/mpkit/lib/countries/prefix-range.ts",
           "type": "registry:lib",
-          "target": "lib/mboa/countries/prefix-range.ts"
+          "target": "lib/mpkit/countries/prefix-range.ts"
         }
       ]
     },
@@ -34,12 +34,12 @@
       "type": "registry:lib",
       "title": "Cameroon",
       "description": "Country data for Cameroon: operators and prefixes, XAF currency, FR/EN locales, regions and cities. Prefixes are community data, not an authoritative source.",
-      "registryDependencies": ["@mboa/country-types", "@mboa/prefix-range"],
+      "registryDependencies": ["@mpkit/country-types", "@mpkit/prefix-range"],
       "files": [
         {
-          "path": "registry/mboa/lib/countries/cm.ts",
+          "path": "registry/mpkit/lib/countries/cm.ts",
           "type": "registry:lib",
-          "target": "lib/mboa/countries/cm.ts"
+          "target": "lib/mpkit/countries/cm.ts"
         }
       ]
     },
@@ -47,13 +47,13 @@
       "name": "i18n",
       "type": "registry:lib",
       "title": "FR/EN dictionary",
-      "description": "Small French and English dictionary and translator used by every mboa-ui component. Supports overriding any string.",
-      "registryDependencies": ["@mboa/country-types"],
+      "description": "Small French and English dictionary and translator used by every MP Kit component. Supports overriding any string.",
+      "registryDependencies": ["@mpkit/country-types"],
       "files": [
         {
-          "path": "registry/mboa/lib/i18n.ts",
+          "path": "registry/mpkit/lib/i18n.ts",
           "type": "registry:lib",
-          "target": "lib/mboa/i18n.ts"
+          "target": "lib/mpkit/i18n.ts"
         }
       ]
     },
@@ -62,12 +62,12 @@
       "type": "registry:lib",
       "title": "formatFcfa",
       "description": "Formats CFA franc amounts (XAF and XOF) with zero decimals and French spacing, for example 25 000 FCFA.",
-      "registryDependencies": ["@mboa/country-types"],
+      "registryDependencies": ["@mpkit/country-types"],
       "files": [
         {
-          "path": "registry/mboa/lib/format-fcfa.ts",
+          "path": "registry/mpkit/lib/format-fcfa.ts",
           "type": "registry:lib",
-          "target": "lib/mboa/format-fcfa.ts"
+          "target": "lib/mpkit/format-fcfa.ts"
         }
       ]
     },
@@ -76,12 +76,12 @@
       "type": "registry:lib",
       "title": "Phone utilities",
       "description": "Parses local and international phone numbers, detects the operator from the prefix, validates length and returns E.164.",
-      "registryDependencies": ["@mboa/country-types"],
+      "registryDependencies": ["@mpkit/country-types"],
       "files": [
         {
-          "path": "registry/mboa/lib/phone.ts",
+          "path": "registry/mpkit/lib/phone.ts",
           "type": "registry:lib",
-          "target": "lib/mboa/phone.ts"
+          "target": "lib/mpkit/phone.ts"
         }
       ]
     },
@@ -92,9 +92,9 @@
       "description": "Formats a duration in milliseconds as m:ss for countdown timers.",
       "files": [
         {
-          "path": "registry/mboa/lib/countdown.ts",
+          "path": "registry/mpkit/lib/countdown.ts",
           "type": "registry:lib",
-          "target": "lib/mboa/countdown.ts"
+          "target": "lib/mpkit/countdown.ts"
         }
       ]
     },
@@ -103,26 +103,26 @@
       "type": "registry:lib",
       "title": "Checkout state machine",
       "description": "Pure reducer for the payment flow: idle, awaiting approval, success, failed and timeout, with retry and stale-result protection.",
-      "registryDependencies": ["@mboa/country-types"],
+      "registryDependencies": ["@mpkit/country-types"],
       "files": [
         {
-          "path": "registry/mboa/lib/checkout-machine.ts",
+          "path": "registry/mpkit/lib/checkout-machine.ts",
           "type": "registry:lib",
-          "target": "lib/mboa/checkout-machine.ts"
+          "target": "lib/mpkit/checkout-machine.ts"
         }
       ]
     },
     {
-      "name": "mboa-provider",
+      "name": "mpkit-provider",
       "type": "registry:component",
-      "title": "MboaProvider",
-      "description": "Context provider for country data, UI language and string overrides, plus the useCountry, useLocale and useT hooks used by every mboa-ui component.",
-      "registryDependencies": ["@mboa/country-types", "@mboa/i18n"],
+      "title": "MpKitProvider",
+      "description": "Context provider for country data, UI language and string overrides, plus the useCountry, useLocale and useT hooks used by every MP Kit component.",
+      "registryDependencies": ["@mpkit/country-types", "@mpkit/i18n"],
       "files": [
         {
-          "path": "registry/mboa/components/mboa-provider.tsx",
+          "path": "registry/mpkit/components/mpkit-provider.tsx",
           "type": "registry:component",
-          "target": "components/mboa/mboa-provider.tsx"
+          "target": "components/mpkit/mpkit-provider.tsx"
         }
       ]
     },
@@ -131,12 +131,16 @@
       "type": "registry:component",
       "title": "Currency",
       "description": "Displays an amount of CFA francs (XAF or XOF) with zero decimals and French spacing, for example 25 000 FCFA. Shows FCFA or the ISO code.",
-      "registryDependencies": ["@mboa/format-fcfa", "@mboa/mboa-provider", "@mboa/country-types"],
+      "registryDependencies": [
+        "@mpkit/format-fcfa",
+        "@mpkit/mpkit-provider",
+        "@mpkit/country-types"
+      ],
       "files": [
         {
-          "path": "registry/mboa/components/currency.tsx",
+          "path": "registry/mpkit/components/currency.tsx",
           "type": "registry:component",
-          "target": "components/mboa/currency.tsx"
+          "target": "components/mpkit/currency.tsx"
         }
       ]
     },
@@ -145,12 +149,12 @@
       "type": "registry:lib",
       "title": "Phone error messages",
       "description": "Turns a phone validation issue into a translated, user-facing message in French or English.",
-      "registryDependencies": ["@mboa/country-types", "@mboa/i18n", "@mboa/phone"],
+      "registryDependencies": ["@mpkit/country-types", "@mpkit/i18n", "@mpkit/phone"],
       "files": [
         {
-          "path": "registry/mboa/lib/phone-errors.ts",
+          "path": "registry/mpkit/lib/phone-errors.ts",
           "type": "registry:lib",
-          "target": "lib/mboa/phone-errors.ts"
+          "target": "lib/mpkit/phone-errors.ts"
         }
       ]
     },
@@ -161,16 +165,16 @@
       "description": "createPhoneSchema(country) returns a zod schema that accepts what people type and outputs the E.164 number, with translated error messages.",
       "dependencies": ["zod"],
       "registryDependencies": [
-        "@mboa/country-types",
-        "@mboa/i18n",
-        "@mboa/phone",
-        "@mboa/phone-errors"
+        "@mpkit/country-types",
+        "@mpkit/i18n",
+        "@mpkit/phone",
+        "@mpkit/phone-errors"
       ],
       "files": [
         {
-          "path": "registry/mboa/lib/phone-schema.ts",
+          "path": "registry/mpkit/lib/phone-schema.ts",
           "type": "registry:lib",
-          "target": "lib/mboa/phone-schema.ts"
+          "target": "lib/mpkit/phone-schema.ts"
         }
       ]
     },
@@ -179,12 +183,12 @@
       "type": "registry:component",
       "title": "OperatorBadge",
       "description": "A neutral badge for a mobile operator: a color dot (or your own logo) and the name. Ships no brand assets.",
-      "registryDependencies": ["@mboa/country-types"],
+      "registryDependencies": ["@mpkit/country-types"],
       "files": [
         {
-          "path": "registry/mboa/components/operator-badge.tsx",
+          "path": "registry/mpkit/components/operator-badge.tsx",
           "type": "registry:component",
-          "target": "components/mboa/operator-badge.tsx"
+          "target": "components/mpkit/operator-badge.tsx"
         }
       ]
     },
@@ -195,18 +199,18 @@
       "description": "A phone number field that groups digits as you type, detects the operator from the prefix, validates the length and returns the E.164 number. Works with react-hook-form and zod.",
       "registryDependencies": [
         "input",
-        "@mboa/operator-badge",
-        "@mboa/mboa-provider",
-        "@mboa/use-phone-field",
-        "@mboa/phone",
-        "@mboa/phone-errors",
-        "@mboa/country-types"
+        "@mpkit/operator-badge",
+        "@mpkit/mpkit-provider",
+        "@mpkit/use-phone-field",
+        "@mpkit/phone",
+        "@mpkit/phone-errors",
+        "@mpkit/country-types"
       ],
       "files": [
         {
-          "path": "registry/mboa/components/phone-input.tsx",
+          "path": "registry/mpkit/components/phone-input.tsx",
           "type": "registry:component",
-          "target": "components/mboa/phone-input.tsx"
+          "target": "components/mpkit/phone-input.tsx"
         }
       ]
     },
@@ -215,12 +219,12 @@
       "type": "registry:lib",
       "title": "Payment methods",
       "description": "The payment methods a country offers (Mobile Money per operator, card, cash) and resolvePayment(), which tells you whether a selection is ready to pay.",
-      "registryDependencies": ["@mboa/country-types", "@mboa/i18n", "@mboa/phone"],
+      "registryDependencies": ["@mpkit/country-types", "@mpkit/i18n", "@mpkit/phone"],
       "files": [
         {
-          "path": "registry/mboa/lib/payment-methods.ts",
+          "path": "registry/mpkit/lib/payment-methods.ts",
           "type": "registry:lib",
-          "target": "lib/mboa/payment-methods.ts"
+          "target": "lib/mpkit/payment-methods.ts"
         }
       ]
     },
@@ -231,17 +235,17 @@
       "description": "Selectable cards for Mobile Money operators, card, cash and methods you add. Choosing Mobile Money reveals a phone input; any method can show your own panel. Built on native radio inputs.",
       "dependencies": ["lucide-react"],
       "registryDependencies": [
-        "@mboa/mboa-provider",
-        "@mboa/phone-input",
-        "@mboa/payment-methods",
-        "@mboa/country-types",
-        "@mboa/i18n"
+        "@mpkit/mpkit-provider",
+        "@mpkit/phone-input",
+        "@mpkit/payment-methods",
+        "@mpkit/country-types",
+        "@mpkit/i18n"
       ],
       "files": [
         {
-          "path": "registry/mboa/components/payment-method-picker.tsx",
+          "path": "registry/mpkit/components/payment-method-picker.tsx",
           "type": "registry:component",
-          "target": "components/mboa/payment-method-picker.tsx"
+          "target": "components/mpkit/payment-method-picker.tsx"
         }
       ]
     },
@@ -252,9 +256,9 @@
       "description": "Copies text to the clipboard with a fallback for older Android WebViews and non-secure pages. Resolves to whether it worked; never throws.",
       "files": [
         {
-          "path": "registry/mboa/lib/clipboard.ts",
+          "path": "registry/mpkit/lib/clipboard.ts",
           "type": "registry:lib",
-          "target": "lib/mboa/clipboard.ts"
+          "target": "lib/mpkit/clipboard.ts"
         }
       ]
     },
@@ -265,9 +269,9 @@
       "description": "Builds a tel: link for a USSD code with # percent-encoded, and refuses text that is not dialable.",
       "files": [
         {
-          "path": "registry/mboa/lib/dial.ts",
+          "path": "registry/mpkit/lib/dial.ts",
           "type": "registry:lib",
-          "target": "lib/mboa/dial.ts"
+          "target": "lib/mpkit/dial.ts"
         }
       ]
     },
@@ -276,12 +280,12 @@
       "type": "registry:hook",
       "title": "useCountdown",
       "description": "Time left until a deadline as a React hook: a thin layer over the framework-free countdown controller.",
-      "registryDependencies": ["@mboa/countdown-controller"],
+      "registryDependencies": ["@mpkit/countdown-controller"],
       "files": [
         {
-          "path": "registry/mboa/hooks/use-countdown.ts",
+          "path": "registry/mpkit/hooks/use-countdown.ts",
           "type": "registry:hook",
-          "target": "hooks/mboa/use-countdown.ts"
+          "target": "hooks/mpkit/use-countdown.ts"
         }
       ]
     },
@@ -292,20 +296,20 @@
       "description": "Asks the user to approve a Mobile Money payment on their phone: approval code with copy and dial actions, an animated waiting state, a countdown and a retry button after the timeout.",
       "registryDependencies": [
         "button",
-        "@mboa/mboa-provider",
-        "@mboa/use-countdown",
-        "@mboa/countdown",
-        "@mboa/clipboard",
-        "@mboa/dial",
-        "@mboa/phone",
-        "@mboa/i18n",
-        "@mboa/country-types"
+        "@mpkit/mpkit-provider",
+        "@mpkit/use-countdown",
+        "@mpkit/countdown",
+        "@mpkit/clipboard",
+        "@mpkit/dial",
+        "@mpkit/phone",
+        "@mpkit/i18n",
+        "@mpkit/country-types"
       ],
       "files": [
         {
-          "path": "registry/mboa/components/ussd-prompt.tsx",
+          "path": "registry/mpkit/components/ussd-prompt.tsx",
           "type": "registry:component",
-          "target": "components/mboa/ussd-prompt.tsx"
+          "target": "components/mpkit/ussd-prompt.tsx"
         }
       ],
       "dependencies": ["lucide-react"]
@@ -315,12 +319,12 @@
       "type": "registry:lib",
       "title": "formatDateTime",
       "description": "Formats a Unix time as a short date and time in French or English.",
-      "registryDependencies": ["@mboa/country-types"],
+      "registryDependencies": ["@mpkit/country-types"],
       "files": [
         {
-          "path": "registry/mboa/lib/format-date.ts",
+          "path": "registry/mpkit/lib/format-date.ts",
           "type": "registry:lib",
-          "target": "lib/mboa/format-date.ts"
+          "target": "lib/mpkit/format-date.ts"
         }
       ]
     },
@@ -329,12 +333,12 @@
       "type": "registry:hook",
       "title": "useMomoCheckout",
       "description": "The payment flow as a React hook: a thin layer over the framework-free checkout controller.",
-      "registryDependencies": ["@mboa/checkout-controller", "@mboa/checkout-machine"],
+      "registryDependencies": ["@mpkit/checkout-controller", "@mpkit/checkout-machine"],
       "files": [
         {
-          "path": "registry/mboa/hooks/use-momo-checkout.ts",
+          "path": "registry/mpkit/hooks/use-momo-checkout.ts",
           "type": "registry:hook",
-          "target": "hooks/mboa/use-momo-checkout.ts"
+          "target": "hooks/mpkit/use-momo-checkout.ts"
         }
       ]
     },
@@ -346,33 +350,33 @@
       "dependencies": ["lucide-react"],
       "registryDependencies": [
         "button",
-        "@mboa/currency",
-        "@mboa/mboa-provider",
-        "@mboa/checkout-machine",
-        "@mboa/country-types",
-        "@mboa/format-date",
-        "@mboa/payment-methods",
-        "@mboa/phone"
+        "@mpkit/currency",
+        "@mpkit/mpkit-provider",
+        "@mpkit/checkout-machine",
+        "@mpkit/country-types",
+        "@mpkit/format-date",
+        "@mpkit/payment-methods",
+        "@mpkit/phone"
       ],
       "files": [
         {
-          "path": "registry/mboa/components/receipt-card.tsx",
+          "path": "registry/mpkit/components/receipt-card.tsx",
           "type": "registry:component",
-          "target": "components/mboa/receipt-card.tsx"
+          "target": "components/mpkit/receipt-card.tsx"
         }
       ]
     },
     {
       "name": "method-panel",
       "type": "registry:component",
-      "title": "MethodPanel",
-      "description": "Types for hosting your payment provider's card or PayPal fields inside the checkout. Card details never enter mboa-ui: the panel returns an opaque token.",
-      "registryDependencies": ["@mboa/country-types", "@mboa/payment-methods"],
+      "title": "MethodPanel (beta)",
+      "description": "Beta. Types for hosting your payment provider's card or PayPal fields inside the checkout. Card details never enter MP Kit: the panel returns an opaque token.",
+      "registryDependencies": ["@mpkit/country-types", "@mpkit/payment-methods"],
       "files": [
         {
-          "path": "registry/mboa/components/method-panel.ts",
+          "path": "registry/mpkit/components/method-panel.ts",
           "type": "registry:component",
-          "target": "components/mboa/method-panel.ts"
+          "target": "components/mpkit/method-panel.ts"
         }
       ]
     },
@@ -380,27 +384,27 @@
       "name": "momo-checkout",
       "type": "registry:block",
       "title": "Mobile Money checkout",
-      "description": "A complete checkout: choose Mobile Money, card or any method you add, then approve and see a receipt. Host your provider's card or PayPal fields in a panel. You provide onPay and onCheckStatus; it never talks to a provider itself and never sees card details.",
+      "description": "A complete checkout: choose Mobile Money, card or any method you add, then approve and see a receipt. Host your provider's card or PayPal fields in a panel (beta). You provide onPay and onCheckStatus; it never talks to a provider itself and never sees card details.",
       "registryDependencies": [
         "button",
-        "@mboa/currency",
-        "@mboa/mboa-provider",
-        "@mboa/method-panel",
-        "@mboa/payment-method-picker",
-        "@mboa/receipt-card",
-        "@mboa/ussd-prompt",
-        "@mboa/use-momo-checkout",
-        "@mboa/checkout-machine",
-        "@mboa/country-types",
-        "@mboa/format-fcfa",
-        "@mboa/payment-methods",
-        "@mboa/phone-errors"
+        "@mpkit/currency",
+        "@mpkit/mpkit-provider",
+        "@mpkit/method-panel",
+        "@mpkit/payment-method-picker",
+        "@mpkit/receipt-card",
+        "@mpkit/ussd-prompt",
+        "@mpkit/use-momo-checkout",
+        "@mpkit/checkout-machine",
+        "@mpkit/country-types",
+        "@mpkit/format-fcfa",
+        "@mpkit/payment-methods",
+        "@mpkit/phone-errors"
       ],
       "files": [
         {
-          "path": "registry/mboa/components/momo-checkout.tsx",
+          "path": "registry/mpkit/components/momo-checkout.tsx",
           "type": "registry:component",
-          "target": "components/mboa/momo-checkout.tsx"
+          "target": "components/mpkit/momo-checkout.tsx"
         }
       ],
       "dependencies": ["lucide-react"]
@@ -412,9 +416,9 @@
       "description": "A tiny observable store (getState, setState, subscribe). It is all a UI framework adapter needs: it fits React's useSyncExternalStore, a Vue ref, a Svelte store or a plain render function.",
       "files": [
         {
-          "path": "registry/mboa/lib/core/store.ts",
+          "path": "registry/mpkit/lib/core/store.ts",
           "type": "registry:lib",
-          "target": "lib/mboa/core/store.ts"
+          "target": "lib/mpkit/core/store.ts"
         }
       ]
     },
@@ -423,12 +427,16 @@
       "type": "registry:lib",
       "title": "Checkout controller",
       "description": "The Mobile Money payment flow with no UI framework in it: it calls your onPay, polls onCheckStatus, times out, retries and cleans up, and lets any UI subscribe to its state.",
-      "registryDependencies": ["@mboa/core-store", "@mboa/checkout-machine", "@mboa/country-types"],
+      "registryDependencies": [
+        "@mpkit/core-store",
+        "@mpkit/checkout-machine",
+        "@mpkit/country-types"
+      ],
       "files": [
         {
-          "path": "registry/mboa/lib/core/checkout-controller.ts",
+          "path": "registry/mpkit/lib/core/checkout-controller.ts",
           "type": "registry:lib",
-          "target": "lib/mboa/core/checkout-controller.ts"
+          "target": "lib/mpkit/core/checkout-controller.ts"
         }
       ]
     },
@@ -437,12 +445,12 @@
       "type": "registry:lib",
       "title": "Phone field core",
       "description": "The behaviour of a phone number field with no UI framework in it: grouping digits as you type, keeping the caret in place, deleting a digit when Backspace lands on a space, detecting the operator and validating.",
-      "registryDependencies": ["@mboa/core-store", "@mboa/phone", "@mboa/country-types"],
+      "registryDependencies": ["@mpkit/core-store", "@mpkit/phone", "@mpkit/country-types"],
       "files": [
         {
-          "path": "registry/mboa/lib/core/phone-field.ts",
+          "path": "registry/mpkit/lib/core/phone-field.ts",
           "type": "registry:lib",
-          "target": "lib/mboa/core/phone-field.ts"
+          "target": "lib/mpkit/core/phone-field.ts"
         }
       ]
     },
@@ -451,12 +459,12 @@
       "type": "registry:lib",
       "title": "Countdown controller",
       "description": "A countdown with no UI framework in it. It ticks exactly on the second, works the time left out from the real clock, and re-checks when the page becomes visible again.",
-      "registryDependencies": ["@mboa/core-store", "@mboa/countdown"],
+      "registryDependencies": ["@mpkit/core-store", "@mpkit/countdown"],
       "files": [
         {
-          "path": "registry/mboa/lib/core/countdown-controller.ts",
+          "path": "registry/mpkit/lib/core/countdown-controller.ts",
           "type": "registry:lib",
-          "target": "lib/mboa/core/countdown-controller.ts"
+          "target": "lib/mpkit/core/countdown-controller.ts"
         }
       ]
     },
@@ -465,12 +473,12 @@
       "type": "registry:hook",
       "title": "usePhoneField",
       "description": "A headless phone field for React: all the behaviour of PhoneInput with none of its markup. Spread getInputProps() on any input.",
-      "registryDependencies": ["@mboa/phone-field", "@mboa/phone", "@mboa/country-types"],
+      "registryDependencies": ["@mpkit/phone-field", "@mpkit/phone", "@mpkit/country-types"],
       "files": [
         {
-          "path": "registry/mboa/hooks/use-phone-field.ts",
+          "path": "registry/mpkit/hooks/use-phone-field.ts",
           "type": "registry:hook",
-          "target": "hooks/mboa/use-phone-field.ts"
+          "target": "hooks/mpkit/use-phone-field.ts"
         }
       ]
     }

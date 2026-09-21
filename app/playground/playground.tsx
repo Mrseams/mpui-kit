@@ -6,20 +6,20 @@ import { Button } from "@/components/ui/button"
 
 import { CheckoutDemo } from "@/app/docs/components/momo-checkout/checkout-demo"
 import { LocaleToggle } from "@/components/site/locale-toggle"
-import { Currency } from "@/components/mboa/currency"
-import { MboaProvider, useLocale, useT } from "@/components/mboa/mboa-provider"
-import { PaymentMethodPicker } from "@/components/mboa/payment-method-picker"
-import { PhoneInput } from "@/components/mboa/phone-input"
-import { UssdPrompt } from "@/components/mboa/ussd-prompt"
-import { cm } from "@/lib/mboa/countries/cm"
-import type { Locale } from "@/lib/mboa/countries/types"
-import { formatFcfa, type CurrencyDisplay } from "@/lib/mboa/format-fcfa"
-import type { PhoneValidation } from "@/lib/mboa/phone"
+import { Currency } from "@/components/mpkit/currency"
+import { MpKitProvider, useLocale, useT } from "@/components/mpkit/mpkit-provider"
+import { PaymentMethodPicker } from "@/components/mpkit/payment-method-picker"
+import { PhoneInput } from "@/components/mpkit/phone-input"
+import { UssdPrompt } from "@/components/mpkit/ussd-prompt"
+import { cm } from "@/lib/mpkit/countries/cm"
+import type { Locale } from "@/lib/mpkit/countries/types"
+import { formatFcfa, type CurrencyDisplay } from "@/lib/mpkit/format-fcfa"
+import type { PhoneValidation } from "@/lib/mpkit/phone"
 import {
   emptySelection,
   type PaymentSelection,
   type ResolvedPayment,
-} from "@/lib/mboa/payment-methods"
+} from "@/lib/mpkit/payment-methods"
 
 const inputClass =
   "border-input bg-background focus-visible:border-ring focus-visible:ring-ring/50 h-9 w-full rounded-lg border px-3 text-sm outline-none focus-visible:ring-3"
@@ -28,7 +28,7 @@ export function Playground() {
   const [locale, setLocale] = useState<Locale>("fr")
 
   return (
-    <MboaProvider country={cm} locale={locale}>
+    <MpKitProvider country={cm} locale={locale}>
       <div className="mt-6 space-y-8">
         <LocaleToggle locale={locale} onChange={setLocale} />
         <FcfaSection />
@@ -40,7 +40,7 @@ export function Playground() {
         </Section>
         <StringsSection />
       </div>
-    </MboaProvider>
+    </MpKitProvider>
   )
 }
 

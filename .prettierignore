@@ -4,4 +4,4 @@ public/r
 pnpm-lock.yaml
 CHANGELOG.md
 packages/core/dist
-public/examples/mboa-core.js
+public/examples/mpkit-core.js

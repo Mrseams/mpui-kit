@@ -12,7 +12,7 @@ export function SiteHeader() {
     <header className="bg-background/90 sticky top-0 z-10 border-b backdrop-blur">
       <div className="mx-auto flex h-14 w-full max-w-6xl items-center justify-between gap-4 px-4">
         <Link href="/" className="font-semibold tracking-tight">
-          mboa-ui
+          MP Kit
         </Link>
         <div className="flex items-center gap-4">
           <nav aria-label="Main" className="flex items-center gap-4 text-sm">

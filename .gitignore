@@ -45,4 +45,4 @@ next-env.d.ts
 
 # built by `pnpm core:build`
 /packages/core/dist/
-/public/examples/mboa-core.js
+/public/examples/mpkit-core.js

@@ -14,7 +14,7 @@ const eslintConfig = defineConfig([
     "next-env.d.ts",
     // Build output.
     "packages/core/dist/**",
-    "public/examples/mboa-core.js",
+    "public/examples/mpkit-core.js",
   ]),
 ])
 

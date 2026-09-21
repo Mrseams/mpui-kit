@@ -8,17 +8,20 @@ Everything between "the code works" and "people can install it, and the Vercel O
 
 ## 1. Blockers: fix before you make the repo public
 
-- [ ] **Verify the Cameroon data against the ART numbering plan.** MTN, Orange and Camtel ranges came from you and are marked `TODO: verify`. **Nexttel `66` came from memory** and was never in your lists. The region and city lists are also from memory. Replace each `TODO` with a source and date once checked. (`registry/mboa/lib/countries/cm.ts`)
+- [ ] **Verify the Cameroon data against the ART numbering plan.** MTN, Orange and Camtel ranges came from you and are marked `TODO: verify`. **Nexttel `66` came from memory** and was never in your lists. The region and city lists are also from memory. Replace each `TODO` with a source and date once checked. (`registry/mpkit/lib/countries/cm.ts`)
 - [ ] **Fill in the Code of Conduct contact.** [CODE_OF_CONDUCT.md](./CODE_OF_CONDUCT.md) line 40 still says `[INSERT CONTACT METHOD]`. Use an address you are happy to publish. The Vercel program requires a Code of Conduct.
-- [ ] **Decide the licence holder.** [LICENSE](./LICENSE) says "mboa-ui contributors". Change it if you want your name or organisation there.
+- [ ] **Decide the licence holder.** [LICENSE](./LICENSE) says "MP Kit contributors". Change it if you want your name or organisation there.
+- [ ] **Confirm the name "MP Kit" is usable before anything is public.** It was chosen on 2026-09-21, and checked only against the npm registry that day: `mp-kit` and `@mpkit/core` were unclaimed, but an unrelated unscoped package called `mpkit` already exists, and the ownership of the `@mpkit` scope could not be checked from here. Still to check: the npm organisation `mpkit`, the GitHub name, the domain, and a search for existing projects or trademarks called "MP Kit" (the name is short and generic). If it changes, the rename is mechanical: see the commit that introduced it.
+- [ ] **Rename the local folder** `mboa-ui` to `mp-kit`. Nothing in the code depends on the folder name.
 - [ ] **Pick the domain**, then replace every placeholder:
-  - [ ] `homepage` in `registry.json` (currently `https://mboa-ui.vercel.app`, a guess)
+  - [ ] `homepage` in `registry.json` (currently `https://mp-kit.vercel.app`, a guess)
   - [ ] `NEXT_PUBLIC_SITE_URL` (env var, see step 3). It feeds the install commands on the site.
   - [ ] `<your-docs-domain>` in `README.md`
   - [ ] `OWNER` in `.github/ISSUE_TEMPLATE/config.yml`
 - [ ] **Record the README demo GIF** (there is a placeholder). A short clip of the booking demo, French to English, paying with Mobile Money.
-- [ ] **Have the wording reviewed.** The copy was drafted with AI assistance. The French strings in particular deserve a native speaker's review (`registry/mboa/lib/i18n.ts`, `lib/booking.ts`).
+- [ ] **Have the wording reviewed.** The copy was drafted with AI assistance. The French strings in particular deserve a native speaker's review (`registry/mpkit/lib/i18n.ts`, `lib/booking.ts`).
 - [ ] **Verify the card and PayPal guide against the real services.** The Stripe Elements and PayPal Buttons code in `app/docs/guides/card-and-paypal/page.tsx` is a sketch that was never run against either. Build a small working example with each, in test mode, fix the code on the page, and then remove the "not run" wording. Also check which currencies each provider can charge: the guide only says to check.
+- [ ] **Decide when card and PayPal stop being beta.** They are labelled "(beta)" in the docs, the README, the CHANGELOG and the registry titles. Search for `beta` and remove the label once the panel API has been used with a real provider and you are happy to keep it stable.
 - [ ] **Have the Vue and Svelte sketches tried** by someone who uses them (`app/docs/headless/page.tsx`, `packages/core/README.md`). They are marked as not run.
 - [ ] **Run `git log` and check the author and email** on every commit are the ones you want public.
 
@@ -52,15 +55,15 @@ Everything between "the code works" and "people can install it, and the Vercel O
 Every earlier attempt to install a component that depends on shadcn's own `input` or `button` failed, because the connection to `ui.shadcn.com` kept resetting. The manifest was checked statically (`pnpm registry:check`) and the CLI was seen resolving `input` correctly, but a complete install has not been observed. Do this from a normal connection:
 
 - [ ] Create a fresh Next.js app with Tailwind v4: `npx shadcn@latest init`.
-- [ ] Register the namespace: `npx shadcn@latest registry add @mboa=https://YOUR-DOMAIN/r/{name}.json`
+- [ ] Register the namespace: `npx shadcn@latest registry add @mpkit=https://YOUR-DOMAIN/r/{name}.json`
 - [ ] Install, one at a time, and confirm each builds (`pnpm build`):
-  - [ ] `@mboa/country-cm @mboa/mboa-provider`
-  - [ ] `@mboa/currency`
-  - [ ] `@mboa/phone-input` (this pulls shadcn's `input`)
-  - [ ] `@mboa/payment-method-picker`
-  - [ ] `@mboa/ussd-prompt`
-  - [ ] `@mboa/momo-checkout` (everything)
-- [ ] Check files landed in `components/mboa/`, `lib/mboa/`, `hooks/mboa/`, and that the `lucide-react` and `zod` dependencies were added when needed.
+  - [ ] `@mpkit/country-cm @mpkit/mpkit-provider`
+  - [ ] `@mpkit/currency`
+  - [ ] `@mpkit/phone-input` (this pulls shadcn's `input`)
+  - [ ] `@mpkit/payment-method-picker`
+  - [ ] `@mpkit/ussd-prompt`
+  - [ ] `@mpkit/momo-checkout` (everything)
+- [ ] Check files landed in `components/mpkit/`, `lib/mpkit/`, `hooks/mpkit/`, and that the `lucide-react` and `zod` dependencies were added when needed.
 - [ ] Repeat once in a project that uses a **`src/`** folder.
 - [ ] Repeat once in a project that **already has a customised `button` and `input`**. Check the CLI asks before overwriting them, and that the components then use your versions.
 - [ ] Paste the README quick start into the fresh app and make sure it works as written.
@@ -76,11 +79,11 @@ From <https://ui.shadcn.com/docs/registry/registry-index> (read 2026-09-21):
 - [ ] Edit `apps/v4/registry/directory.json` in <https://github.com/shadcn-ui/ui>, run `pnpm validate:registries` there, and open a pull request.
 - [ ] After it merges, the registry is published and **Registry Health** monitoring starts, so keep the URLs stable.
 
-## 6. Publish `@mboa/core` to npm
+## 6. Publish `@mpkit/core` to npm
 
 It is built and checked here (`pnpm core:build && pnpm core:check`: imports as ESM and CommonJS, no React inside, about 8.6 kB gzipped) but `packages/core/package.json` still says `"private": true`. The docs and READMEs say "not published yet".
 
-- [ ] **Choose the package name and the scope.** `@mboa/core` needs an npm organisation called `mboa`. Check it is free at <https://www.npmjs.com/org/create>. If not, pick another scope and change the name in `packages/core/package.json`, the README, the docs and `public/examples/vanilla.html`.
+- [ ] **Choose the package name and the scope.** `@mpkit/core` needs an npm organisation called `mpkit`. Check it is free at <https://www.npmjs.com/org/create>. If not, pick another scope and change the name in `packages/core/package.json`, the README, the docs and `public/examples/vanilla.html`.
 - [ ] Turn on two-factor authentication for your npm account, and use a granular access token for CI, never your password.
 - [ ] Fill in `repository`, `homepage` and `bugs` in `packages/core/package.json` once the GitHub URL exists.
 - [ ] Decide the version. The registry and the package share the source, so start both at `0.1.0` and say in the CHANGELOG which one changed.

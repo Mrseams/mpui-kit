@@ -9,12 +9,12 @@ export default defineConfig({
   plugins: [react()],
   resolve: {
     // Registry files import each other as they will be installed in a user's
-    // project (`@/lib/mboa/...`). Here they live under `registry/mboa/`, so map
+    // project (`@/lib/mpkit/...`). Here they live under `registry/mpkit/`, so map
     // those paths back. Order matters: the specific aliases must come first.
     alias: [
-      { find: /^@\/lib\/mboa\//, replacement: `${root}registry/mboa/lib/` },
-      { find: /^@\/components\/mboa\//, replacement: `${root}registry/mboa/components/` },
-      { find: /^@\/hooks\/mboa\//, replacement: `${root}registry/mboa/hooks/` },
+      { find: /^@\/lib\/mpkit\//, replacement: `${root}registry/mpkit/lib/` },
+      { find: /^@\/components\/mpkit\//, replacement: `${root}registry/mpkit/components/` },
+      { find: /^@\/hooks\/mpkit\//, replacement: `${root}registry/mpkit/hooks/` },
       { find: /^@\//, replacement: root },
     ],
   },

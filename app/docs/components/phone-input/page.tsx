@@ -8,9 +8,9 @@ import { PropsTable, type PropRow } from "@/components/site/props-table"
 
 export const metadata: Metadata = { title: "Phone input" }
 
-const usage = `import { PhoneInput } from "@/components/mboa/phone-input"
+const usage = `import { PhoneInput } from "@/components/mpkit/phone-input"
 
-// Inside <MboaProvider country={cm}>
+// Inside <MpKitProvider country={cm}>
 const [phone, setPhone] = useState("")
 
 <PhoneInput
@@ -25,9 +25,9 @@ const formExample = `import { zodResolver } from "@hookform/resolvers/zod"
 import { Controller, useForm } from "react-hook-form"
 import { z } from "zod"
 
-import { PhoneInput } from "@/components/mboa/phone-input"
-import { cm } from "@/lib/mboa/countries/cm"
-import { createPhoneSchema } from "@/lib/mboa/phone-schema"
+import { PhoneInput } from "@/components/mpkit/phone-input"
+import { cm } from "@/lib/mpkit/countries/cm"
+import { createPhoneSchema } from "@/lib/mpkit/phone-schema"
 
 const schema = z.object({ phone: createPhoneSchema(cm, { locale: "en" }) })
 
@@ -76,13 +76,13 @@ const props: PropRow[] = [
   {
     name: "country",
     type: "CountryConfig",
-    default: "MboaProvider's country",
+    default: "MpKitProvider's country",
     description: "Country to use. Throws if neither this nor a provider is set.",
   },
   {
     name: "locale",
     type: '"fr" | "en"',
-    default: "MboaProvider's locale, then “fr”",
+    default: "MpKitProvider's locale, then “fr”",
     description: "Language of the label, hint and built-in errors.",
   },
   {
@@ -148,7 +148,7 @@ const badgeProps: PropRow[] = [
   {
     name: "logo",
     type: "ReactNode",
-    description: "Your own logo, shown instead of the color dot. mboa-ui ships no logos.",
+    description: "Your own logo, shown instead of the color dot. MP Kit ships no logos.",
   },
   { name: "...props", type: "ComponentProps<'span'>", description: "Any other span prop." },
 ]
@@ -180,7 +180,7 @@ export default function PhoneInputPage() {
         <p className="text-muted-foreground text-sm">
           Install the schema helper with{" "}
           <code className="bg-muted rounded px-1 py-0.5">
-            npx shadcn@latest add @mboa/phone-schema
+            npx shadcn@latest add @mpkit/phone-schema
           </code>
           . It needs <code>zod</code>, which the CLI installs for you.
         </p>
@@ -191,7 +191,7 @@ export default function PhoneInputPage() {
           OperatorBadge
         </h2>
         <p className="text-muted-foreground max-w-prose">
-          The badge is a color dot and the operator name. mboa-ui ships no operator logos or brand
+          The badge is a color dot and the operator name. MP Kit ships no operator logos or brand
           assets. Pass your own through <code>logo</code>, or <code>operatorLogos</code> on the
           input, if you have the right to use them.
         </p>

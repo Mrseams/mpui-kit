@@ -5,7 +5,7 @@ export function SiteFooter() {
     <footer className="mt-16 border-t">
       <div className="text-muted-foreground mx-auto flex w-full max-w-6xl flex-col gap-3 px-4 py-8 text-sm">
         <p className="max-w-prose">
-          mboa-ui is an independent open-source project, MIT licensed. It is not affiliated with,
+          MP Kit is an independent open-source project, MIT licensed. It is not affiliated with,
           endorsed by or sponsored by any mobile network operator, mobile money provider, bank or
           payment company. All trademarks belong to their owners.
         </p>

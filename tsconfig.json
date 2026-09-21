@@ -19,9 +19,9 @@
       }
     ],
     "paths": {
-      "@/lib/mboa/*": ["./registry/mboa/lib/*"],
-      "@/components/mboa/*": ["./registry/mboa/components/*"],
-      "@/hooks/mboa/*": ["./registry/mboa/hooks/*"],
+      "@/lib/mpkit/*": ["./registry/mpkit/lib/*"],
+      "@/components/mpkit/*": ["./registry/mpkit/components/*"],
+      "@/hooks/mpkit/*": ["./registry/mpkit/hooks/*"],
       "@/*": ["./*"]
     }
   },

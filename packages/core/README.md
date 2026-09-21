@@ -1,6 +1,6 @@
-# @mboa/core
+# @mpkit/core
 
-The framework-free core of [mboa-ui](../../README.md): a Mobile Money checkout controller, phone number and FCFA helpers, and French and English strings, for African markets.
+The framework-free core of [MP Kit](../../README.md): a Mobile Money checkout controller, phone number and FCFA helpers, and French and English strings, for African markets.
 
 It has **no dependencies** and no UI. It works in the browser and in Node, with React, Vue, Svelte, Solid or plain JavaScript. If you use React and shadcn/ui, the [components](../../README.md) are built on this package.
 
@@ -24,7 +24,7 @@ Every controller has the same small shape: `getSnapshot()` returns the current s
 This example runs, in a real browser, as [`vanilla.html`](../../public/examples/vanilla.html).
 
 ```js
-import { cm, createCheckoutController, createPhoneField, formatFcfa } from "@mboa/core"
+import { cm, createCheckoutController, createPhoneField, formatFcfa } from "@mpkit/core"
 
 const field = createPhoneField({ country: cm })
 input.addEventListener("input", () => {
@@ -37,7 +37,7 @@ const checkout = createCheckoutController({
   amount: 25000,
   currency: "XAF",
   onPay: async ({ methodId, phone }) => {
-    // Call YOUR backend. mboa-ui never talks to a payment provider.
+    // Call YOUR backend. MP Kit never talks to a payment provider.
     const { reference } = await startPayment({ methodId, phone })
     return { status: "pending", reference }
   },

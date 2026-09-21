@@ -3,10 +3,10 @@
 import { useState } from "react"
 
 import { LocaleToggle } from "@/components/site/locale-toggle"
-import { MboaProvider } from "@/components/mboa/mboa-provider"
-import { MomoCheckout } from "@/components/mboa/momo-checkout"
-import { cm } from "@/lib/mboa/countries/cm"
-import type { Locale } from "@/lib/mboa/countries/types"
+import { MpKitProvider } from "@/components/mpkit/mpkit-provider"
+import { MomoCheckout } from "@/components/mpkit/momo-checkout"
+import { cm } from "@/lib/mpkit/countries/cm"
+import type { Locale } from "@/lib/mpkit/countries/types"
 import { createDemoBackend, type DemoScenario } from "@/lib/demo-backend"
 
 const SCENARIOS: { value: DemoScenario; label: string }[] = [
@@ -30,7 +30,7 @@ export function CheckoutDemo({ showControls = true }: { showControls?: boolean }
   const [backend] = useState(() => createDemoBackend({ scenario: "approve" }))
 
   return (
-    <MboaProvider country={cm} locale={locale}>
+    <MpKitProvider country={cm} locale={locale}>
       <div className="space-y-6">
         {showControls && (
           <div className="flex flex-wrap items-end gap-4">
@@ -60,14 +60,14 @@ export function CheckoutDemo({ showControls = true }: { showControls?: boolean }
         )}
 
         <div className="max-w-lg">
-          <MboaCheckout locale={locale} backend={backend} />
+          <MpKitCheckout locale={locale} backend={backend} />
         </div>
       </div>
-    </MboaProvider>
+    </MpKitProvider>
   )
 }
 
-function MboaCheckout({
+function MpKitCheckout({
   locale,
   backend,
 }: {

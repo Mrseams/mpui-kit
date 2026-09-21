@@ -10,7 +10,7 @@ You should get a first reply within a few days. Please give us a reasonable time
 
 ## Scope
 
-mboa-ui is a set of UI components that you copy into your own project. It **does not talk to any payment provider**, and it never sees your API keys. Your backend does that, through the `onPay` and `onCheckStatus` functions you write.
+MP Kit is a set of UI components that you copy into your own project. It **does not talk to any payment provider**, and it never sees your API keys. Your backend does that, through the `onPay` and `onCheckStatus` functions you write.
 
 That shapes what counts as a vulnerability here:
 
@@ -24,4 +24,4 @@ The components never collect card numbers. To take cards or PayPal, use your pro
 
 ## Supported versions
 
-mboa-ui is pre-release (0.1.0 in development). Fixes go to the latest version on the default branch.
+MP Kit is pre-release (0.1.0 in development). Fixes go to the latest version on the default branch.

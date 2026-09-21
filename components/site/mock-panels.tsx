@@ -4,7 +4,7 @@ import { Check } from "lucide-react"
 import { useEffect, useState } from "react"
 
 import { Button } from "@/components/ui/button"
-import type { MethodPanelProps } from "@/components/mboa/method-panel"
+import type { MethodPanelProps } from "@/components/mpkit/method-panel"
 
 /**
  * Stand-ins for a payment provider's hosted fields, for the docs demos only.

@@ -7,10 +7,10 @@ import type { PropRow } from "@/components/site/props-table"
 
 export const metadata: Metadata = { title: "Payment method picker" }
 
-const usage = `import { PaymentMethodPicker } from "@/components/mboa/payment-method-picker"
-import { emptySelection, type PaymentSelection } from "@/lib/mboa/payment-methods"
+const usage = `import { PaymentMethodPicker } from "@/components/mpkit/payment-method-picker"
+import { emptySelection, type PaymentSelection } from "@/lib/mpkit/payment-methods"
 
-// Inside <MboaProvider country={cm}>
+// Inside <MpKitProvider country={cm}>
 const [selection, setSelection] = useState<PaymentSelection>(emptySelection)
 const [ready, setReady] = useState(false)
 
@@ -23,7 +23,7 @@ const [ready, setReady] = useState(false)
   }}
 />`
 
-const customMethods = `import { defaultPaymentMethods } from "@/lib/mboa/payment-methods"
+const customMethods = `import { defaultPaymentMethods } from "@/lib/mpkit/payment-methods"
 
 // Mobile Money only
 <PaymentMethodPicker methods={defaultPaymentMethods(cm, { card: false, cash: false })} />
@@ -65,13 +65,13 @@ const props: PropRow[] = [
   {
     name: "country",
     type: "CountryConfig",
-    default: "MboaProvider's country",
+    default: "MpKitProvider's country",
     description: "Country to use. Throws if neither this nor a provider is set.",
   },
   {
     name: "locale",
     type: '"fr" | "en"',
-    default: "MboaProvider's locale, then “fr”",
+    default: "MpKitProvider's locale, then “fr”",
     description: "Language of the labels and messages.",
   },
   {

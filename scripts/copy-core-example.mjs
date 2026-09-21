@@ -10,5 +10,5 @@ if (!existsSync(from)) {
   console.error("No core build found. Run `pnpm core:build` first.")
   process.exit(1)
 }
-copyFileSync(from, "public/examples/mboa-core.js")
-console.log("copied the core bundle to public/examples/mboa-core.js")
+copyFileSync(from, "public/examples/mpkit-core.js")
+console.log("copied the core bundle to public/examples/mpkit-core.js")

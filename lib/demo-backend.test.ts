@@ -1,7 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
 
 import { createDemoBackend, type DemoScenario } from "@/lib/demo-backend"
-import type { PaymentRequest } from "@/hooks/mboa/use-momo-checkout"
+import type { PaymentRequest } from "@/hooks/mpkit/use-momo-checkout"
 
 const request = (methodId: string, signal = new AbortController().signal): PaymentRequest => ({
   methodId,

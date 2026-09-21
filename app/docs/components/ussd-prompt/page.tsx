@@ -7,9 +7,9 @@ import type { PropRow } from "@/components/site/props-table"
 
 export const metadata: Metadata = { title: "USSD prompt" }
 
-const usage = `import { UssdPrompt } from "@/components/mboa/ussd-prompt"
+const usage = `import { UssdPrompt } from "@/components/mpkit/ussd-prompt"
 
-// Inside <MboaProvider country={cm}>
+// Inside <MpKitProvider country={cm}>
 const [expiresAt, setExpiresAt] = useState<number>()
 
 // When your backend has started the payment:
@@ -28,7 +28,7 @@ setExpiresAt(Date.now() + 90_000)
   />
 )}`
 
-const hookUsage = `import { useCountdown } from "@/hooks/mboa/use-countdown"
+const hookUsage = `import { useCountdown } from "@/hooks/mpkit/use-countdown"
 
 const remainingMs = useCountdown(expiresAt, { onExpire: () => console.log("done") })
 // 0 once the time is up; pass null for "no countdown"`
@@ -71,13 +71,13 @@ const props: PropRow[] = [
   {
     name: "country",
     type: "CountryConfig",
-    default: "MboaProvider's country",
+    default: "MpKitProvider's country",
     description: "Only used to format phone.",
   },
   {
     name: "locale",
     type: '"fr" | "en"',
-    default: "MboaProvider's locale, then “fr”",
+    default: "MpKitProvider's locale, then “fr”",
     description: "Language of the prompt.",
   },
   {

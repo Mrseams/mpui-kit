@@ -4,13 +4,13 @@ import { useState } from "react"
 
 import { LocaleToggle } from "@/components/site/locale-toggle"
 import { MockCardPanel, MockWalletPanel } from "@/components/site/mock-panels"
-import { MboaProvider } from "@/components/mboa/mboa-provider"
-import { MomoCheckout } from "@/components/mboa/momo-checkout"
-import { cm } from "@/lib/mboa/countries/cm"
-import type { Locale } from "@/lib/mboa/countries/types"
-import { defaultPaymentMethods, type PaymentMethod } from "@/lib/mboa/payment-methods"
+import { MpKitProvider } from "@/components/mpkit/mpkit-provider"
+import { MomoCheckout } from "@/components/mpkit/momo-checkout"
+import { cm } from "@/lib/mpkit/countries/cm"
+import type { Locale } from "@/lib/mpkit/countries/types"
+import { defaultPaymentMethods, type PaymentMethod } from "@/lib/mpkit/payment-methods"
 import { createDemoBackend } from "@/lib/demo-backend"
-import type { PaymentRequest } from "@/hooks/mboa/use-momo-checkout"
+import type { PaymentRequest } from "@/hooks/mpkit/use-momo-checkout"
 
 const methods: PaymentMethod[] = [
   ...defaultPaymentMethods(cm, { cash: false }),
@@ -36,7 +36,7 @@ export function PanelsDemo() {
   }
 
   return (
-    <MboaProvider country={cm} locale={locale}>
+    <MpKitProvider country={cm} locale={locale}>
       <div className="space-y-4">
         <LocaleToggle locale={locale} onChange={setLocale} />
         <div className="grid gap-6 md:grid-cols-2">
@@ -64,6 +64,6 @@ export function PanelsDemo() {
           </div>
         </div>
       </div>
-    </MboaProvider>
+    </MpKitProvider>
   )
 }

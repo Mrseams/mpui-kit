@@ -45,9 +45,9 @@ export function ComponentDoc({
         <h2 id="installation" className="text-xl font-semibold">
           Installation
         </h2>
-        <CodeBlock label={`Install ${title}`} code={`npx shadcn@latest add @mboa/${name}`} />
+        <CodeBlock label={`Install ${title}`} code={`npx shadcn@latest add @mpkit/${name}`} />
         <p className="text-muted-foreground text-sm">
-          Requires the <code>@mboa</code> namespace. See{" "}
+          Requires the <code>@mpkit</code> namespace. See{" "}
           <Link href="/docs/getting-started" className="underline underline-offset-4">
             Getting started
           </Link>

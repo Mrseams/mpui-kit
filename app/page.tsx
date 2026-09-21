@@ -32,7 +32,7 @@ const features = [
   },
 ]
 
-const countryExample = `// registry/mboa/lib/countries/<iso>.ts
+const countryExample = `// registry/mpkit/lib/countries/<iso>.ts
 export const xx: CountryConfig = {
   iso: "XX",
   callingCode: "000",
@@ -44,8 +44,8 @@ export const xx: CountryConfig = {
   // ...groupSizes, locales, regions
 }`
 
-const installCommands = `npx shadcn@latest registry add @mboa=${registryUrlTemplate}
-npx shadcn@latest add @mboa/country-cm @mboa/momo-checkout`
+const installCommands = `npx shadcn@latest registry add @mpkit=${registryUrlTemplate}
+npx shadcn@latest add @mpkit/country-cm @mpkit/momo-checkout`
 
 // Every section sits in the same column as the header, so the left and right
 // edges line up all the way down the page.

@@ -8,21 +8,21 @@ const layers = [
   {
     name: "Core",
     what: "Controllers and pure helpers with no UI and no dependencies: createCheckoutController, createPhoneField, createCountdown, formatFcfa, validatePhone, the FR/EN dictionary and the Cameroon data.",
-    where: "registry/mboa/lib, and the @mboa/core npm package built from it",
+    where: "registry/mpkit/lib, and the @mpkit/core npm package built from it",
   },
   {
     name: "Hooks",
     what: "Thin React wrappers over the core: useMomoCheckout, usePhoneField, useCountdown. They render nothing, so you bring your own markup.",
-    where: "registry/mboa/hooks",
+    where: "registry/mpkit/hooks",
   },
   {
     name: "Components",
     what: "The shadcn/ui components, built on the hooks.",
-    where: "registry/mboa/components",
+    where: "registry/mpkit/components",
   },
 ]
 
-const plain = `import { cm, createCheckoutController, createPhoneField, formatFcfa } from "@mboa/core"
+const plain = `import { cm, createCheckoutController, createPhoneField, formatFcfa } from "@mpkit/core"
 
 const field = createPhoneField({ country: cm })
 input.addEventListener("input", () => {
@@ -35,7 +35,7 @@ const checkout = createCheckoutController({
   amount: 25000,
   currency: "XAF",
   onPay: async ({ methodId, phone, payload }) => {
-    // Call YOUR backend. mboa-ui never talks to a payment provider.
+    // Call YOUR backend. MP Kit never talks to a payment provider.
     const { reference } = await startPayment({ methodId, phone, payload })
     return { status: "pending", reference }
   },
@@ -112,7 +112,7 @@ export default function HeadlessPage() {
           bundle, with a simulated payment. It is also checked in a real browser in this repository.
         </p>
         <iframe
-          title="mboa core in plain JavaScript"
+          title="MP Kit core in plain JavaScript"
           src="/examples/vanilla.html"
           className="bg-background h-[36rem] w-full rounded-lg border"
           loading="lazy"
@@ -139,10 +139,10 @@ export default function HeadlessPage() {
           The npm package
         </h2>
         <p className="text-muted-foreground max-w-prose">
-          <code>@mboa/core</code> is built from the same source as the registry, as ESM and CommonJS
-          with type declarations. <strong>It is not published yet.</strong> The package name and
-          scope are provisional until the project has its own npm scope. Country data is community
-          data, not an authoritative source.
+          <code>@mpkit/core</code> is built from the same source as the registry, as ESM and
+          CommonJS with type declarations. <strong>It is not published yet.</strong> The package
+          name and scope are provisional until the project has its own npm scope. Country data is
+          community data, not an authoritative source.
         </p>
         <p className="text-muted-foreground max-w-prose">
           The core never calls a payment provider and never asks for card details. Always confirm a

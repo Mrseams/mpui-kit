@@ -18,7 +18,7 @@ function declaredKeys(source: string, component: string): string[] {
 describe.each(classSlots)(
   "class slots: $component",
   ({ component, file, slotPrefix, keys, forwarded = [] }) => {
-    const source = readFileSync(`registry/mboa/components/${file}`, "utf8")
+    const source = readFileSync(`registry/mpkit/components/${file}`, "utf8")
 
     it("lists exactly the keys of its ClassNames interface", () => {
       expect([...declaredKeys(source, component)].sort()).toEqual([...keys].sort())

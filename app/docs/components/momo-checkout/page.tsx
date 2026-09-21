@@ -8,14 +8,14 @@ import { PropsTable, type PropRow } from "@/components/site/props-table"
 
 export const metadata: Metadata = { title: "Mobile Money checkout" }
 
-const usage = `import { MomoCheckout } from "@/components/mboa/momo-checkout"
+const usage = `import { MomoCheckout } from "@/components/mpkit/momo-checkout"
 
-// Inside <MboaProvider country={cm}>
+// Inside <MpKitProvider country={cm}>
 <MomoCheckout
   amount={25000}
   summary="Studio in Bastos, 1 night"
   onPay={async ({ methodId, phone, amount, currency, attempt, signal }) => {
-    // Call YOUR backend. mboa-ui never talks to a payment provider.
+    // Call YOUR backend. MP Kit never talks to a payment provider.
     const res = await fetch("/api/pay", {
       method: "POST",
       headers: { "Idempotency-Key": crypto.randomUUID() },
@@ -57,7 +57,7 @@ type StatusResult =
   | { status: "success"; reference?: string }
   | { status: "failed"; reason?: string }`
 
-const hookUsage = `import { useMomoCheckout } from "@/hooks/mboa/use-momo-checkout"
+const hookUsage = `import { useMomoCheckout } from "@/hooks/mpkit/use-momo-checkout"
 
 const { state, pay, retry, cancel, reset } = useMomoCheckout({
   amount: 25000,
@@ -125,12 +125,12 @@ const props: PropRow[] = [
     name: "panels",
     type: "Record<string, MethodPanel>",
     description:
-      "Your own panel for a payment method, by method id: where you host your provider’s card fields or PayPal buttons. The panel hands back an opaque token, which reaches onPay as payload. Card details never enter mboa-ui. See the card and PayPal guide.",
+      "Beta. Your own panel for a payment method, by method id: where you host your provider’s card fields or PayPal buttons. The panel hands back an opaque token, which reaches onPay as payload. Card details never enter MP Kit. See the card and PayPal guide.",
   },
   {
     name: "methodIcons",
     type: "Record<string, ReactNode>",
-    description: "Your own icons by method id. mboa-ui ships no brand logos.",
+    description: "Your own icons by method id. MP Kit ships no brand logos.",
   },
   {
     name: "submitLabel",
@@ -178,13 +178,13 @@ const props: PropRow[] = [
   {
     name: "country",
     type: "CountryConfig",
-    default: "MboaProvider's country",
+    default: "MpKitProvider's country",
     description: "Country to use.",
   },
   {
     name: "locale",
     type: '"fr" | "en"',
-    default: "MboaProvider's locale, then “fr”",
+    default: "MpKitProvider's locale, then “fr”",
     description: "Language.",
   },
   {
@@ -226,7 +226,7 @@ const receiptProps: PropRow[] = [
   {
     name: "country / locale",
     type: "CountryConfig / “fr” | “en”",
-    default: "from MboaProvider",
+    default: "from MpKitProvider",
     description: "Used to name the method and format the phone and date.",
   },
   {
@@ -296,12 +296,12 @@ export default function MomoCheckoutPage() {
 
       <section aria-labelledby="more-methods" className="space-y-3">
         <h2 id="more-methods" className="text-xl font-semibold">
-          Cards, PayPal and other methods
+          Cards, PayPal and other methods (beta)
         </h2>
         <p className="text-muted-foreground max-w-prose">
           Add any method with a <code>kind</code> of <code>&quot;other&quot;</code> (or{" "}
           <code>&quot;card&quot;</code>), then give it a panel to host your provider&apos;s own
-          fields or buttons. Card details never enter mboa-ui: the panel returns a token and the
+          fields or buttons. Card details never enter MP Kit: the panel returns a token and the
           checkout passes it to <code>onPay</code> as <code>payload</code>.{" "}
           <Link
             href="/docs/guides/card-and-paypal"

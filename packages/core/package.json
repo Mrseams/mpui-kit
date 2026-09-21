@@ -1,7 +1,7 @@
 {
-  "name": "@mboa/core",
+  "name": "@mpkit/core",
   "version": "0.1.0",
-  "description": "Framework-free core of mboa-ui: a Mobile Money checkout controller, phone number and FCFA helpers, and FR/EN strings for African markets. Works with React, Vue, Svelte or plain JavaScript.",
+  "description": "Framework-free core of MP Kit: a Mobile Money checkout controller, phone number and FCFA helpers, and FR/EN strings for African markets. Works with React, Vue, Svelte or plain JavaScript.",
   "private": true,
   "type": "module",
   "license": "MIT",

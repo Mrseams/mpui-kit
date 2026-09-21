@@ -4,15 +4,15 @@ import { useState } from "react"
 
 import { Button } from "@/components/ui/button"
 import { LocaleToggle } from "@/components/site/locale-toggle"
-import { MboaProvider } from "@/components/mboa/mboa-provider"
-import { PaymentMethodPicker } from "@/components/mboa/payment-method-picker"
-import { cm } from "@/lib/mboa/countries/cm"
-import type { Locale } from "@/lib/mboa/countries/types"
+import { MpKitProvider } from "@/components/mpkit/mpkit-provider"
+import { PaymentMethodPicker } from "@/components/mpkit/payment-method-picker"
+import { cm } from "@/lib/mpkit/countries/cm"
+import type { Locale } from "@/lib/mpkit/countries/types"
 import {
   emptySelection,
   type PaymentSelection,
   type ResolvedPayment,
-} from "@/lib/mboa/payment-methods"
+} from "@/lib/mpkit/payment-methods"
 
 export function PickerDemo() {
   const [locale, setLocale] = useState<Locale>("fr")
@@ -20,7 +20,7 @@ export function PickerDemo() {
   const [resolved, setResolved] = useState<ResolvedPayment | null>(null)
 
   return (
-    <MboaProvider country={cm} locale={locale}>
+    <MpKitProvider country={cm} locale={locale}>
       <div className="space-y-6">
         <div className="max-w-xl">
           <PaymentMethodPicker
@@ -51,6 +51,6 @@ export function PickerDemo() {
           <LocaleToggle locale={locale} onChange={setLocale} />
         </div>
       </div>
-    </MboaProvider>
+    </MpKitProvider>
   )
 }

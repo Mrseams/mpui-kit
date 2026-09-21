@@ -22,7 +22,7 @@ const poppins = localFont({
 })
 
 export const metadata: Metadata = {
-  title: { default: "mboa-ui", template: "%s · mboa-ui" },
+  title: { default: "MP Kit", template: "%s · MP Kit" },
   description:
     "Open-source shadcn/ui components for African markets: Mobile Money, FCFA, local phone numbers and bilingual FR/EN forms.",
 }

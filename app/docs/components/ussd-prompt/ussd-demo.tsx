@@ -4,10 +4,10 @@ import { useState } from "react"
 
 import { Button } from "@/components/ui/button"
 import { LocaleToggle } from "@/components/site/locale-toggle"
-import { MboaProvider } from "@/components/mboa/mboa-provider"
-import { UssdPrompt } from "@/components/mboa/ussd-prompt"
-import { cm } from "@/lib/mboa/countries/cm"
-import type { Locale } from "@/lib/mboa/countries/types"
+import { MpKitProvider } from "@/components/mpkit/mpkit-provider"
+import { UssdPrompt } from "@/components/mpkit/ussd-prompt"
+import { cm } from "@/lib/mpkit/countries/cm"
+import type { Locale } from "@/lib/mpkit/countries/types"
 
 const DURATIONS = [15, 45, 120] as const
 
@@ -19,7 +19,7 @@ export function UssdDemo() {
   const start = () => setExpiresAt(Date.now() + seconds * 1000)
 
   return (
-    <MboaProvider country={cm} locale={locale}>
+    <MpKitProvider country={cm} locale={locale}>
       <div className="space-y-6">
         <div className="flex flex-wrap items-end gap-4">
           <div className="space-y-1">
@@ -57,6 +57,6 @@ export function UssdDemo() {
           with it filled in.
         </p>
       </div>
-    </MboaProvider>
+    </MpKitProvider>
   )
 }

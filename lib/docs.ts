@@ -49,7 +49,7 @@ export interface GuideEntry {
 export const guideDocs: GuideEntry[] = [
   {
     href: "/docs/guides/card-and-paypal",
-    title: "Card and PayPal",
+    title: "Card and PayPal (beta)",
     description: "Host your provider’s card fields or PayPal buttons in the checkout.",
   },
   {

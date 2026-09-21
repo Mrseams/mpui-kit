@@ -3,11 +3,11 @@
 import { useState } from "react"
 
 import { LocaleToggle } from "@/components/site/locale-toggle"
-import { Currency } from "@/components/mboa/currency"
-import { MboaProvider } from "@/components/mboa/mboa-provider"
-import { cm } from "@/lib/mboa/countries/cm"
-import type { Locale } from "@/lib/mboa/countries/types"
-import type { CurrencyDisplay } from "@/lib/mboa/format-fcfa"
+import { Currency } from "@/components/mpkit/currency"
+import { MpKitProvider } from "@/components/mpkit/mpkit-provider"
+import { cm } from "@/lib/mpkit/countries/cm"
+import type { Locale } from "@/lib/mpkit/countries/types"
+import type { CurrencyDisplay } from "@/lib/mpkit/format-fcfa"
 
 const inputClass =
   "border-input bg-background focus-visible:border-ring focus-visible:ring-ring/50 h-9 w-full rounded-lg border px-3 text-sm outline-none focus-visible:ring-3"
@@ -20,7 +20,7 @@ export function CurrencyDemo() {
   const value = amount.trim() === "" ? Number.NaN : Number(amount)
 
   return (
-    <MboaProvider country={cm} locale={locale}>
+    <MpKitProvider country={cm} locale={locale}>
       <div className="space-y-4">
         <p className="text-3xl font-semibold" aria-live="polite">
           <Currency amount={value} display={display} />
@@ -60,6 +60,6 @@ export function CurrencyDemo() {
           </div>
         </div>
       </div>
-    </MboaProvider>
+    </MpKitProvider>
   )
 }

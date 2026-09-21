@@ -3,11 +3,11 @@
 import { useState } from "react"
 
 import { LocaleToggle } from "@/components/site/locale-toggle"
-import { MboaProvider } from "@/components/mboa/mboa-provider"
-import { PhoneInput } from "@/components/mboa/phone-input"
-import { cm } from "@/lib/mboa/countries/cm"
-import type { Locale } from "@/lib/mboa/countries/types"
-import type { PhoneValidation } from "@/lib/mboa/phone"
+import { MpKitProvider } from "@/components/mpkit/mpkit-provider"
+import { PhoneInput } from "@/components/mpkit/phone-input"
+import { cm } from "@/lib/mpkit/countries/cm"
+import type { Locale } from "@/lib/mpkit/countries/types"
+import type { PhoneValidation } from "@/lib/mpkit/phone"
 
 const selectClass =
   "border-input bg-background focus-visible:border-ring focus-visible:ring-ring/50 h-9 w-full rounded-lg border px-3 text-sm outline-none focus-visible:ring-3"
@@ -19,7 +19,7 @@ export function PhoneInputDemo() {
   const [details, setDetails] = useState<PhoneValidation | null>(null)
 
   return (
-    <MboaProvider country={cm} locale={locale}>
+    <MpKitProvider country={cm} locale={locale}>
       <div className="space-y-6">
         <div className="max-w-sm">
           <PhoneInput
@@ -75,6 +75,6 @@ export function PhoneInputDemo() {
           option to require a specific operator.
         </p>
       </div>
-    </MboaProvider>
+    </MpKitProvider>
   )
 }

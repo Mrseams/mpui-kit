@@ -1,4 +1,4 @@
-# mboa-ui
+# MP Kit
 
 Open-source [shadcn/ui](https://ui.shadcn.com) components for African markets: Mobile Money checkout, FCFA currency, local phone numbers, bilingual FR/EN forms, and UX that holds up on slow connections and low-end phones.
 
@@ -12,14 +12,14 @@ Cameroon is the first supported country. Country data is pluggable, so adding an
 
 ## Why
 
-Generic checkout components assume cards, `$` and 10-digit US phone numbers. In much of Africa, people pay with Mobile Money, prices are in FCFA with no decimals, phone numbers identify the operator, and users switch between French and English on a slow connection. mboa-ui ships those defaults as copy-paste components you own, like the rest of shadcn/ui.
+Generic checkout components assume cards, `$` and 10-digit US phone numbers. In much of Africa, people pay with Mobile Money, prices are in FCFA with no decimals, phone numbers identify the operator, and users switch between French and English on a slow connection. MP Kit ships those defaults as copy-paste components you own, like the rest of shadcn/ui.
 
 ## Install
 
-Components are distributed through a shadcn registry. Register the `@mboa` namespace once:
+Components are distributed through a shadcn registry. Register the `@mpkit` namespace once:
 
 ```bash
-npx shadcn@latest registry add @mboa=https://<your-docs-domain>/r/{name}.json
+npx shadcn@latest registry add @mpkit=https://<your-docs-domain>/r/{name}.json
 ```
 
 or add it to your `components.json` yourself:
@@ -27,7 +27,7 @@ or add it to your `components.json` yourself:
 ```json
 {
   "registries": {
-    "@mboa": "https://<your-docs-domain>/r/{name}.json"
+    "@mpkit": "https://<your-docs-domain>/r/{name}.json"
   }
 }
 ```
@@ -35,14 +35,14 @@ or add it to your `components.json` yourself:
 Then install by name. Shared pieces, such as the country types, are installed automatically:
 
 ```bash
-npx shadcn@latest add @mboa/currency
-npx shadcn@latest add @mboa/country-cm
-npx shadcn@latest add @mboa/momo-checkout
+npx shadcn@latest add @mpkit/currency
+npx shadcn@latest add @mpkit/country-cm
+npx shadcn@latest add @mpkit/momo-checkout
 ```
 
-Files are added under `lib/mboa/` and `components/mboa/` (or `src/lib/mboa/` and `src/components/mboa/` if your project uses `src/`).
+Files are added under `lib/mpkit/` and `components/mpkit/` (or `src/lib/mpkit/` and `src/components/mpkit/` if your project uses `src/`).
 
-The namespace is required because items depend on each other by `@mboa/<name>`. `<your-docs-domain>` is a placeholder until the site is deployed.
+The namespace is required because items depend on each other by `@mpkit/<name>`. `<your-docs-domain>` is a placeholder until the site is deployed.
 
 ## Requirements
 
@@ -57,24 +57,24 @@ Because they use your tokens, the components follow your theme, radius and dark 
 
 Phase 1:
 
-| Name                    | Type            | What it does                                                                                                                      |
-| ----------------------- | --------------- | --------------------------------------------------------------------------------------------------------------------------------- |
-| `currency`              | component + lib | Formats FCFA (XAF/XOF): zero decimals, French spacing (`25 000 FCFA`), `FCFA` or ISO code.                                        |
-| `phone-input`           | component       | Detects the operator from the prefix as you type, validates length, returns E.164. Works with react-hook-form and zod.            |
-| `payment-method-picker` | component       | Selectable cards for Mobile Money operators, card and cash. Reveals the phone input inline.                                       |
-| `ussd-prompt`           | component       | Approval code with copy button and `tel:` link, waiting animation, countdown and retry.                                           |
-| `momo-checkout`         | block           | Full checkout: idle → awaiting approval → success / failed / timeout, plus a receipt card. Host card or PayPal fields in a panel. |
-| `method-panel`          | types           | The contract for a payment method's panel. Card details never enter mboa-ui: your provider's fields return a token.               |
+| Name                    | Type            | What it does                                                                                                                             |
+| ----------------------- | --------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
+| `currency`              | component + lib | Formats FCFA (XAF/XOF): zero decimals, French spacing (`25 000 FCFA`), `FCFA` or ISO code.                                               |
+| `phone-input`           | component       | Detects the operator from the prefix as you type, validates length, returns E.164. Works with react-hook-form and zod.                   |
+| `payment-method-picker` | component       | Selectable cards for Mobile Money operators, card and cash. Reveals the phone input inline.                                              |
+| `ussd-prompt`           | component       | Approval code with copy button and `tel:` link, waiting animation, countdown and retry.                                                  |
+| `momo-checkout`         | block           | Full checkout: idle → awaiting approval → success / failed / timeout, plus a receipt card. Host card or PayPal fields in a panel (beta). |
+| `method-panel`          | types           | (Beta) The contract for a payment method's panel. Card details never enter MP Kit: your provider's fields return a token.                |
 
 ### Headless and framework-free
 
-The logic is separate from the UI. `registry/mboa/lib/core` has no React and no dependencies, and `@mboa/core` (not published yet) is built from it, so you can use the checkout controller, phone field and countdown with Vue, Svelte or plain JavaScript. See [packages/core](./packages/core/README.md) and the Headless guide in the docs.
+The logic is separate from the UI. `registry/mpkit/lib/core` has no React and no dependencies, and `@mpkit/core` (not published yet) is built from it, so you can use the checkout controller, phone field and countdown with Vue, Svelte or plain JavaScript. See [packages/core](./packages/core/README.md) and the Headless guide in the docs.
 
 Planned: landmark-based address input, OTP input, FCFA range slider, French date picker, WhatsApp button and chat widget, network banner, data-saver image, low-data mode provider, transaction timeline, listing card block, pricing table block.
 
 ## Design principles
 
-- **No hardcoded country.** Components take a `country` prop or read it from `MboaProvider`. Operators, prefixes, currency, locales and regions live in `registry/mboa/lib/countries/<iso>.ts`.
+- **No hardcoded country.** Components take a `country` prop or read it from `MpKitProvider`. Operators, prefixes, currency, locales and regions live in `registry/mpkit/lib/countries/<iso>.ts`.
 - **UI only.** No payment API calls. Payment flows take async callbacks (`onPay`, `onCheckStatus`), so they work with any backend or aggregator.
 - **Accessible by default.** Labelled inputs, keyboard navigation, `aria-live` for payment states, `prefers-reduced-motion` respected.
 - **Bilingual.** Every string goes through a small FR/EN dictionary that you can override.
@@ -101,7 +101,7 @@ pnpm size            # checks the JavaScript each page loads, after a build
 
 ## Disclaimer
 
-mboa-ui is an independent project. It is **not affiliated with, endorsed by, or sponsored by** any mobile network operator, mobile money provider, bank or payment company. Operator names appear only to identify the service a user is paying with. All trademarks belong to their owners.
+MP Kit is an independent project. It is **not affiliated with, endorsed by, or sponsored by** any mobile network operator, mobile money provider, bank or payment company. Operator names appear only to identify the service a user is paying with. All trademarks belong to their owners.
 
 ## License
 

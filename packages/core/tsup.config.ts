@@ -2,9 +2,9 @@ import { defineConfig } from "tsup"
 
 // The package is built from the same source files the shadcn registry ships, so
 // there is one copy of the code. Run from the repository root: tsconfig.json maps
-// `@/lib/mboa/*` to `registry/mboa/lib/*`, which esbuild and the type bundler follow.
+// `@/lib/mpkit/*` to `registry/mpkit/lib/*`, which esbuild and the type bundler follow.
 export default defineConfig({
-  entry: { index: "registry/mboa/lib/core/index.ts" },
+  entry: { index: "registry/mpkit/lib/core/index.ts" },
   outDir: "packages/core/dist",
   format: ["esm", "cjs"],
   // The package is "type": "module", so ESM is .js and CommonJS is .cjs. (tsup
