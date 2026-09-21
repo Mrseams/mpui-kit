@@ -29,6 +29,12 @@ function setup(props: Partial<ReceiptCardProps> = {}, locale: Locale = "en") {
   )
 }
 
+/** The headline amount, without the hidden label that screen readers get. */
+function amount() {
+  return document.querySelector('[data-slot="receipt-card-amount"] > span:not(.sr-only)')
+    ?.textContent
+}
+
 /** The text of the <dd> that follows the <dt> with this label. */
 function valueOf(label: string) {
   const term = screen.getByText(label, { selector: "dt" })
@@ -46,9 +52,20 @@ describe("<ReceiptCard />", () => {
     expect(within(region).getByRole("heading", { name: "Payment received" })).toBeVisible()
   })
 
-  it("shows the amount in FCFA, grouped for the language", () => {
+  it("shows the amount in FCFA as the headline, grouped for the language", () => {
     setup()
-    expect(valueOf("Amount")).toBe(`25,000${NBSP}FCFA`)
+    expect(amount()).toBe(`25,000${NBSP}FCFA`)
+  })
+
+  it("does not repeat the amount as a row", () => {
+    setup()
+    expect(screen.queryByText("Amount", { selector: "dt" })).toBeNull()
+  })
+
+  it("reads the amount with its label for screen readers", () => {
+    setup()
+    const headline = document.querySelector('[data-slot="receipt-card-amount"]')
+    expect(headline?.querySelector(".sr-only")?.textContent).toBe("Amount: ")
   })
 
   it("names the payment method", () => {
@@ -99,7 +116,7 @@ describe("<ReceiptCard />", () => {
   it("translates to French", () => {
     setup({}, "fr")
     expect(screen.getByRole("region", { name: "Paiement reçu" })).toBeVisible()
-    expect(valueOf("Montant")).toBe(`25${NBSP}000${NBSP}FCFA`)
+    expect(amount()).toBe(`25${NBSP}000${NBSP}FCFA`)
     expect(valueOf("Référence")).toBe("PAY-8F2K-2291")
     expect(valueOf("Téléphone")).toBe("+237 6 51 23 45 67")
   })
@@ -122,12 +139,41 @@ describe("<ReceiptCard />", () => {
   it("lets you style each part with classNames and finds them by data-slot", () => {
     setup({
       onDone: () => {},
-      classNames: { icon: "i-x", title: "t-x", list: "l-x", done: "d-x" },
+      classNames: { icon: "i-x", title: "t-x", amount: "a-x", list: "l-x", done: "d-x" },
     })
     expect(document.querySelector('[data-slot="receipt-card-icon"]')).toHaveClass("i-x")
     expect(document.querySelector('[data-slot="receipt-card-title"]')).toHaveClass("t-x")
+    expect(document.querySelector('[data-slot="receipt-card-amount"]')).toHaveClass("a-x")
     expect(document.querySelector('[data-slot="receipt-card-list"]')).toHaveClass("l-x")
     expect(document.querySelector('[data-slot="receipt-card-done"]')).toHaveClass("d-x")
+  })
+
+  it("puts each label on the left and its value on the right", () => {
+    setup()
+    const row = screen.getByText("Method", { selector: "dt" }).parentElement
+    expect(row?.className).toContain("justify-between")
+    expect(row?.lastElementChild).toHaveClass("text-right")
+  })
+
+  it("gives the Done button the full width", () => {
+    setup({ onDone: () => {} })
+    expect(screen.getByRole("button", { name: "Done" })).toHaveClass("w-full")
+  })
+
+  it("eases in and pops the checkmark, only when reduced motion is not requested", () => {
+    setup()
+    const root = document.querySelector('[data-slot="receipt-card"]')
+    const icon = document.querySelector('[data-slot="receipt-card-icon"]')
+    expect(root?.className).toContain("motion-safe:animate-in")
+    expect(icon?.className).toContain("motion-safe:zoom-in-50")
+  })
+
+  it("hides the decorative checkmark from screen readers", () => {
+    setup()
+    expect(document.querySelector('[data-slot="receipt-card-icon"]')).toHaveAttribute(
+      "aria-hidden",
+      "true"
+    )
   })
 
   it("shows an unformatted number as it is", () => {

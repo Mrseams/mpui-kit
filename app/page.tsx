@@ -47,62 +47,80 @@ export const xx: CountryConfig = {
 const installCommands = `npx shadcn@latest registry add @mboa=${registryUrlTemplate}
 npx shadcn@latest add @mboa/country-cm @mboa/momo-checkout`
 
+// Every section sits in the same column as the header, so the left and right
+// edges line up all the way down the page.
+const column = "mx-auto w-full max-w-6xl px-4"
+
+// A section heading and its intro, centered on the page axis.
+function SectionIntro({
+  id,
+  title,
+  children,
+}: {
+  id: string
+  title: string
+  children?: React.ReactNode
+}) {
+  return (
+    <div className="mx-auto max-w-2xl space-y-3 text-center">
+      <h2 id={id} className="text-2xl font-semibold tracking-tight">
+        {title}
+      </h2>
+      {children && <div className="text-muted-foreground text-pretty">{children}</div>}
+    </div>
+  )
+}
+
 export default function Home() {
   return (
     <main className="flex-1">
-      <section className="mx-auto w-full max-w-3xl space-y-6 px-4 pt-16 pb-12 sm:pt-24">
-        <p className="text-muted-foreground text-sm">
-          Open source · shadcn/ui registry · Pre-release (0.1.0 in development)
-        </p>
-        <h1 className="text-4xl font-semibold tracking-tight text-balance sm:text-5xl">
-          shadcn/ui components for African markets
-        </h1>
-        <p className="text-muted-foreground max-w-prose text-lg text-pretty">
-          Mobile Money checkout, FCFA currency, local phone numbers with operator detection, and
-          bilingual FR/EN forms. Copy-paste components that work on slow connections and low-end
-          phones. Cameroon first, and other countries are a pull request away.
-        </p>
-        <div className="flex flex-wrap gap-3">
-          <Link href="/docs/getting-started" className={buttonVariants({ size: "lg" })}>
-            Get started
-          </Link>
-          <a href="#demo" className={buttonVariants({ variant: "outline", size: "lg" })}>
-            Try the demo
-          </a>
-          <Link href="/docs" className={buttonVariants({ variant: "ghost", size: "lg" })}>
-            Read the docs
-          </Link>
+      <section className={`${column} pt-16 pb-14 sm:pt-24`}>
+        <div className="motion-safe:animate-in motion-safe:fade-in motion-safe:slide-in-from-bottom-3 mx-auto max-w-3xl space-y-6 text-center motion-safe:duration-700">
+          <p className="text-muted-foreground text-sm">
+            Open source · shadcn/ui registry · Pre-release (0.1.0 in development)
+          </p>
+          <h1 className="text-4xl font-semibold tracking-tight text-balance sm:text-5xl">
+            shadcn/ui components for African markets
+          </h1>
+          <p className="text-muted-foreground text-lg text-pretty">
+            Mobile Money checkout, FCFA currency, local phone numbers with operator detection, and
+            bilingual FR/EN forms. Copy-paste components that work on slow connections and low-end
+            phones. Cameroon first, and other countries are a pull request away.
+          </p>
+          <div className="flex flex-wrap justify-center gap-3">
+            <Link href="/docs/getting-started" className={buttonVariants({ size: "lg" })}>
+              Get started
+            </Link>
+            <a href="#demo" className={buttonVariants({ variant: "outline", size: "lg" })}>
+              Try the demo
+            </a>
+            <Link href="/docs" className={buttonVariants({ variant: "outline", size: "lg" })}>
+              Read the docs
+            </Link>
+          </div>
         </div>
       </section>
 
       <section
         id="demo"
         aria-labelledby="demo-title"
-        className="mx-auto w-full max-w-5xl scroll-mt-20 space-y-4 px-4 py-8"
+        className={`${column} scroll-mt-20 space-y-8 py-10`}
       >
-        <div className="space-y-2">
-          <h2 id="demo-title" className="text-2xl font-semibold tracking-tight">
-            Try it: book an apartment
-          </h2>
-          <p className="text-muted-foreground max-w-prose">
-            A fake booking priced per night in FCFA, paid with the real checkout block. The payment
-            goes to a fake backend that waits a few seconds, like a customer approving on their
-            phone. No real payment is made and nothing leaves your browser.
-          </p>
-        </div>
+        <SectionIntro id="demo-title" title="Try it: book an apartment">
+          A fake booking priced per night in FCFA, paid with the real checkout block. The payment
+          goes to a fake backend that waits a few seconds, like a customer approving on their phone.
+          No real payment is made and nothing leaves your browser.
+        </SectionIntro>
         <LazyBookingDemo />
         <noscript>
-          <p className="text-muted-foreground text-sm">The live demo needs JavaScript.</p>
+          <p className="text-muted-foreground text-center text-sm">
+            The live demo needs JavaScript.
+          </p>
         </noscript>
       </section>
 
-      <section
-        aria-labelledby="features-title"
-        className="mx-auto w-full max-w-5xl space-y-6 px-4 py-12"
-      >
-        <h2 id="features-title" className="text-2xl font-semibold tracking-tight">
-          What is in it
-        </h2>
+      <section aria-labelledby="features-title" className={`${column} space-y-8 py-14`}>
+        <SectionIntro id="features-title" title="What is in it" />
         <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {features.map((feature) => (
             <li key={feature.title} className="bg-card space-y-2 rounded-xl border p-5">
@@ -113,44 +131,38 @@ export default function Home() {
         </ul>
       </section>
 
-      <section
-        aria-labelledby="country-title"
-        className="mx-auto w-full max-w-3xl space-y-4 px-4 py-12"
-      >
-        <h2 id="country-title" className="text-2xl font-semibold tracking-tight">
-          Your country is a pull request away
-        </h2>
-        <p className="text-muted-foreground max-w-prose">
+      <section aria-labelledby="country-title" className={`${column} space-y-6 py-14`}>
+        <SectionIntro id="country-title" title="Your country is a pull request away">
           No component hard-codes Cameroon. Operators, prefixes, currency, languages and regions
           live in one data file per country, and a test checks it for overlapping prefixes and other
           mistakes. Copy <code>cm.ts</code>, fill in your country, and open a pull request.
-        </p>
-        <CodeBlock label="A country data file" code={countryExample} />
-        <p className="text-muted-foreground text-sm">
-          The Cameroon prefixes are community data, not an authoritative source, so treat operator
-          detection as a hint. The{" "}
-          <Link href="/docs/components/phone-input" className="underline underline-offset-4">
-            phone input docs
-          </Link>{" "}
-          explain what that means.
-        </p>
+        </SectionIntro>
+        <div className="mx-auto max-w-3xl space-y-3">
+          <CodeBlock label="A country data file" code={countryExample} />
+          <p className="text-muted-foreground text-center text-sm">
+            The Cameroon prefixes are community data, not an authoritative source, so treat operator
+            detection as a hint. The{" "}
+            <Link href="/docs/components/phone-input" className="underline underline-offset-4">
+              phone input docs
+            </Link>{" "}
+            explain what that means.
+          </p>
+        </div>
       </section>
 
-      <section
-        aria-labelledby="install-title"
-        className="mx-auto w-full max-w-3xl space-y-4 px-4 py-12"
-      >
-        <h2 id="install-title" className="text-2xl font-semibold tracking-tight">
-          Install
-        </h2>
-        <p className="text-muted-foreground max-w-prose">
+      <section aria-labelledby="install-title" className={`${column} space-y-6 py-14`}>
+        <SectionIntro id="install-title" title="Install">
           You need Tailwind CSS v4, shadcn/ui and React 19. The components are copied into your
           project, so you own the code.
-        </p>
-        <CodeBlock label="Install commands" code={installCommands} />
-        <Link href="/docs/getting-started" className={buttonVariants({ variant: "outline" })}>
-          Full getting started guide
-        </Link>
+        </SectionIntro>
+        <div className="mx-auto max-w-3xl space-y-4">
+          <CodeBlock label="Install commands" code={installCommands} />
+          <div className="flex justify-center">
+            <Link href="/docs/getting-started" className={buttonVariants({ variant: "outline" })}>
+              Full getting started guide
+            </Link>
+          </div>
+        </div>
       </section>
     </main>
   )

@@ -1,6 +1,6 @@
 "use client"
 
-import { Banknote, CreditCard, Smartphone } from "lucide-react"
+import { Banknote, Check, CreditCard, Smartphone } from "lucide-react"
 import { useId, useState, type ComponentProps, type ReactNode } from "react"
 
 import { useCountry, useLocale, useT } from "@/components/mboa/mboa-provider"
@@ -150,8 +150,10 @@ export function PaymentMethodPicker({
               key={method.id}
               data-slot="payment-method-picker-option"
               className={cn(
-                "bg-background flex cursor-pointer items-start gap-3 rounded-lg border p-3 transition-colors",
-                "hover:bg-muted/50 has-[:checked]:border-primary has-[:checked]:bg-primary/5",
+                "group/option bg-background flex cursor-pointer items-start gap-3 rounded-lg border p-3.5",
+                "motion-safe:transition-[border-color,background-color,box-shadow,transform] motion-safe:duration-200",
+                "hover:bg-muted/50 motion-safe:active:scale-[0.99]",
+                "has-[:checked]:border-primary has-[:checked]:bg-primary/5 has-[:checked]:ring-primary has-[:checked]:ring-1",
                 "has-[:focus-visible]:ring-ring/50 has-[:focus-visible]:ring-3",
                 "has-[:disabled]:cursor-not-allowed has-[:disabled]:opacity-50",
                 classNames?.option
@@ -177,7 +179,7 @@ export function PaymentMethodPicker({
                   <Icon className="text-muted-foreground size-5" />
                 )}
               </span>
-              <span className="min-w-0">
+              <span className="min-w-0 flex-1">
                 <span
                   data-slot="payment-method-picker-option-label"
                   className={cn("block text-sm leading-tight font-medium", classNames?.optionLabel)}
@@ -194,24 +196,33 @@ export function PaymentMethodPicker({
                   {description}
                 </span>
               </span>
+              {/* A tick that pops in when the card is chosen, so the choice is clear. */}
+              <span
+                aria-hidden="true"
+                className="border-input text-primary-foreground group-has-[:checked]/option:border-primary group-has-[:checked]/option:bg-primary mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-full border motion-safe:transition-colors motion-safe:duration-200"
+              >
+                <Check className="size-3 scale-0 group-has-[:checked]/option:scale-100 motion-safe:transition-transform motion-safe:duration-200" />
+              </span>
             </label>
           )
         })}
       </div>
 
       {resolved.method?.kind === "mobile_money" && operator && (
-        <PhoneInput
-          country={country}
-          locale={locale}
-          label={t("picker.phoneLabel", { operator: operator.name })}
-          operator={operator.id}
-          operatorLogos={operatorLogos}
-          className={classNames?.phone}
-          error={phoneError}
-          value={selection.phone}
-          onChange={(phone) => update({ ...selection, phone })}
-          disabled={disabled}
-        />
+        <div className="motion-safe:animate-in motion-safe:fade-in motion-safe:slide-in-from-top-1 motion-safe:duration-200">
+          <PhoneInput
+            country={country}
+            locale={locale}
+            label={t("picker.phoneLabel", { operator: operator.name })}
+            operator={operator.id}
+            operatorLogos={operatorLogos}
+            className={classNames?.phone}
+            error={phoneError}
+            value={selection.phone}
+            onChange={(phone) => update({ ...selection, phone })}
+            disabled={disabled}
+          />
+        </div>
       )}
 
       {error && (

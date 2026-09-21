@@ -51,12 +51,12 @@ export const classSlots: ClassSlots[] = [
     component: "UssdPrompt",
     file: "ussd-prompt.tsx",
     slotPrefix: "ussd-prompt",
-    keys: ["dots", "title", "phone", "code", "status", "countdown", "retry"],
+    keys: ["indicator", "title", "phone", "codeBox", "code", "status", "bar", "countdown", "retry"],
   },
   {
     component: "ReceiptCard",
     file: "receipt-card.tsx",
     slotPrefix: "receipt-card",
-    keys: ["icon", "title", "list", "done"],
+    keys: ["icon", "title", "amount", "list", "done"],
   },
 ]

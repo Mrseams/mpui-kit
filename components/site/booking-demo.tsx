@@ -50,64 +50,82 @@ export function BookingDemo() {
           </div>
         </div>
 
-        <div className="grid gap-6 md:grid-cols-2 md:items-start">
+        <div className="grid gap-6 md:grid-cols-2 md:items-stretch">
           <section
             aria-labelledby={listingId}
-            className="bg-card overflow-hidden rounded-xl border"
+            className="bg-card flex flex-col overflow-hidden rounded-xl border"
           >
-            {/* No photo on purpose: nothing to download on a slow connection. */}
-            <div aria-hidden="true" className="from-primary/20 to-primary/5 h-24 bg-linear-to-br" />
-            <div className="space-y-4 p-4 sm:p-6">
-              <div className="space-y-1">
-                <h3 id={listingId} className="font-semibold">
-                  {listing.name[locale]}
-                </h3>
-                <p className="text-muted-foreground text-sm">{listing.area}</p>
+            {/* An illustration instead of a photo: nothing to download on a slow connection. */}
+            <ListingArt />
+            <div className="flex flex-1 flex-col justify-between gap-6 p-4 sm:p-6">
+              <div className="space-y-3">
+                <div className="space-y-1">
+                  <h3 id={listingId} className="font-semibold">
+                    {listing.name[locale]}
+                  </h3>
+                  <p className="text-muted-foreground text-sm">{listing.area}</p>
+                </div>
+
+                <p className="flex items-baseline gap-2">
+                  <Currency amount={listing.pricePerNight} className="text-lg font-semibold" />
+                  <span className="text-muted-foreground text-sm">{copy.perNight}</span>
+                </p>
               </div>
 
-              <p className="flex items-baseline gap-2">
-                <Currency amount={listing.pricePerNight} className="text-lg font-semibold" />
-                <span className="text-muted-foreground text-sm">{copy.perNight}</span>
-              </p>
-
-              <div role="group" aria-labelledby={nightsId} className="flex items-center gap-3">
+              <div
+                role="group"
+                aria-labelledby={nightsId}
+                className="flex items-center justify-between gap-3 rounded-lg border p-2 pl-4"
+              >
                 <span id={nightsId} className="text-sm font-medium">
                   {copy.nights}
                 </span>
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="icon"
-                  aria-label={copy.fewer}
-                  disabled={locked || nights <= listing.minNights}
-                  onClick={() => setNights((current) => clampNights(current - 1))}
-                >
-                  −
-                </Button>
-                <output aria-live="polite" className="w-6 text-center font-medium tabular-nums">
-                  {nights}
-                </output>
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="icon"
-                  aria-label={copy.more}
-                  disabled={locked || nights >= listing.maxNights}
-                  onClick={() => setNights((current) => clampNights(current + 1))}
-                >
-                  +
-                </Button>
+                <div className="flex items-center gap-1">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="icon"
+                    className="size-10 text-lg"
+                    aria-label={copy.fewer}
+                    disabled={locked || nights <= listing.minNights}
+                    onClick={() => setNights((current) => clampNights(current - 1))}
+                  >
+                    −
+                  </Button>
+                  <output
+                    aria-live="polite"
+                    className="w-10 text-center text-lg font-semibold tabular-nums"
+                  >
+                    {nights}
+                  </output>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="icon"
+                    className="size-10 text-lg"
+                    aria-label={copy.more}
+                    disabled={locked || nights >= listing.maxNights}
+                    onClick={() => setNights((current) => clampNights(current + 1))}
+                  >
+                    +
+                  </Button>
+                </div>
               </div>
 
-              <p className="text-muted-foreground flex flex-wrap items-baseline gap-x-1 text-sm">
-                {copy.nightsCount(nights)} × <Currency amount={listing.pricePerNight} />
-              </p>
+              <div className="space-y-2">
+                <div className="flex items-baseline justify-between gap-4 border-t pt-4 text-sm">
+                  <span className="text-muted-foreground">
+                    {copy.nightsCount(nights)} × <Currency amount={listing.pricePerNight} />
+                  </span>
+                  <Currency amount={bookingTotal(nights)} className="font-semibold" />
+                </div>
 
-              {locked && (
-                <p role="status" className="text-muted-foreground text-xs">
-                  {copy.locked}
-                </p>
-              )}
+                {locked && (
+                  <p role="status" className="text-muted-foreground text-xs">
+                    {copy.locked}
+                  </p>
+                )}
+              </div>
             </div>
           </section>
 
@@ -156,5 +174,42 @@ export function BookingDemo() {
         </details>
       </div>
     </MboaProvider>
+  )
+}
+
+/**
+ * A small skyline drawn with SVG shapes: about a kilobyte, no download, and it
+ * follows the theme because every fill is a token.
+ */
+function ListingArt() {
+  return (
+    <svg
+      aria-hidden="true"
+      viewBox="0 0 320 96"
+      preserveAspectRatio="xMidYMid slice"
+      className="fill-primary h-24 w-full"
+    >
+      <rect width="320" height="96" className="fill-primary/10" />
+      <circle cx="262" cy="26" r="13" className="fill-primary/20" />
+      <g className="fill-primary/20">
+        <rect x="18" y="52" width="34" height="44" rx="3" />
+        <rect x="58" y="36" width="40" height="60" rx="3" />
+        <rect x="222" y="48" width="36" height="48" rx="3" />
+        <rect x="264" y="58" width="38" height="38" rx="3" />
+      </g>
+      <g className="fill-primary/35">
+        <rect x="104" y="20" width="58" height="76" rx="4" />
+        <rect x="168" y="42" width="48" height="54" rx="4" />
+      </g>
+      <g className="fill-background/80">
+        <rect x="114" y="32" width="10" height="10" rx="1.5" />
+        <rect x="132" y="32" width="10" height="10" rx="1.5" />
+        <rect x="114" y="50" width="10" height="10" rx="1.5" />
+        <rect x="132" y="50" width="10" height="10" rx="1.5" />
+        <rect x="178" y="54" width="10" height="10" rx="1.5" />
+        <rect x="194" y="54" width="10" height="10" rx="1.5" />
+      </g>
+      <rect y="90" width="320" height="6" className="fill-primary/25" />
+    </svg>
   )
 }

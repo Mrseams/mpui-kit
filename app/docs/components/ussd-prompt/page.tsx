@@ -47,9 +47,15 @@ const props: PropRow[] = [
       "When the request times out, as a Unix time in milliseconds. Starts the countdown. Without it the prompt waits indefinitely.",
   },
   {
+    name: "durationMs",
+    type: "number",
+    description:
+      "The total time allowed. Adds a bar that shrinks smoothly as time runs out. Without it there is only the countdown text.",
+  },
+  {
     name: "phone",
     type: "string",
-    description: "The number the request was sent to, shown as a reminder.",
+    description: "The number the request was sent to, shown as a reminder. It never wraps.",
   },
   {
     name: "onRetry",
@@ -76,7 +82,7 @@ const props: PropRow[] = [
   },
   {
     name: "classNames",
-    type: "{ dots, title, phone, code, status, countdown, retry }",
+    type: "{ indicator, title, phone, codeBox, code, status, bar, countdown, retry }",
     description:
       "Class names for parts of the prompt. Each part also has a data-slot attribute, such as ussd-prompt-code.",
   },
@@ -126,8 +132,9 @@ export default function UssdPromptPage() {
             and 10 seconds.
           </li>
           <li>
-            <strong>Reduced motion.</strong> The waiting dots pulse only for users who have not
-            asked for reduced motion.
+            <strong>Motion.</strong> While waiting, a ring ripples out from the phone icon and the
+            bar shrinks smoothly. Both are skipped for users who have asked for reduced motion. The
+            icon and the countdown text stay.
           </li>
           <li>
             <strong>Focus.</strong> If keyboard focus was on the copy button when the request timed

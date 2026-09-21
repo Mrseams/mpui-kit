@@ -1,5 +1,6 @@
 "use client"
 
+import { CircleAlert, Clock } from "lucide-react"
 import {
   useEffect,
   useId,
@@ -263,7 +264,10 @@ export function MomoCheckout({
           onSubmit={handleSubmit}
           noValidate
           data-slot="momo-checkout-form"
-          className={cn("space-y-4", classNames?.form)}
+          className={cn(
+            "motion-safe:animate-in motion-safe:fade-in space-y-4 motion-safe:duration-200",
+            classNames?.form
+          )}
         >
           <PaymentMethodPicker
             className={classNames?.picker}
@@ -298,6 +302,7 @@ export function MomoCheckout({
               code={state.ussdCode}
               phone={resolved.e164 ?? undefined}
               expiresAt={state.expiresAt}
+              durationMs={state.timeoutMs}
             />
           ) : (
             <p role="status" className="text-sm font-medium">
@@ -337,26 +342,51 @@ export function MomoCheckout({
           aria-labelledby={resultTitleId}
           data-slot="momo-checkout-failure"
           className={cn(
-            "border-destructive/40 bg-destructive/5 space-y-3 rounded-lg border p-4",
+            "border-destructive/40 bg-destructive/5 space-y-4 rounded-lg border p-5 text-center",
+            "motion-safe:animate-in motion-safe:fade-in motion-safe:zoom-in-95 motion-safe:duration-300",
             classNames?.failure
           )}
         >
-          <h3 id={resultTitleId} className="font-medium">
-            {state.status === "failed" ? t("checkout.failedTitle") : t("checkout.timeoutTitle")}
-          </h3>
-          <p className="text-sm">
-            {state.status === "failed"
-              ? (failureMessages?.[state.reason ?? ""] ?? t("checkout.failedBody"))
-              : t("checkout.timeoutBody")}
-          </p>
-          {state.status === "timeout" && (
-            <p className="text-muted-foreground text-sm">{t("checkout.timeoutNote")}</p>
-          )}
-          <div className="flex flex-wrap gap-2">
-            <Button type="button" onClick={checkout.retry}>
+          <span
+            aria-hidden="true"
+            className="bg-destructive/10 text-destructive mx-auto flex size-14 items-center justify-center rounded-full"
+          >
+            {state.status === "failed" ? (
+              <CircleAlert className="size-7" />
+            ) : (
+              <Clock className="size-7" />
+            )}
+          </span>
+          <div className="space-y-1.5">
+            <h3 id={resultTitleId} className="font-medium">
+              {state.status === "failed" ? t("checkout.failedTitle") : t("checkout.timeoutTitle")}
+            </h3>
+            <p className="text-sm text-pretty">
+              {state.status === "failed"
+                ? (failureMessages?.[state.reason ?? ""] ?? t("checkout.failedBody"))
+                : t("checkout.timeoutBody")}
+            </p>
+            {state.status === "timeout" && (
+              <p className="text-muted-foreground text-sm text-pretty">
+                {t("checkout.timeoutNote")}
+              </p>
+            )}
+          </div>
+          {/* Two equal buttons, side by side. */}
+          <div className="grid grid-cols-2 gap-2">
+            <Button
+              type="button"
+              className="h-auto min-h-10 w-full py-2 leading-tight whitespace-normal"
+              onClick={checkout.retry}
+            >
               {t("checkout.retry")}
             </Button>
-            <Button type="button" variant="outline" onClick={checkout.reset}>
+            <Button
+              type="button"
+              variant="outline"
+              className="h-auto min-h-10 w-full py-2 leading-tight whitespace-normal"
+              onClick={checkout.reset}
+            >
               {t("checkout.changeMethod")}
             </Button>
           </div>

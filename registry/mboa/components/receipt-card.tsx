@@ -20,9 +20,11 @@ export interface ReceiptDetail {
 
 /** Parts of the receipt you can style. Each also has a `data-slot` attribute. */
 export interface ReceiptCardClassNames {
-  /** The checkmark icon. */
+  /** The round badge with the checkmark. */
   icon?: string
   title?: string
+  /** The amount, shown large under the title. */
+  amount?: string
   /** The list of rows. */
   list?: string
   /** The Done button. */
@@ -41,7 +43,11 @@ export interface ReceiptCardProps extends Omit<ComponentProps<"section">, "child
   classNames?: ReceiptCardClassNames
 }
 
-/** A confirmation card for a successful payment: amount, method, reference and date. */
+/**
+ * A confirmation card for a successful payment: a checkmark, the amount, and
+ * the method, reference and date. It eases in, and the checkmark pops, unless
+ * the user has asked for reduced motion.
+ */
 export function ReceiptCard({
   receipt,
   details,
@@ -64,19 +70,28 @@ export function ReceiptCard({
     <section
       data-slot="receipt-card"
       aria-labelledby={titleId}
-      className={cn("bg-card space-y-4 rounded-lg border p-4", className)}
+      className={cn(
+        "bg-card space-y-5 rounded-lg border p-5",
+        "motion-safe:animate-in motion-safe:fade-in motion-safe:slide-in-from-bottom-2 motion-safe:duration-300",
+        className
+      )}
       {...props}
     >
-      <div className="flex items-center gap-2">
-        <CircleCheck
+      <div className="flex flex-col items-center gap-2 text-center">
+        <span
+          aria-hidden="true"
           data-slot="receipt-card-icon"
           // Uses your --success color if you define one, otherwise your primary color.
           className={cn(
-            "size-6 shrink-0 text-[color:var(--success,var(--primary))]",
+            "flex size-14 items-center justify-center rounded-full",
+            "bg-[color-mix(in_oklab,var(--success,var(--primary))_12%,transparent)]",
+            "text-[color:var(--success,var(--primary))]",
+            "motion-safe:animate-in motion-safe:zoom-in-50 motion-safe:delay-100 motion-safe:duration-500",
             classNames?.icon
           )}
-          aria-hidden
-        />
+        >
+          <CircleCheck className="size-8" />
+        </span>
         <h3
           id={titleId}
           data-slot="receipt-card-title"
@@ -84,38 +99,29 @@ export function ReceiptCard({
         >
           {t("receipt.title")}
         </h3>
+        <p
+          data-slot="receipt-card-amount"
+          className={cn("text-3xl font-semibold tabular-nums", classNames?.amount)}
+        >
+          <span className="sr-only">{t("receipt.amount")}: </span>
+          <Currency amount={receipt.amount} currency={receipt.currency} locale={locale} />
+        </p>
       </div>
 
       <dl
         data-slot="receipt-card-list"
-        className={cn("grid grid-cols-[auto_1fr] gap-x-4 gap-y-2 text-sm", classNames?.list)}
+        className={cn("divide-y border-y text-sm", classNames?.list)}
       >
-        <dt className="text-muted-foreground">{t("receipt.amount")}</dt>
-        <dd className="font-semibold">
-          <Currency amount={receipt.amount} currency={receipt.currency} locale={locale} />
-        </dd>
-
-        <dt className="text-muted-foreground">{t("receipt.method")}</dt>
-        <dd>{paymentMethodLabel(receipt.methodId, country, t)}</dd>
-
-        {phoneText && (
-          <>
-            <dt className="text-muted-foreground">{t("receipt.phone")}</dt>
-            <dd>{phoneText}</dd>
-          </>
-        )}
-
-        <dt className="text-muted-foreground">{t("receipt.reference")}</dt>
-        <dd className="font-mono break-all">{receipt.reference}</dd>
-
-        <dt className="text-muted-foreground">{t("receipt.date")}</dt>
-        <dd>{formatDateTime(receipt.paidAt, locale)}</dd>
-
+        <Row label={t("receipt.method")}>{paymentMethodLabel(receipt.methodId, country, t)}</Row>
+        {phoneText && <Row label={t("receipt.phone")}>{phoneText}</Row>}
+        <Row label={t("receipt.reference")} mono>
+          {receipt.reference}
+        </Row>
+        <Row label={t("receipt.date")}>{formatDateTime(receipt.paidAt, locale)}</Row>
         {details?.map((detail) => (
-          <div key={detail.label} className="contents">
-            <dt className="text-muted-foreground">{detail.label}</dt>
-            <dd>{detail.value}</dd>
-          </div>
+          <Row key={detail.label} label={detail.label}>
+            {detail.value}
+          </Row>
         ))}
       </dl>
 
@@ -123,12 +129,24 @@ export function ReceiptCard({
         <Button
           type="button"
           data-slot="receipt-card-done"
-          className={classNames?.done}
+          className={cn("h-10 w-full", classNames?.done)}
           onClick={onDone}
         >
           {t("receipt.done")}
         </Button>
       )}
     </section>
+  )
+}
+
+/** One line of the receipt: the label on the left, the value on the right. */
+function Row({ label, mono, children }: { label: string; mono?: boolean; children: ReactNode }) {
+  return (
+    <div className="flex items-baseline justify-between gap-4 py-2.5">
+      <dt className="text-muted-foreground">{label}</dt>
+      <dd className={cn("text-right font-medium", mono && "font-mono text-xs break-all")}>
+        {children}
+      </dd>
+    </div>
   )
 }

@@ -248,21 +248,26 @@ describe("<UssdPrompt /> styling", () => {
       code: "*123#",
       phone: "+237651234567",
       expiresAt: START + 90_000,
+      durationMs: 90_000,
       classNames: {
-        dots: "dots-x",
+        indicator: "indicator-x",
         title: "title-x",
         phone: "phone-x",
+        codeBox: "codebox-x",
         code: "code-x",
         status: "status-x",
+        bar: "bar-x",
         countdown: "countdown-x",
       },
     })
     const slot = (name: string) => container.querySelector(`[data-slot="ussd-prompt-${name}"]`)
-    expect(slot("dots")).toHaveClass("dots-x")
+    expect(slot("indicator")).toHaveClass("indicator-x")
     expect(slot("title")).toHaveClass("title-x")
     expect(slot("phone")).toHaveClass("phone-x")
+    expect(slot("code-box")).toHaveClass("codebox-x")
     expect(slot("code")).toHaveClass("code-x")
     expect(slot("status")).toHaveClass("status-x")
+    expect(slot("bar")).toHaveClass("bar-x")
     expect(slot("countdown")).toHaveClass("countdown-x")
   })
 
@@ -275,21 +280,96 @@ describe("<UssdPrompt /> styling", () => {
     advance(3_000)
     expect(container.querySelector('[data-slot="ussd-prompt-retry"]')).toHaveClass("retry-x")
   })
+
+  it("never splits the phone number across two lines", () => {
+    const { container } = setup({ phone: "+237651234567" })
+    const text = container.querySelector('[data-slot="ussd-prompt-phone"]')?.textContent
+    // No-break spaces between the groups keep the number in one piece.
+    expect(text).toContain("+237\u00a06\u00a051\u00a023\u00a045\u00a067")
+  })
+
+  it("gives a single action the whole row when the code cannot be dialled", () => {
+    const { container } = setup({ code: "call the office" })
+    const actions = screen.getByRole("button", { name: "Copy code" }).parentElement
+    expect(actions?.children).toHaveLength(1)
+    expect(actions?.className).toContain("only-child:col-span-2")
+    expect(container.querySelector("a")).toBeNull()
+  })
+
+  it("puts the copy and dial actions side by side, with equal width", () => {
+    setup({ code: "*123#" })
+    const copyButton = screen.getByRole("button", { name: "Copy code" })
+    const dial = screen.getByRole("link", { name: "Dial now" })
+    expect(copyButton.parentElement).toBe(dial.parentElement)
+    expect(copyButton.parentElement?.className).toContain("grid-cols-2")
+    expect(copyButton).toHaveClass("w-full")
+    expect(dial).toHaveClass("w-full")
+  })
+})
+
+describe("<UssdPrompt /> countdown bar", () => {
+  const fill = () =>
+    document.querySelector<HTMLElement>('[data-slot="ussd-prompt-bar"] > div') as HTMLElement
+
+  it("starts full and shrinks with the time left", () => {
+    setup({ expiresAt: START + 40_000, durationMs: 40_000 })
+    expect(fill().style.transform).toBe("scaleX(1)")
+
+    advance(10_000)
+    expect(fill().style.transform).toBe("scaleX(0.75)")
+
+    advance(20_000)
+    expect(fill().style.transform).toBe("scaleX(0.25)")
+  })
+
+  it("is not shown without a duration, and is hidden from screen readers", () => {
+    const { container, unmount } = setup({ expiresAt: START + 40_000 })
+    expect(container.querySelector('[data-slot="ussd-prompt-bar"]')).toBeNull()
+    unmount()
+
+    setup({ expiresAt: START + 40_000, durationMs: 40_000 })
+    expect(document.querySelector('[data-slot="ussd-prompt-bar"]')).toHaveAttribute(
+      "aria-hidden",
+      "true"
+    )
+  })
+
+  it("does not animate for users who prefer reduced motion", () => {
+    setup({ expiresAt: START + 40_000, durationMs: 40_000 })
+    expect(fill().className).toContain("motion-reduce:transition-none")
+  })
+
+  it("disappears with the countdown when the time is up", () => {
+    setup({ expiresAt: START + 3_000, durationMs: 3_000 })
+    advance(3_000)
+    expect(document.querySelector('[data-slot="ussd-prompt-bar"]')).toBeNull()
+  })
 })
 
 describe("<UssdPrompt /> motion", () => {
-  const dots = () =>
-    Array.from(document.querySelectorAll("[data-slot=ussd-prompt] span.rounded-full"))
+  const indicator = () => document.querySelector('[data-slot="ussd-prompt-indicator"]')
 
-  it("pulses while waiting, only when reduced motion is not requested", () => {
+  it("ripples around the phone icon while waiting, only when reduced motion is not requested", () => {
     setup({ expiresAt: START + 3_000 })
-    expect(dots()).toHaveLength(3)
-    for (const dot of dots()) expect(dot.className).toContain("motion-safe:animate-pulse")
+    expect(indicator()?.innerHTML).toContain("motion-safe:animate-ping")
+    expect(indicator()?.querySelector("svg")).toBeInTheDocument()
   })
 
-  it("stops pulsing once expired", () => {
+  it("stops rippling once expired, and keeps the icon", () => {
     setup({ expiresAt: START + 3_000 })
     advance(3_000)
-    for (const dot of dots()) expect(dot.className).not.toContain("animate-pulse")
+    expect(indicator()?.innerHTML).not.toContain("animate-ping")
+    expect(indicator()?.querySelector("svg")).toBeInTheDocument()
+  })
+
+  it("eases in, and only for users who have not asked for reduced motion", () => {
+    setup({ expiresAt: START + 3_000 })
+    const root = document.querySelector('[data-slot="ussd-prompt"]')
+    expect(root?.className).toContain("motion-safe:animate-in")
+  })
+
+  it("hides the decorative indicator from screen readers", () => {
+    setup({ expiresAt: START + 3_000 })
+    expect(indicator()).toHaveAttribute("aria-hidden", "true")
   })
 })

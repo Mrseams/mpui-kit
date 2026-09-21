@@ -306,7 +306,8 @@
           "type": "registry:component",
           "target": "components/mboa/ussd-prompt.tsx"
         }
-      ]
+      ],
+      "dependencies": ["lucide-react"]
     },
     {
       "name": "format-date",
@@ -385,7 +386,8 @@
           "type": "registry:component",
           "target": "components/mboa/momo-checkout.tsx"
         }
-      ]
+      ],
+      "dependencies": ["lucide-react"]
     }
   ]
 }
