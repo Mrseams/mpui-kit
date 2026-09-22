@@ -80,7 +80,7 @@ export default function Home() {
             Open source · shadcn/ui registry · Pre-release (0.1.0 in development)
           </p>
           <h1 className="text-4xl font-semibold tracking-tight text-balance sm:text-5xl">
-            shadcn/ui components for African markets
+            shadcn/ui components for mobile payments
           </h1>
           <p className="text-muted-foreground text-lg text-pretty">
             Mobile Money checkout, FCFA currency, local phone numbers with operator detection, and
