@@ -66,6 +66,14 @@ Phase 1:
 | `momo-checkout`         | block           | Full checkout: idle → awaiting approval → success / failed / timeout, plus a receipt card. Host card or PayPal fields in a panel (beta). |
 | `method-panel`          | types           | (Beta) The contract for a payment method's panel. Card details never enter MPUI-KIT: your provider's fields return a token.              |
 
+### Card and PayPal (beta)
+
+Give a payment method a `panel` to host your provider's own fields or buttons — Stripe's Payment
+Element, PayPal's Buttons, or anything else — directly inside the checkout. Card details never
+enter MPUI-KIT: the panel hands back an opaque token, and only that token reaches your `onPay`.
+See the card and PayPal guide in the docs, which has a live demo running the real Stripe and
+PayPal widgets in test/sandbox mode.
+
 ### Headless and framework-free
 
 The logic is separate from the UI. `registry/mpui-kit/lib/core` has no React and no dependencies, and `@mpui-kit/core` (not published yet) is built from it, so you can use the checkout controller, phone field and countdown with Vue, Svelte or plain JavaScript. See [packages/core](./packages/core/README.md) and the Headless guide in the docs.
