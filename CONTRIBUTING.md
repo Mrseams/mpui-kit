@@ -86,7 +86,7 @@ Prefix or region corrections are welcome. Open a pull request (or a "Country dat
 
 ## Keeping it light
 
-The audience often has slow connections and low-end phones. `pnpm size` (run it after `pnpm build`) checks how much JavaScript each docs page loads up front against a budget, and that the landing page demo stays lazy. If your change goes over a budget, look for something to remove or load later before raising the budget.
+The audience often has slow connections. `pnpm size` (run it after `pnpm build`) checks how much JavaScript each docs page loads up front against a budget, and that the landing page demo stays lazy. If your change goes over a budget, look for something to remove or load later before raising the budget.
 
 ## Guidelines for components
 
@@ -94,7 +94,7 @@ The audience often has slow connections and low-end phones. `pnpm size` (run it 
 - **UI only.** No real payment API calls. Accept async callbacks instead.
 - **Accessible by default.** Labels, keyboard navigation, `aria-live` for async states, and respect `prefers-reduced-motion`.
 - **Every user-facing string goes through `registry/mpui-kit/lib/i18n.ts`,** in both French and English.
-- **Keep it light.** Avoid heavy dependencies and animation libraries. The audience often has slow connections and low-end phones.
+- **Keep it light.** Avoid heavy dependencies and animation libraries. The audience often has slow connections.
 - **Test the logic.** Put logic in `registry/mpui-kit/lib/` as pure functions and unit-test it.
 
 ## Reporting bugs

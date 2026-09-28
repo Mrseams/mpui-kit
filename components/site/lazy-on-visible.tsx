@@ -6,7 +6,7 @@ import { useEffect, useRef, useState, type ReactNode } from "react"
  * Shows `placeholder` until the box is close to the viewport, and only then
  * renders `children`. Put a lazily loaded component inside, and its JavaScript
  * is not downloaded until the visitor scrolls near it: useful for heavy demos
- * on slow connections and low-end phones.
+ * on slow connections.
  */
 export function LazyOnVisible({
   children,

@@ -22,7 +22,7 @@ export default function DocsIndex() {
           <li>No hardcoded country. Country data is pluggable, with Cameroon first.</li>
           <li>UI only. Payment flows take async callbacks, so they work with any backend.</li>
           <li>Accessible by default, and bilingual FR/EN.</li>
-          <li>Light. Built for slow connections and low-end phones.</li>
+          <li>Light. Built for slow connections.</li>
           <li>
             Themeable. They read your shadcn tokens, so they follow your theme and dark mode. See{" "}
             <Link href="/docs/theming" className="underline underline-offset-4">

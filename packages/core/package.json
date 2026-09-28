@@ -2,7 +2,7 @@
   "name": "@mpui-kit/core",
   "version": "0.1.0",
   "description": "Framework-free core of MPUI-KIT: a Mobile Money checkout controller, phone number and FCFA helpers, and FR/EN strings for African markets. Works with React, Vue, Svelte or plain JavaScript.",
-  "private": true,
+  "private": false,
   "type": "module",
   "license": "MIT",
   "repository": {

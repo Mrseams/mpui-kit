@@ -1,6 +1,6 @@
 # MPUI-KIT
 
-Open-source [shadcn/ui](https://ui.shadcn.com) components for African markets: Mobile Money checkout, FCFA currency, local phone numbers, bilingual FR/EN forms, and UX that holds up on slow connections and low-end phones.
+Open-source [shadcn/ui](https://ui.shadcn.com) components for African markets: Mobile Money checkout, FCFA currency, local phone numbers, bilingual FR/EN forms, and UX that holds up on slow connections.
 
 Cameroon is the first supported country. Country data is pluggable, so adding another country is a pull request, not a fork. See [Add your country](./CONTRIBUTING.md#add-your-country).
 
