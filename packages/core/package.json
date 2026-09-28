@@ -5,6 +5,13 @@
   "private": true,
   "type": "module",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Mrseams/mpui-kit.git",
+    "directory": "packages/core"
+  },
+  "homepage": "https://mpui-kit.vercel.app/docs/headless",
+  "bugs": "https://github.com/Mrseams/mpui-kit/issues",
   "sideEffects": false,
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
