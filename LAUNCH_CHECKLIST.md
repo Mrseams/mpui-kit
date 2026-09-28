@@ -17,7 +17,7 @@ Everything between "the code works" and "people can install it, and the Vercel O
 - [x] ~~Pick the domain.~~ **Done:** `https://mpui-kit.vercel.app`, filled in everywhere below. It still needs to be created and deployed (step 3).
   - [ ] Set `NEXT_PUBLIC_SITE_URL` to it on Vercel (see step 3). It feeds the install commands on the site.
 - [ ] **Record the README demo GIF** (there is a placeholder). A short clip of the booking demo, French to English, paying with Mobile Money.
-- [ ] **Have the wording reviewed.** The copy was drafted with AI assistance. The French strings in particular deserve a native speaker's review (`registry/mpui-kit/lib/i18n.ts`, `lib/booking.ts`).
+- [x] ~~Have the wording reviewed.~~ **Done:** the French strings were reviewed by the maintainer.
 - [ ] **Verify the card and PayPal guide against the real services.** The Stripe Elements and PayPal Buttons code in `app/docs/guides/card-and-paypal/page.tsx` is a sketch that was never run against either. Build a small working example with each, in test mode, fix the code on the page, and then remove the "not run" wording. Also check which currencies each provider can charge: the guide only says to check.
 - [ ] **Decide when card and PayPal stop being beta.** They are labelled "(beta)" in the docs, the README, the CHANGELOG and the registry titles. Search for `beta` and remove the label once the panel API has been used with a real provider and you are happy to keep it stable.
 - [ ] **Have the Vue and Svelte sketches tried** by someone who uses them (`app/docs/headless/page.tsx`, `packages/core/README.md`). They are marked as not run.
@@ -25,15 +25,15 @@ Everything between "the code works" and "people can install it, and the Vercel O
 
 ## 2. GitHub
 
-- [ ] Create the repository and push (`main`). There is no remote yet.
-- [ ] **Confirm CI is green on the first push.** It has never run on GitHub. It uses Node 22 and reads the pnpm version from `packageManager`, while local development used Node 24. Fix any difference.
+- [x] ~~Create the repository and push (`main`).~~ **Done:** public at `github.com/Mrseams/mpui-kit`.
+- [ ] **Fix CI: the account is locked on a billing issue.** Every run since 2026-09-21 fails at startup with "your account is locked due to a billing issue" (not a code or workflow problem). Resolve it under Settings → Billing on github.com, then re-run the latest workflow and confirm it goes green. It uses Node 22 and reads the pnpm version from `packageManager`, while local development used Node 24 — watch for a difference once it actually runs.
 - [ ] Turn on **private vulnerability reporting** (Settings → Code security). [SECURITY.md](./SECURITY.md) tells people to use it.
-- [ ] Turn on **Discussions** (the issue template links to them).
-- [ ] Create the labels the templates use: `bug`, `enhancement`, `country-data`.
-- [ ] Add a description and topics, for example: `shadcn`, `shadcn-ui`, `registry`, `mobile-money`, `fcfa`, `africa`, `cameroon`, `nextjs`, `react`, `tailwindcss`, `i18n`.
-- [ ] Protect `main` (require CI to pass, require a pull request).
+- [x] ~~Turn on Discussions.~~ **Done.**
+- [x] ~~Create the labels the templates use.~~ **Done:** `bug` and `enhancement` already existed; added `country-data`.
+- [x] ~~Add a description and topics.~~ **Done:** description was already set; added the topics `shadcn`, `shadcn-ui`, `registry`, `mobile-money`, `fcfa`, `africa`, `cameroon`, `nextjs`, `react`, `tailwindcss`, `i18n`.
+- [ ] Protect `main` (require CI to pass, require a pull request). Needs CI working first.
 - [ ] Tag `v0.1.0` and create a GitHub release from the [CHANGELOG](./CHANGELOG.md), once step 4 passes. Change "Unreleased" to the date.
-- [ ] Run `pnpm audit` and look at anything serious.
+- [x] ~~Run `pnpm audit` and look at anything serious.~~ **Done on 2026-09-28:** one low-severity advisory, in `esbuild` (a dev-only transitive dependency of `vitest`/`vite`, arbitrary file read from its dev server on Windows). Nothing reaches the built site or an installed component. Re-run after dependency updates.
 
 ## 3. Vercel
 
