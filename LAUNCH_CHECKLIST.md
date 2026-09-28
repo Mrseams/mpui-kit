@@ -21,7 +21,7 @@ Everything between "the code works" and "people can install it, and the Vercel O
 - [ ] **Verify the card and PayPal guide against the real services.** The Stripe Elements and PayPal Buttons code in `app/docs/guides/card-and-paypal/page.tsx` is a sketch that was never run against either. Build a small working example with each, in test mode, fix the code on the page, and then remove the "not run" wording. Also check which currencies each provider can charge: the guide only says to check.
 - [ ] **Decide when card and PayPal stop being beta.** They are labelled "(beta)" in the docs, the README, the CHANGELOG and the registry titles. Search for `beta` and remove the label once the panel API has been used with a real provider and you are happy to keep it stable.
 - [ ] **Have the Vue and Svelte sketches tried** by someone who uses them (`app/docs/headless/page.tsx`, `packages/core/README.md`). They are marked as not run.
-- [ ] **Run `git log` and check the author and email** on every commit are the ones you want public.
+- [x] ~~Run `git log` and check the author and email on every commit.~~ **Done:** every commit is `Emmanuel Essam <mrseams@outlook.fr>`, the address already public in the Code of Conduct.
 
 ## 2. GitHub
 
