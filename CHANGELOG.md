@@ -20,7 +20,7 @@ Initial release. Phase 1.
 - A framework-free core (`registry/mpui-kit/lib/core`): `createCheckoutController`, `createPhoneField` and `createCountdown`, each with `getSnapshot()` and `subscribe()`, so they work with React, Vue, Svelte or plain JavaScript. The React hooks (`useMomoCheckout`, `usePhoneField`, `useCountdown`) are thin wrappers over them. A plain-JavaScript demo runs at `/examples/vanilla.html`.
 - `@mpui-kit/core`: the same core as an npm package (ESM, CommonJS and types). Built and checked in this repository, **not published yet**.
 - A configurable checkout. Card and PayPal support is **beta**: the panel API may change before 1.0. Give a payment method a `panel` to host your provider's own card fields or PayPal buttons: the panel returns an opaque token that reaches `onPay` as `payload`, and card details never enter MPUI-KIT. Also `methodIcons`, `submitLabel`, `submitDisabled`, `footer`, a new `"other"` method kind, and `methodLabel` on the receipt.
-- A guide for card and PayPal, marked beta (with a simulated demo, and Stripe Elements and PayPal Buttons sketches that have **not** been run against those services) and a guide to the headless core.
+- A guide for card and PayPal, marked beta, with a live demo of Stripe's real Payment Element and PayPal's real Buttons, in test/sandbox mode, using each provider's own public test credentials.
 - Polish: symmetrical layouts, entrance animations that respect `prefers-reduced-motion`, and a redesigned USSD prompt and receipt.
 - `pnpm registry:check` to verify that every registry item ships what it imports, and `pnpm size` to keep the pages light.
 

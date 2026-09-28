@@ -3,7 +3,8 @@
 import { useState } from "react"
 
 import { LocaleToggle } from "@/components/site/locale-toggle"
-import { MockCardPanel, MockWalletPanel } from "@/components/site/mock-panels"
+import { PayPalPanel } from "@/components/site/paypal-panel"
+import { StripeCardPanel } from "@/components/site/stripe-card-panel"
 import { MpuiKitProvider } from "@/components/mpui-kit/mpui-kit-provider"
 import { MomoCheckout } from "@/components/mpui-kit/momo-checkout"
 import { cm } from "@/lib/mpui-kit/countries/cm"
@@ -14,12 +15,12 @@ import type { PaymentRequest } from "@/hooks/mpui-kit/use-momo-checkout"
 
 const methods: PaymentMethod[] = [
   ...defaultPaymentMethods(cm, { cash: false }),
-  { id: "wallet", kind: "other", label: "Demo wallet", description: "A simulated wallet" },
+  { id: "paypal", kind: "other", label: "PayPal", description: "Pay with your PayPal account" },
 ]
 
 const panels = {
-  card: { component: MockCardPanel },
-  wallet: { component: MockWalletPanel, submit: "panel" as const },
+  card: { component: StripeCardPanel },
+  paypal: { component: PayPalPanel, submit: "panel" as const },
 }
 
 /** The checkout with a simulated card panel and wallet, and a view of what onPay receives. */
@@ -48,7 +49,7 @@ export function PanelsDemo() {
             pollIntervalMs={1_000}
             onPay={onPay}
             onCheckStatus={backend.onCheckStatus}
-            footer="Payments are simulated."
+            footer="Card and PayPal are real, in test mode. Nothing is ever charged."
           />
           <div className="space-y-2">
             <p className="text-sm font-medium">What your onPay receives</p>
@@ -59,7 +60,7 @@ export function PanelsDemo() {
               {received ?? "Choose a method and pay to see the request."}
             </pre>
             <p className="text-muted-foreground text-xs text-pretty">
-              Only the token from the panel reaches your code, never card details.
+              Only the token or order id from the panel reaches your code, never card details.
             </p>
           </div>
         </div>

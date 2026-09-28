@@ -50,8 +50,7 @@ interface MethodPanel {
   submit?: "checkout" | "panel"        // "checkout" (default) uses the Pay button
 }`
 
-const stripe = `// SKETCH: not run in this repository. Check it against Stripe's current docs.
-"use client"
+const stripe = `"use client"
 import { Elements, PaymentElement, useElements, useStripe } from "@stripe/react-stripe-js"
 import { loadStripe } from "@stripe/stripe-js"
 import { useEffect } from "react"
@@ -94,22 +93,25 @@ export function StripeCardPanel(props: MethodPanelProps) {
   return (
     <Elements
       stripe={stripePromise}
-      options={{ mode: "payment", amount: props.amount, currency: "eur" }}
+      options={{ mode: "payment", amount: 1000, currency: "usd" }} // your price, converted
     >
       <Fields {...props} />
     </Elements>
   )
 }`
 
-const paypal = `// SKETCH: not run in this repository. Check it against PayPal's current docs.
-"use client"
+const paypal = `"use client"
 import { PayPalButtons, PayPalScriptProvider } from "@paypal/react-paypal-js"
 import type { MethodPanelProps } from "@/components/mpui-kit/method-panel"
 
 export function PayPalPanel({ disabled, submit, setError }: MethodPanelProps) {
   return (
     <PayPalScriptProvider
-      options={{ clientId: process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID!, currency: "EUR" }}
+      options={{
+        clientId: process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID!,
+        currency: "USD",
+        components: "buttons",
+      }}
     >
       <PayPalButtons
         disabled={disabled}
@@ -127,7 +129,7 @@ export function PayPalPanel({ disabled, submit, setError }: MethodPanelProps) {
 // Register it with { submit: "panel" }: PayPal's buttons are the Pay button.
 // Your onPay then receives { payload: { orderId } }, and your server captures the order.`
 
-const serverNotes = `// On your server, for the card flow (sketch)
+const serverNotes = `// On your server, for the card flow
 // 1. Read the price from YOUR data. Ignore any amount sent by the browser.
 // 2. Create the payment with the token from payload, and confirm it.
 // 3. Answer { status: "success", reference } or { status: "failed", reason }.
@@ -152,8 +154,7 @@ export default function CardAndPayPalPage() {
           This feature is in beta
         </p>
         <p className="text-muted-foreground text-pretty">
-          The panel API may change before 1.0, and the Stripe and PayPal examples below have not
-          been run against those services. Mobile Money and cash are not affected.
+          The panel API may change before 1.0. Mobile Money and cash are not affected.
         </p>
       </aside>
 
@@ -179,8 +180,20 @@ export default function CardAndPayPalPage() {
           Try it
         </h2>
         <p className="text-muted-foreground max-w-prose">
-          These panels are <strong>simulated</strong>. They collect nothing and contact no provider.
-          Watch the right side: only a made-up token arrives.
+          This is Stripe&apos;s real Payment Element and PayPal&apos;s real Buttons, in{" "}
+          <strong>test mode</strong>, using each provider&apos;s own public test credentials so
+          there is nothing to configure. Nothing is ever charged. Try Stripe&apos;s test card{" "}
+          <code>4242 4242 4242 4242</code>, any future expiry, any CVC and postal code. Watch the
+          right side: only a token or an order id ever reaches this page, never card details.
+        </p>
+        <p className="text-muted-foreground max-w-prose">
+          The PayPal button here creates its order in the browser, from a fixed amount, only because
+          this demo has no server. Do not do that in your app: create the order on your server, from
+          your own price, or the amount can be changed before it reaches PayPal. See{" "}
+          <Link href="#paypal-example" className="text-foreground underline underline-offset-4">
+            the example below
+          </Link>{" "}
+          for the right way.
         </p>
         <div className="rounded-lg border p-4 sm:p-6">
           <PanelsDemo />
@@ -218,24 +231,29 @@ export default function CardAndPayPalPage() {
           Example: Stripe Elements
         </h2>
         <p className="text-muted-foreground max-w-prose">
-          A sketch of a card panel with Stripe&apos;s Payment Element.{" "}
-          <strong>It has not been run in this repository</strong>, so check it against Stripe&apos;s
-          current documentation before you use it.
+          A card panel with Stripe&apos;s Payment Element, the same one used in the demo above (with
+          your own key in place of Stripe&apos;s test one, and your real amount and currency).
         </p>
-        <CodeBlock label="StripeCardPanel sketch" code={stripe} />
+        <CodeBlock label="StripeCardPanel" code={stripe} />
         <CodeBlock label="Server side notes" code={serverNotes} />
       </section>
 
-      <section aria-labelledby="paypal" className="space-y-3">
-        <h2 id="paypal" className="text-xl font-semibold">
+      <section aria-labelledby="paypal-example" className="space-y-3">
+        {/*
+          Not "paypal": an element with that id would shadow window.paypal
+          (the SDK's own global) via the browser's named-access behavior, and
+          the PayPal script would then fail to attach itself to it.
+        */}
+        <h2 id="paypal-example" className="text-xl font-semibold">
           Example: PayPal buttons
         </h2>
         <p className="text-muted-foreground max-w-prose">
           PayPal&apos;s buttons start the payment themselves, so this panel is registered with{" "}
-          <code>submit: &quot;panel&quot;</code> to hide the Pay button. Also{" "}
-          <strong>not run here</strong>: check it against PayPal&apos;s current documentation.
+          <code>submit: &quot;panel&quot;</code> to hide the Pay button.{" "}
+          <strong>Unlike the demo above, this creates the order on your server</strong> — the right
+          way to do it, since the browser never gets to say what the price is.
         </p>
-        <CodeBlock label="PayPalPanel sketch" code={paypal} />
+        <CodeBlock label="PayPalPanel" code={paypal} />
       </section>
 
       <section aria-labelledby="notes" className="space-y-3">
@@ -243,6 +261,13 @@ export default function CardAndPayPalPage() {
           Before you go live
         </h2>
         <ul className="text-muted-foreground list-disc space-y-1 pl-5">
+          <li>
+            <strong>Use your own keys.</strong> The demo uses Stripe&apos;s and PayPal&apos;s public
+            test credentials, which anyone can use and which only ever produce test-mode data. Set{" "}
+            <code>NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY</code> and{" "}
+            <code>NEXT_PUBLIC_PAYPAL_CLIENT_ID</code> to your own, and swap in your live keys when
+            you are ready to accept real payments.
+          </li>
           <li>
             <strong>Currency.</strong> Providers support different currencies, and not every one can
             charge in CFA francs (XAF or XOF). Check what yours accepts. You may need to charge in
