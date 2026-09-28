@@ -37,35 +37,32 @@ Everything between "the code works" and "people can install it, and the Vercel O
 
 ## 3. Vercel
 
-- [ ] Import the repository. Framework: Next.js. Build command: the default `pnpm build` (it runs the registry check, the registry build and the site build). Use Node 22.
-- [ ] Set `NEXT_PUBLIC_SITE_URL` to the final URL (Production and Preview).
-- [ ] Add the custom domain if you have one.
-- [ ] After the first deploy, open these and check they return JSON, not a page:
-  - [ ] `/r/registry.json`
-  - [ ] `/r/momo-checkout.json`
-  - [ ] `/r/country-cm.json`
+- [x] ~~Import the repository and deploy.~~ **Done:** live at <https://mpui-kit.vercel.app>.
+- [ ] Confirm `NEXT_PUBLIC_SITE_URL` is actually set on Vercel (Production and Preview), rather than falling back to the hardcoded default in `lib/site.ts`. Both currently point at the same URL, so this can't be told apart from the outside — check the Vercel project settings directly.
+- [ ] Add a custom domain, if you want one instead of `mpui-kit.vercel.app`.
+- [x] ~~Open `/r/registry.json`, `/r/momo-checkout.json` and `/r/country-cm.json` and check they return JSON, not a page.~~ **Done on 2026-09-28:** all three return `application/json`.
 - [ ] Optional: add `Access-Control-Allow-Origin: *` for `/r/*` in `next.config.ts`, so browser-based tools can read the registry. The CLI does not need it.
-- [ ] Open the site on the real URL: landing, demo, dark toggle, docs, playground.
-- [ ] Run `pnpm size` against the production build and check the numbers still hold.
+- [x] ~~Open the site on the real URL: landing, demo, dark toggle, docs, playground.~~ **Done:** the landing page, `/docs`, and `/docs/guides/card-and-paypal` were opened and worked. Dark toggle and playground were not separately re-checked on the live URL.
+- [ ] Run `pnpm size` against the production build and check the numbers still hold. (Checked against a local build only, not the deployed one.)
 
 ## 4. Real install test: the one check that could never finish
 
-Every earlier attempt to install a component that depends on shadcn's own `input` or `button` failed, because the connection to `ui.shadcn.com` kept resetting. The manifest was checked statically (`pnpm registry:check`) and the CLI was seen resolving `input` correctly, but a complete install has not been observed. Do this from a normal connection:
+Every earlier attempt to install a component that depends on shadcn's own `input` or `button` failed, because the connection to `ui.shadcn.com` kept resetting. Now that the registry is deployed, this was finally run for real, from this environment, on 2026-09-28.
 
-- [ ] Create a fresh Next.js app with Tailwind v4: `npx shadcn@latest init`.
-- [ ] Register the namespace: `npx shadcn@latest registry add @mpui-kit=https://mpui-kit.vercel.app/r/{name}.json`
-- [ ] Install, one at a time, and confirm each builds (`pnpm build`):
-  - [ ] `@mpui-kit/country-cm @mpui-kit/mpui-kit-provider`
-  - [ ] `@mpui-kit/currency`
-  - [ ] `@mpui-kit/phone-input` (this pulls shadcn's `input`)
-  - [ ] `@mpui-kit/payment-method-picker`
-  - [ ] `@mpui-kit/ussd-prompt`
-  - [ ] `@mpui-kit/momo-checkout` (everything)
-- [ ] Check files landed in `components/mpui-kit/`, `lib/mpui-kit/`, `hooks/mpui-kit/`, and that the `lucide-react` and `zod` dependencies were added when needed.
-- [ ] Repeat once in a project that uses a **`src/`** folder.
+- [x] ~~Create a fresh Next.js app with Tailwind v4: `npx shadcn@latest init`.~~ **Done.** The CLI's interactive prompts changed since this was written (a component-library and a preset choice were added): `npx shadcn@latest init -y --base radix --preset nova`. `-y` alone no longer skips every prompt.
+- [x] ~~Register the namespace.~~ **Done**, against the live URL.
+- [x] ~~Install, one at a time, and confirm each builds.~~ **Done, all real:**
+  - [x] `@mpui-kit/country-cm @mpui-kit/mpui-kit-provider`
+  - [x] `@mpui-kit/currency`
+  - [x] `@mpui-kit/phone-input` — **this is the one that always failed before.** It pulled shadcn's `input` correctly.
+  - [x] `@mpui-kit/payment-method-picker`
+  - [x] `@mpui-kit/ussd-prompt` — pulled shadcn's `button`.
+  - [x] `@mpui-kit/momo-checkout` (everything). A page using it built and rendered correctly (screenshot taken), with no console errors.
+- [x] ~~Check files landed in the right folders, and dependencies were added when needed.~~ **Done:** every file landed under `components/mpui-kit/`, `lib/mpui-kit/`, `hooks/mpui-kit/` as expected, and `lucide-react` was added. `zod` was not, but nothing installed in this run needed it (only `phone-schema` does, for the optional react-hook-form integration, and it was not installed here).
+- [ ] Repeat once in a project that uses a **`src/`** folder. (Not done: this run used a root-level project.)
 - [ ] Repeat once in a project that **already has a customised `button` and `input`**. Check the CLI asks before overwriting them, and that the components then use your versions.
-- [ ] Paste the README quick start into the fresh app and make sure it works as written.
-- [ ] Try a project **without** `tw-animate-css` and one on **React 18**, and decide what to say. Animations degrade to nothing without it. On React 18, components that take `ref` as a prop will not forward it.
+- [ ] Paste the README quick start into the fresh app and make sure it works as written, word for word.
+- [ ] Try a project **without** `tw-animate-css` and one on **React 18**, and decide what to say. Animations degrade to nothing without it. On React 18, components that take `ref` as a prop will not forward it. (This run had `tw-animate-css` and React 19, both installed automatically by `shadcn init`.)
 
 ## 5. Get listed in the shadcn registry directory
 
