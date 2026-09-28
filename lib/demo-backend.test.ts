@@ -40,7 +40,7 @@ describe("createDemoBackend", () => {
     await expect(promise).resolves.toEqual({ status: "success", reference: "DEMO-0001" })
   })
 
-  it("starts Mobile Money as pending with a made-up USSD code", async () => {
+  it("starts Mobile Money as pending with the operator's dial code", async () => {
     const { onPay } = setup("approve")
     const promise = onPay(request("mtn"))
     await vi.advanceTimersByTimeAsync(600)
@@ -48,6 +48,17 @@ describe("createDemoBackend", () => {
       status: "pending",
       reference: "DEMO-0001",
       ussdCode: "*123#",
+    })
+  })
+
+  it("uses Orange's own dial code, not MTN's", async () => {
+    const { onPay } = setup("approve")
+    const promise = onPay(request("orange"))
+    await vi.advanceTimersByTimeAsync(600)
+    await expect(promise).resolves.toEqual({
+      status: "pending",
+      reference: "DEMO-0001",
+      ussdCode: "#150#",
     })
   })
 

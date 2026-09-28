@@ -277,9 +277,11 @@ export default function MomoCheckoutPage() {
           About the demo
         </h2>
         <p className="text-muted-foreground max-w-prose">
-          The preview above talks to a fake backend that makes no network calls. Pick what the fake
-          user does on their phone, then pay with Mobile Money. Card and cash settle straight away.
-          The USSD code <code>*123#</code> is made up.
+          The preview above talks to a fake backend that makes no network calls: nothing is dialled
+          or sent to an operator. Pick what the fake user does on their phone, then pay with Mobile
+          Money. Card and cash settle straight away. The dial code shown (<code>*123#</code> for
+          MTN, <code>#150#</code> for Orange) matches each operator&apos;s real one, only to make
+          the demo realistic.
         </p>
       </section>
 

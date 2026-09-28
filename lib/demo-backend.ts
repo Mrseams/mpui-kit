@@ -7,6 +7,16 @@ import type { PayResult, StatusResult, PaymentRequest } from "@/hooks/mpui-kit/u
  */
 export type DemoScenario = "approve" | "decline" | "timeout" | "error"
 
+/**
+ * The dial code shown for each Mobile Money operator in the demo. These are
+ * real short codes, not made up, but the demo never actually dials them or
+ * talks to the operator: it only shows what a real onPay would return.
+ */
+const DEMO_USSD_CODES: Record<string, string> = {
+  mtn: "*123#",
+  orange: "#150#",
+}
+
 export interface DemoBackendOptions {
   /** The scenario to start with. Change it later with `setScenario`. */
   scenario?: DemoScenario
@@ -55,8 +65,7 @@ export function createDemoBackend({
     if (scenario === "error") throw new Error("Demo gateway error")
 
     startedAt.set(reference, Date.now())
-    // *123# is a made-up code, not a real operator's.
-    return { status: "pending", reference, ussdCode: "*123#" }
+    return { status: "pending", reference, ussdCode: DEMO_USSD_CODES[request.methodId] }
   }
 
   async function onCheckStatus(reference: string): Promise<StatusResult> {
