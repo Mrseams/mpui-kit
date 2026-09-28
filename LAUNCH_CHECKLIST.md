@@ -78,11 +78,11 @@ From <https://ui.shadcn.com/docs/registry/registry-index> (read 2026-09-21):
 
 It is built and checked here (`pnpm core:build && pnpm core:check`: imports as ESM and CommonJS, no React inside, about 8.6 kB gzipped) but `packages/core/package.json` still says `"private": true`. The docs and READMEs say "not published yet".
 
-- [ ] **Choose the package name and the scope.** `@mpui-kit/core` needs an npm organisation called `mpui-kit`. Check it is free at <https://www.npmjs.com/org/create>. If not, pick another scope and change the name in `packages/core/package.json`, the README, the docs and `public/examples/vanilla.html`.
+- [ ] **Choose the package name and the scope.** `@mpui-kit/core` needs an npm organisation called `mpui-kit`. Check it is free at <https://www.npmjs.com/org/create> (unclaimed as of 2026-09-28, but that can change). If not, pick another scope and change the name in `packages/core/package.json`, the README, the docs and `public/examples/vanilla.html`. **This step needs your own npm account and cannot be done from here** (no npm session is available in this environment — `npm whoami` fails).
 - [ ] Turn on two-factor authentication for your npm account, and use a granular access token for CI, never your password.
-- [ ] Fill in `repository`, `homepage` and `bugs` in `packages/core/package.json` once the GitHub URL exists.
+- [x] ~~Fill in `repository`, `homepage` and `bugs` in `packages/core/package.json`.~~ **Done**, now that the GitHub repo exists.
 - [ ] Decide the version. The registry and the package share the source, so start both at `0.1.0` and say in the CHANGELOG which one changed.
-- [ ] Set `"private": false`, then run `pnpm core:build && pnpm core:check` and `cd packages/core && npm pack --dry-run`. Read the file list: only `dist`, the README and the LICENSE should be in it.
+- [x] ~~Run `npm pack --dry-run` and check the file list.~~ **Done on 2026-09-28:** exactly `dist/`, `README.md`, `LICENSE` and `package.json` — 85.6 kB packed, 10 files. Still not done: setting `"private": false` and actually publishing, both of which need your npm login.
 - [ ] Install the packed file (`npm pack`) in an empty project and import it from both an ESM and a CommonJS file.
 - [ ] Publish with provenance from CI (`npm publish --provenance --access public`), so the package links to the commit that built it.
 - [ ] After it is live, update the "not published yet" wording in `README.md`, `packages/core/README.md`, `app/docs/headless/page.tsx` and the CHANGELOG.
