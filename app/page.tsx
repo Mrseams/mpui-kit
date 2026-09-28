@@ -32,7 +32,7 @@ const features = [
   },
 ]
 
-const countryExample = `// registry/mpkit/lib/countries/<iso>.ts
+const countryExample = `// registry/mpui-kit/lib/countries/<iso>.ts
 export const xx: CountryConfig = {
   iso: "XX",
   callingCode: "000",
@@ -44,8 +44,8 @@ export const xx: CountryConfig = {
   // ...groupSizes, locales, regions
 }`
 
-const installCommands = `npx shadcn@latest registry add @mpkit=${registryUrlTemplate}
-npx shadcn@latest add @mpkit/country-cm @mpkit/momo-checkout`
+const installCommands = `npx shadcn@latest registry add @mpui-kit=${registryUrlTemplate}
+npx shadcn@latest add @mpui-kit/country-cm @mpui-kit/momo-checkout`
 
 // Every section sits in the same column as the header, so the left and right
 // edges line up all the way down the page.
@@ -140,8 +140,8 @@ export default function Home() {
         <div className="mx-auto max-w-3xl space-y-3">
           <CodeBlock label="A country data file" code={countryExample} />
           <p className="text-muted-foreground text-center text-sm">
-            The Cameroon prefixes are community data, not an authoritative source, so treat operator
-            detection as a hint. The{" "}
+            The Cameroon prefixes were verified against the ART numbering plan, but treat operator
+            detection as a hint, not proof. The{" "}
             <Link href="/docs/components/phone-input" className="underline underline-offset-4">
               phone input docs
             </Link>{" "}

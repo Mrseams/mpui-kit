@@ -8,9 +8,9 @@ import { PropsTable, type PropRow } from "@/components/site/props-table"
 
 export const metadata: Metadata = { title: "Phone input" }
 
-const usage = `import { PhoneInput } from "@/components/mpkit/phone-input"
+const usage = `import { PhoneInput } from "@/components/mpui-kit/phone-input"
 
-// Inside <MpKitProvider country={cm}>
+// Inside <MpuiKitProvider country={cm}>
 const [phone, setPhone] = useState("")
 
 <PhoneInput
@@ -25,9 +25,9 @@ const formExample = `import { zodResolver } from "@hookform/resolvers/zod"
 import { Controller, useForm } from "react-hook-form"
 import { z } from "zod"
 
-import { PhoneInput } from "@/components/mpkit/phone-input"
-import { cm } from "@/lib/mpkit/countries/cm"
-import { createPhoneSchema } from "@/lib/mpkit/phone-schema"
+import { PhoneInput } from "@/components/mpui-kit/phone-input"
+import { cm } from "@/lib/mpui-kit/countries/cm"
+import { createPhoneSchema } from "@/lib/mpui-kit/phone-schema"
 
 const schema = z.object({ phone: createPhoneSchema(cm, { locale: "en" }) })
 
@@ -76,13 +76,13 @@ const props: PropRow[] = [
   {
     name: "country",
     type: "CountryConfig",
-    default: "MpKitProvider's country",
+    default: "MpuiKitProvider's country",
     description: "Country to use. Throws if neither this nor a provider is set.",
   },
   {
     name: "locale",
     type: '"fr" | "en"',
-    default: "MpKitProvider's locale, then “fr”",
+    default: "MpuiKitProvider's locale, then “fr”",
     description: "Language of the label, hint and built-in errors.",
   },
   {
@@ -148,7 +148,7 @@ const badgeProps: PropRow[] = [
   {
     name: "logo",
     type: "ReactNode",
-    description: "Your own logo, shown instead of the color dot. MP Kit ships no logos.",
+    description: "Your own logo, shown instead of the color dot. MPUI-KIT ships no logos.",
   },
   { name: "...props", type: "ComponentProps<'span'>", description: "Any other span prop." },
 ]
@@ -180,7 +180,7 @@ export default function PhoneInputPage() {
         <p className="text-muted-foreground text-sm">
           Install the schema helper with{" "}
           <code className="bg-muted rounded px-1 py-0.5">
-            npx shadcn@latest add @mpkit/phone-schema
+            npx shadcn@latest add @mpui-kit/phone-schema
           </code>
           . It needs <code>zod</code>, which the CLI installs for you.
         </p>
@@ -191,7 +191,7 @@ export default function PhoneInputPage() {
           OperatorBadge
         </h2>
         <p className="text-muted-foreground max-w-prose">
-          The badge is a color dot and the operator name. MP Kit ships no operator logos or brand
+          The badge is a color dot and the operator name. MPUI-KIT ships no operator logos or brand
           assets. Pass your own through <code>logo</code>, or <code>operatorLogos</code> on the
           input, if you have the right to use them.
         </p>

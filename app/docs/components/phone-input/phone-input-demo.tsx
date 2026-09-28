@@ -3,11 +3,11 @@
 import { useState } from "react"
 
 import { LocaleToggle } from "@/components/site/locale-toggle"
-import { MpKitProvider } from "@/components/mpkit/mpkit-provider"
-import { PhoneInput } from "@/components/mpkit/phone-input"
-import { cm } from "@/lib/mpkit/countries/cm"
-import type { Locale } from "@/lib/mpkit/countries/types"
-import type { PhoneValidation } from "@/lib/mpkit/phone"
+import { MpuiKitProvider } from "@/components/mpui-kit/mpui-kit-provider"
+import { PhoneInput } from "@/components/mpui-kit/phone-input"
+import { cm } from "@/lib/mpui-kit/countries/cm"
+import type { Locale } from "@/lib/mpui-kit/countries/types"
+import type { PhoneValidation } from "@/lib/mpui-kit/phone"
 
 const selectClass =
   "border-input bg-background focus-visible:border-ring focus-visible:ring-ring/50 h-9 w-full rounded-lg border px-3 text-sm outline-none focus-visible:ring-3"
@@ -19,7 +19,7 @@ export function PhoneInputDemo() {
   const [details, setDetails] = useState<PhoneValidation | null>(null)
 
   return (
-    <MpKitProvider country={cm} locale={locale}>
+    <MpuiKitProvider country={cm} locale={locale}>
       <div className="space-y-6">
         <div className="max-w-sm">
           <PhoneInput
@@ -75,6 +75,6 @@ export function PhoneInputDemo() {
           option to require a specific operator.
         </p>
       </div>
-    </MpKitProvider>
+    </MpuiKitProvider>
   )
 }

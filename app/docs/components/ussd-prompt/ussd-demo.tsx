@@ -4,10 +4,10 @@ import { useState } from "react"
 
 import { Button } from "@/components/ui/button"
 import { LocaleToggle } from "@/components/site/locale-toggle"
-import { MpKitProvider } from "@/components/mpkit/mpkit-provider"
-import { UssdPrompt } from "@/components/mpkit/ussd-prompt"
-import { cm } from "@/lib/mpkit/countries/cm"
-import type { Locale } from "@/lib/mpkit/countries/types"
+import { MpuiKitProvider } from "@/components/mpui-kit/mpui-kit-provider"
+import { UssdPrompt } from "@/components/mpui-kit/ussd-prompt"
+import { cm } from "@/lib/mpui-kit/countries/cm"
+import type { Locale } from "@/lib/mpui-kit/countries/types"
 
 const DURATIONS = [15, 45, 120] as const
 
@@ -19,7 +19,7 @@ export function UssdDemo() {
   const start = () => setExpiresAt(Date.now() + seconds * 1000)
 
   return (
-    <MpKitProvider country={cm} locale={locale}>
+    <MpuiKitProvider country={cm} locale={locale}>
       <div className="space-y-6">
         <div className="flex flex-wrap items-end gap-4">
           <div className="space-y-1">
@@ -57,6 +57,6 @@ export function UssdDemo() {
           with it filled in.
         </p>
       </div>
-    </MpKitProvider>
+    </MpuiKitProvider>
   )
 }

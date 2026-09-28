@@ -1,7 +1,7 @@
 "use client"
 
 import { Button } from "@/components/ui/button"
-import type { Locale } from "@/lib/mpkit/countries/types"
+import type { Locale } from "@/lib/mpui-kit/countries/types"
 
 /** FR/EN switch for docs demos. It only reports the choice; the demo owns the state. */
 export function LocaleToggle({

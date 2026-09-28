@@ -3,10 +3,10 @@
 import { useState } from "react"
 
 import { LocaleToggle } from "@/components/site/locale-toggle"
-import { MpKitProvider } from "@/components/mpkit/mpkit-provider"
-import { MomoCheckout } from "@/components/mpkit/momo-checkout"
-import { cm } from "@/lib/mpkit/countries/cm"
-import type { Locale } from "@/lib/mpkit/countries/types"
+import { MpuiKitProvider } from "@/components/mpui-kit/mpui-kit-provider"
+import { MomoCheckout } from "@/components/mpui-kit/momo-checkout"
+import { cm } from "@/lib/mpui-kit/countries/cm"
+import type { Locale } from "@/lib/mpui-kit/countries/types"
 import { createDemoBackend, type DemoScenario } from "@/lib/demo-backend"
 
 const SCENARIOS: { value: DemoScenario; label: string }[] = [
@@ -30,7 +30,7 @@ export function CheckoutDemo({ showControls = true }: { showControls?: boolean }
   const [backend] = useState(() => createDemoBackend({ scenario: "approve" }))
 
   return (
-    <MpKitProvider country={cm} locale={locale}>
+    <MpuiKitProvider country={cm} locale={locale}>
       <div className="space-y-6">
         {showControls && (
           <div className="flex flex-wrap items-end gap-4">
@@ -60,14 +60,14 @@ export function CheckoutDemo({ showControls = true }: { showControls?: boolean }
         )}
 
         <div className="max-w-lg">
-          <MpKitCheckout locale={locale} backend={backend} />
+          <MpuiKitCheckout locale={locale} backend={backend} />
         </div>
       </div>
-    </MpKitProvider>
+    </MpuiKitProvider>
   )
 }
 
-function MpKitCheckout({
+function MpuiKitCheckout({
   locale,
   backend,
 }: {

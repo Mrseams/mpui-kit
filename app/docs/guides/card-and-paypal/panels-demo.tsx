@@ -4,13 +4,13 @@ import { useState } from "react"
 
 import { LocaleToggle } from "@/components/site/locale-toggle"
 import { MockCardPanel, MockWalletPanel } from "@/components/site/mock-panels"
-import { MpKitProvider } from "@/components/mpkit/mpkit-provider"
-import { MomoCheckout } from "@/components/mpkit/momo-checkout"
-import { cm } from "@/lib/mpkit/countries/cm"
-import type { Locale } from "@/lib/mpkit/countries/types"
-import { defaultPaymentMethods, type PaymentMethod } from "@/lib/mpkit/payment-methods"
+import { MpuiKitProvider } from "@/components/mpui-kit/mpui-kit-provider"
+import { MomoCheckout } from "@/components/mpui-kit/momo-checkout"
+import { cm } from "@/lib/mpui-kit/countries/cm"
+import type { Locale } from "@/lib/mpui-kit/countries/types"
+import { defaultPaymentMethods, type PaymentMethod } from "@/lib/mpui-kit/payment-methods"
 import { createDemoBackend } from "@/lib/demo-backend"
-import type { PaymentRequest } from "@/hooks/mpkit/use-momo-checkout"
+import type { PaymentRequest } from "@/hooks/mpui-kit/use-momo-checkout"
 
 const methods: PaymentMethod[] = [
   ...defaultPaymentMethods(cm, { cash: false }),
@@ -36,7 +36,7 @@ export function PanelsDemo() {
   }
 
   return (
-    <MpKitProvider country={cm} locale={locale}>
+    <MpuiKitProvider country={cm} locale={locale}>
       <div className="space-y-4">
         <LocaleToggle locale={locale} onChange={setLocale} />
         <div className="grid gap-6 md:grid-cols-2">
@@ -64,6 +64,6 @@ export function PanelsDemo() {
           </div>
         </div>
       </div>
-    </MpKitProvider>
+    </MpuiKitProvider>
   )
 }

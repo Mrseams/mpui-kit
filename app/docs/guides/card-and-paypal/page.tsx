@@ -6,8 +6,8 @@ import { CodeBlock } from "@/components/site/code-block"
 
 export const metadata: Metadata = { title: "Card and PayPal (beta)" }
 
-const setup = `import { MomoCheckout } from "@/components/mpkit/momo-checkout"
-import { defaultPaymentMethods } from "@/lib/mpkit/payment-methods"
+const setup = `import { MomoCheckout } from "@/components/mpui-kit/momo-checkout"
+import { defaultPaymentMethods } from "@/lib/mpui-kit/payment-methods"
 
 const methods = [
   ...defaultPaymentMethods(cm, { card: false, cash: false }), // MTN, Orange...
@@ -55,7 +55,7 @@ const stripe = `// SKETCH: not run in this repository. Check it against Stripe's
 import { Elements, PaymentElement, useElements, useStripe } from "@stripe/react-stripe-js"
 import { loadStripe } from "@stripe/stripe-js"
 import { useEffect } from "react"
-import type { MethodPanelProps } from "@/components/mpkit/method-panel"
+import type { MethodPanelProps } from "@/components/mpui-kit/method-panel"
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!)
 
@@ -104,7 +104,7 @@ export function StripeCardPanel(props: MethodPanelProps) {
 const paypal = `// SKETCH: not run in this repository. Check it against PayPal's current docs.
 "use client"
 import { PayPalButtons, PayPalScriptProvider } from "@paypal/react-paypal-js"
-import type { MethodPanelProps } from "@/components/mpkit/method-panel"
+import type { MethodPanelProps } from "@/components/mpui-kit/method-panel"
 
 export function PayPalPanel({ disabled, submit, setError }: MethodPanelProps) {
   return (
@@ -159,10 +159,10 @@ export default function CardAndPayPalPage() {
 
       <section aria-labelledby="rule" className="space-y-3">
         <h2 id="rule" className="text-xl font-semibold">
-          The rule: card details never enter MP Kit
+          The rule: card details never enter MPUI-KIT
         </h2>
         <p className="text-muted-foreground max-w-prose">
-          MP Kit does not build card fields. Your provider&apos;s hosted fields (Stripe&apos;s
+          MPUI-KIT does not build card fields. Your provider&apos;s hosted fields (Stripe&apos;s
           Payment Element, PayPal&apos;s buttons) keep the card details in their own iframe. When
           the customer presses Pay, the panel asks the provider for an opaque token and the checkout
           hands that token to your <code>onPay</code> as <code>payload</code>. It is never shown on
@@ -258,8 +258,8 @@ export default function CardAndPayPalPage() {
             data when you create the charge or the PayPal order.
           </li>
           <li>
-            <strong>Logos.</strong> MP Kit ships no brand logos. If you show PayPal&apos;s or a card
-            network&apos;s, follow their brand guidelines and pass them with{" "}
+            <strong>Logos.</strong> MPUI-KIT ships no brand logos. If you show PayPal&apos;s or a
+            card network&apos;s, follow their brand guidelines and pass them with{" "}
             <code>methodIcons</code>.
           </li>
         </ul>

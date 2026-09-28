@@ -6,20 +6,20 @@ import { Button } from "@/components/ui/button"
 
 import { CheckoutDemo } from "@/app/docs/components/momo-checkout/checkout-demo"
 import { LocaleToggle } from "@/components/site/locale-toggle"
-import { Currency } from "@/components/mpkit/currency"
-import { MpKitProvider, useLocale, useT } from "@/components/mpkit/mpkit-provider"
-import { PaymentMethodPicker } from "@/components/mpkit/payment-method-picker"
-import { PhoneInput } from "@/components/mpkit/phone-input"
-import { UssdPrompt } from "@/components/mpkit/ussd-prompt"
-import { cm } from "@/lib/mpkit/countries/cm"
-import type { Locale } from "@/lib/mpkit/countries/types"
-import { formatFcfa, type CurrencyDisplay } from "@/lib/mpkit/format-fcfa"
-import type { PhoneValidation } from "@/lib/mpkit/phone"
+import { Currency } from "@/components/mpui-kit/currency"
+import { MpuiKitProvider, useLocale, useT } from "@/components/mpui-kit/mpui-kit-provider"
+import { PaymentMethodPicker } from "@/components/mpui-kit/payment-method-picker"
+import { PhoneInput } from "@/components/mpui-kit/phone-input"
+import { UssdPrompt } from "@/components/mpui-kit/ussd-prompt"
+import { cm } from "@/lib/mpui-kit/countries/cm"
+import type { Locale } from "@/lib/mpui-kit/countries/types"
+import { formatFcfa, type CurrencyDisplay } from "@/lib/mpui-kit/format-fcfa"
+import type { PhoneValidation } from "@/lib/mpui-kit/phone"
 import {
   emptySelection,
   type PaymentSelection,
   type ResolvedPayment,
-} from "@/lib/mpkit/payment-methods"
+} from "@/lib/mpui-kit/payment-methods"
 
 const inputClass =
   "border-input bg-background focus-visible:border-ring focus-visible:ring-ring/50 h-9 w-full rounded-lg border px-3 text-sm outline-none focus-visible:ring-3"
@@ -28,7 +28,7 @@ export function Playground() {
   const [locale, setLocale] = useState<Locale>("fr")
 
   return (
-    <MpKitProvider country={cm} locale={locale}>
+    <MpuiKitProvider country={cm} locale={locale}>
       <div className="mt-6 space-y-8">
         <LocaleToggle locale={locale} onChange={setLocale} />
         <FcfaSection />
@@ -40,7 +40,7 @@ export function Playground() {
         </Section>
         <StringsSection />
       </div>
-    </MpKitProvider>
+    </MpuiKitProvider>
   )
 }
 

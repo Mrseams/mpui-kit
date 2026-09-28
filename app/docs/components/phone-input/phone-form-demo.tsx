@@ -7,10 +7,10 @@ import { z } from "zod"
 
 import { Button } from "@/components/ui/button"
 import { LocaleToggle } from "@/components/site/locale-toggle"
-import { PhoneInput } from "@/components/mpkit/phone-input"
-import { cm } from "@/lib/mpkit/countries/cm"
-import type { Locale } from "@/lib/mpkit/countries/types"
-import { createPhoneSchema } from "@/lib/mpkit/phone-schema"
+import { PhoneInput } from "@/components/mpui-kit/phone-input"
+import { cm } from "@/lib/mpui-kit/countries/cm"
+import type { Locale } from "@/lib/mpui-kit/countries/types"
+import { createPhoneSchema } from "@/lib/mpui-kit/phone-schema"
 
 export function PhoneFormDemo() {
   const [locale, setLocale] = useState<Locale>("en")

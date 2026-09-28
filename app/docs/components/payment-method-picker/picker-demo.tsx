@@ -4,15 +4,15 @@ import { useState } from "react"
 
 import { Button } from "@/components/ui/button"
 import { LocaleToggle } from "@/components/site/locale-toggle"
-import { MpKitProvider } from "@/components/mpkit/mpkit-provider"
-import { PaymentMethodPicker } from "@/components/mpkit/payment-method-picker"
-import { cm } from "@/lib/mpkit/countries/cm"
-import type { Locale } from "@/lib/mpkit/countries/types"
+import { MpuiKitProvider } from "@/components/mpui-kit/mpui-kit-provider"
+import { PaymentMethodPicker } from "@/components/mpui-kit/payment-method-picker"
+import { cm } from "@/lib/mpui-kit/countries/cm"
+import type { Locale } from "@/lib/mpui-kit/countries/types"
 import {
   emptySelection,
   type PaymentSelection,
   type ResolvedPayment,
-} from "@/lib/mpkit/payment-methods"
+} from "@/lib/mpui-kit/payment-methods"
 
 export function PickerDemo() {
   const [locale, setLocale] = useState<Locale>("fr")
@@ -20,7 +20,7 @@ export function PickerDemo() {
   const [resolved, setResolved] = useState<ResolvedPayment | null>(null)
 
   return (
-    <MpKitProvider country={cm} locale={locale}>
+    <MpuiKitProvider country={cm} locale={locale}>
       <div className="space-y-6">
         <div className="max-w-xl">
           <PaymentMethodPicker
@@ -51,6 +51,6 @@ export function PickerDemo() {
           <LocaleToggle locale={locale} onChange={setLocale} />
         </div>
       </div>
-    </MpKitProvider>
+    </MpuiKitProvider>
   )
 }

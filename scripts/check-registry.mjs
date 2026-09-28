@@ -5,14 +5,14 @@
  *
  * For every item it verifies that:
  *  - each file exists and has a target,
- *  - each @mpkit/<name> dependency exists,
- *  - each import of another registry file (@/lib/mpkit/..., @/components/mpkit/...,
- *    @/hooks/mpkit/...) is provided by the item or one of its dependencies,
+ *  - each @mpui-kit/<name> dependency exists,
+ *  - each import of another registry file (@/lib/mpui-kit/..., @/components/mpui-kit/...,
+ *    @/hooks/mpui-kit/...) is provided by the item or one of its dependencies,
  *  - each shadcn primitive it imports (@/components/ui/<name>) is a registryDependency,
  *  - each npm package it imports is in `dependencies` (react and next excepted),
  *  - no file is imported through @/registry/... or a relative path.
  * It also checks that no two items write the same target, and that every source
- * file under registry/mpkit/ is registered (tests and the countries index excepted).
+ * file under registry/mpui-kit/ is registered (tests and the countries index excepted).
  *
  * Usage: node scripts/check-registry.mjs [path/to/registry.json]
  */
@@ -34,11 +34,11 @@ const NOT_DISTRIBUTED = [/\.test\.tsx?$/, /countries\/index\.ts$/, /lib\/core\/i
 
 const stripExtension = (path) => path.replace(/\.(tsx?|jsx?)$/, "")
 
-/** Names of the @mpkit items an item depends on, directly. */
-function mpkitDependencies(item) {
+/** Names of the @mpui-kit items an item depends on, directly. */
+function mpuiKitDependencies(item) {
   return (item.registryDependencies ?? [])
-    .filter((name) => name.startsWith("@mpkit/"))
-    .map((name) => name.slice("@mpkit/".length))
+    .filter((name) => name.startsWith("@mpui-kit/"))
+    .map((name) => name.slice("@mpui-kit/".length))
 }
 
 /** An item plus everything it pulls in, following registryDependencies. */
@@ -46,7 +46,7 @@ function closure(name, seen = new Set()) {
   if (seen.has(name)) return seen
   seen.add(name)
   const item = items.get(name)
-  if (item) for (const dependency of mpkitDependencies(item)) closure(dependency, seen)
+  if (item) for (const dependency of mpuiKitDependencies(item)) closure(dependency, seen)
   return seen
 }
 
@@ -92,7 +92,7 @@ for (const item of registry.items) {
   )
 
   for (const dependency of item.registryDependencies ?? []) {
-    if (dependency.startsWith("@mpkit/") && !items.has(dependency.slice("@mpkit/".length))) {
+    if (dependency.startsWith("@mpui-kit/") && !items.has(dependency.slice("@mpui-kit/".length))) {
       error(`${item.name}: depends on unknown item ${dependency}`)
     }
   }
@@ -104,10 +104,10 @@ for (const item of registry.items) {
       const where = `${item.name} (${file.path})`
 
       if (specifier.startsWith("@/registry/")) {
-        error(`${where}: imports ${specifier}; use the installed path (@/lib/mpkit/...) instead`)
+        error(`${where}: imports ${specifier}; use the installed path (@/lib/mpui-kit/...) instead`)
       } else if (specifier.startsWith(".")) {
         error(`${where}: relative import ${specifier}; use an @/... path so the CLI can rewrite it`)
-      } else if (/^@\/(lib|components|hooks)\/mpkit\//.test(specifier)) {
+      } else if (/^@\/(lib|components|hooks)\/mpui-kit\//.test(specifier)) {
         const key = specifier.slice(2)
         if (!providedTargets.has(key)) {
           error(
@@ -136,7 +136,7 @@ for (const item of registry.items) {
     }
   }
 
-  for (const dependency of mpkitDependencies(item)) {
+  for (const dependency of mpuiKitDependencies(item)) {
     if (!imported.has(dependency) && items.has(dependency)) {
       // Not an error: a dependency can be needed for types or kept for clarity.
       warnings.push(`${item.name}: no direct import from ${dependency}`)
@@ -156,8 +156,8 @@ const registered = new Set(
     (item.files ?? []).map((file) => file.path.replaceAll("\\", "/"))
   )
 )
-if (existsSync("registry/mpkit")) {
-  for (const path of walk("registry/mpkit").map((file) =>
+if (existsSync("registry/mpui-kit")) {
+  for (const path of walk("registry/mpui-kit").map((file) =>
     relative(".", file).replaceAll("\\", "/")
   )) {
     if (NOT_DISTRIBUTED.some((pattern) => pattern.test(path))) continue

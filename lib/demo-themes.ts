@@ -2,7 +2,7 @@
  * Themes for the Theming docs demo. A theme is a set of CSS variables put on a
  * wrapper element: the components read the same tokens as the rest of a shadcn
  * app (--primary, --radius, ...), so changing them changes every component
- * inside the wrapper. Nothing here is specific to MP Kit.
+ * inside the wrapper. Nothing here is specific to MPUI-KIT.
  */
 export interface DemoTheme {
   id: string

@@ -1,4 +1,4 @@
-import type { Locale } from "@/lib/mpkit/countries/types"
+import type { Locale } from "@/lib/mpui-kit/countries/types"
 
 /** The fake apartment for the landing page demo. */
 export interface Listing {

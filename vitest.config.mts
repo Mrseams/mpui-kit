@@ -9,12 +9,12 @@ export default defineConfig({
   plugins: [react()],
   resolve: {
     // Registry files import each other as they will be installed in a user's
-    // project (`@/lib/mpkit/...`). Here they live under `registry/mpkit/`, so map
+    // project (`@/lib/mpui-kit/...`). Here they live under `registry/mpui-kit/`, so map
     // those paths back. Order matters: the specific aliases must come first.
     alias: [
-      { find: /^@\/lib\/mpkit\//, replacement: `${root}registry/mpkit/lib/` },
-      { find: /^@\/components\/mpkit\//, replacement: `${root}registry/mpkit/components/` },
-      { find: /^@\/hooks\/mpkit\//, replacement: `${root}registry/mpkit/hooks/` },
+      { find: /^@\/lib\/mpui-kit\//, replacement: `${root}registry/mpui-kit/lib/` },
+      { find: /^@\/components\/mpui-kit\//, replacement: `${root}registry/mpui-kit/components/` },
+      { find: /^@\/hooks\/mpui-kit\//, replacement: `${root}registry/mpui-kit/hooks/` },
       { find: /^@\//, replacement: root },
     ],
   },

@@ -4,4 +4,4 @@ public/r
 pnpm-lock.yaml
 CHANGELOG.md
 packages/core/dist
-public/examples/mpkit-core.js
+public/examples/mpui-kit-core.js

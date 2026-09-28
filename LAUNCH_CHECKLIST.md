@@ -8,18 +8,16 @@ Everything between "the code works" and "people can install it, and the Vercel O
 
 ## 1. Blockers: fix before you make the repo public
 
-- [ ] **Verify the Cameroon data against the ART numbering plan.** MTN, Orange and Camtel ranges came from you and are marked `TODO: verify`. **Nexttel `66` came from memory** and was never in your lists. The region and city lists are also from memory. Replace each `TODO` with a source and date once checked. (`registry/mpkit/lib/countries/cm.ts`)
-- [ ] **Fill in the Code of Conduct contact.** [CODE_OF_CONDUCT.md](./CODE_OF_CONDUCT.md) line 40 still says `[INSERT CONTACT METHOD]`. Use an address you are happy to publish. The Vercel program requires a Code of Conduct.
-- [ ] **Decide the licence holder.** [LICENSE](./LICENSE) says "MP Kit contributors". Change it if you want your name or organisation there.
-- [ ] **Confirm the name "MP Kit" is usable before anything is public.** It was chosen on 2026-09-21, and checked only against the npm registry that day: `mp-kit` and `@mpkit/core` were unclaimed, but an unrelated unscoped package called `mpkit` already exists, and the ownership of the `@mpkit` scope could not be checked from here. Still to check: the npm organisation `mpkit`, the GitHub name, the domain, and a search for existing projects or trademarks called "MP Kit" (the name is short and generic). If it changes, the rename is mechanical: see the commit that introduced it.
-- [ ] **Rename the local folder** `mboa-ui` to `mp-kit`. Nothing in the code depends on the folder name.
-- [ ] **Pick the domain**, then replace every placeholder:
-  - [ ] `homepage` in `registry.json` (currently `https://mp-kit.vercel.app`, a guess)
-  - [ ] `NEXT_PUBLIC_SITE_URL` (env var, see step 3). It feeds the install commands on the site.
-  - [ ] `<your-docs-domain>` in `README.md`
-  - [ ] `OWNER` in `.github/ISSUE_TEMPLATE/config.yml`
+- [x] ~~Verify the Cameroon data against the ART numbering plan.~~ **Done on 2026-09-28:** the maintainer confirmed the MTN, Orange, Nexttel and Camtel prefix ranges against the ART allocation, and added `685` to Nexttel. (`registry/mpui-kit/lib/countries/cm.ts`)
+- [ ] **Verify the region and city lists** (spelling, completeness), still marked `// TODO: verify region and city lists` in the same file. Unlike the phone prefixes, these have not been checked against a source.
+- [x] ~~Fill in the Code of Conduct contact.~~ **Done:** [CODE_OF_CONDUCT.md](./CODE_OF_CONDUCT.md) now points to the maintainer's email.
+- [ ] **Decide the licence holder.** [LICENSE](./LICENSE) says "MPUI-KIT contributors". Change it if you want your own name there instead, now that the project has a named, sole maintainer.
+- [ ] **Confirm the name "MPUI-KIT" is usable before anything is public.** Chosen on 2026-09-28. Checked that day: `mpui-kit` and `@mpui-kit/core` were unclaimed on npm (no existing unscoped package, unlike the previous name), and `Mrseams/mpui-kit` did not exist on GitHub. Still to check: the npm organisation `mpui-kit`, the domain, and a search for existing projects or trademarks called "MPUI-KIT".
+- [ ] **Rename the local folder** `mboa-ui` to `mpui-kit`. Nothing in the code depends on the folder name.
+- [x] ~~Pick the domain.~~ **Done:** `https://mpui-kit.vercel.app`, filled in everywhere below. It still needs to be created and deployed (step 3).
+  - [ ] Set `NEXT_PUBLIC_SITE_URL` to it on Vercel (see step 3). It feeds the install commands on the site.
 - [ ] **Record the README demo GIF** (there is a placeholder). A short clip of the booking demo, French to English, paying with Mobile Money.
-- [ ] **Have the wording reviewed.** The copy was drafted with AI assistance. The French strings in particular deserve a native speaker's review (`registry/mpkit/lib/i18n.ts`, `lib/booking.ts`).
+- [ ] **Have the wording reviewed.** The copy was drafted with AI assistance. The French strings in particular deserve a native speaker's review (`registry/mpui-kit/lib/i18n.ts`, `lib/booking.ts`).
 - [ ] **Verify the card and PayPal guide against the real services.** The Stripe Elements and PayPal Buttons code in `app/docs/guides/card-and-paypal/page.tsx` is a sketch that was never run against either. Build a small working example with each, in test mode, fix the code on the page, and then remove the "not run" wording. Also check which currencies each provider can charge: the guide only says to check.
 - [ ] **Decide when card and PayPal stop being beta.** They are labelled "(beta)" in the docs, the README, the CHANGELOG and the registry titles. Search for `beta` and remove the label once the panel API has been used with a real provider and you are happy to keep it stable.
 - [ ] **Have the Vue and Svelte sketches tried** by someone who uses them (`app/docs/headless/page.tsx`, `packages/core/README.md`). They are marked as not run.
@@ -55,15 +53,15 @@ Everything between "the code works" and "people can install it, and the Vercel O
 Every earlier attempt to install a component that depends on shadcn's own `input` or `button` failed, because the connection to `ui.shadcn.com` kept resetting. The manifest was checked statically (`pnpm registry:check`) and the CLI was seen resolving `input` correctly, but a complete install has not been observed. Do this from a normal connection:
 
 - [ ] Create a fresh Next.js app with Tailwind v4: `npx shadcn@latest init`.
-- [ ] Register the namespace: `npx shadcn@latest registry add @mpkit=https://YOUR-DOMAIN/r/{name}.json`
+- [ ] Register the namespace: `npx shadcn@latest registry add @mpui-kit=https://mpui-kit.vercel.app/r/{name}.json`
 - [ ] Install, one at a time, and confirm each builds (`pnpm build`):
-  - [ ] `@mpkit/country-cm @mpkit/mpkit-provider`
-  - [ ] `@mpkit/currency`
-  - [ ] `@mpkit/phone-input` (this pulls shadcn's `input`)
-  - [ ] `@mpkit/payment-method-picker`
-  - [ ] `@mpkit/ussd-prompt`
-  - [ ] `@mpkit/momo-checkout` (everything)
-- [ ] Check files landed in `components/mpkit/`, `lib/mpkit/`, `hooks/mpkit/`, and that the `lucide-react` and `zod` dependencies were added when needed.
+  - [ ] `@mpui-kit/country-cm @mpui-kit/mpui-kit-provider`
+  - [ ] `@mpui-kit/currency`
+  - [ ] `@mpui-kit/phone-input` (this pulls shadcn's `input`)
+  - [ ] `@mpui-kit/payment-method-picker`
+  - [ ] `@mpui-kit/ussd-prompt`
+  - [ ] `@mpui-kit/momo-checkout` (everything)
+- [ ] Check files landed in `components/mpui-kit/`, `lib/mpui-kit/`, `hooks/mpui-kit/`, and that the `lucide-react` and `zod` dependencies were added when needed.
 - [ ] Repeat once in a project that uses a **`src/`** folder.
 - [ ] Repeat once in a project that **already has a customised `button` and `input`**. Check the CLI asks before overwriting them, and that the components then use your versions.
 - [ ] Paste the README quick start into the fresh app and make sure it works as written.
@@ -79,11 +77,11 @@ From <https://ui.shadcn.com/docs/registry/registry-index> (read 2026-09-21):
 - [ ] Edit `apps/v4/registry/directory.json` in <https://github.com/shadcn-ui/ui>, run `pnpm validate:registries` there, and open a pull request.
 - [ ] After it merges, the registry is published and **Registry Health** monitoring starts, so keep the URLs stable.
 
-## 6. Publish `@mpkit/core` to npm
+## 6. Publish `@mpui-kit/core` to npm
 
 It is built and checked here (`pnpm core:build && pnpm core:check`: imports as ESM and CommonJS, no React inside, about 8.6 kB gzipped) but `packages/core/package.json` still says `"private": true`. The docs and READMEs say "not published yet".
 
-- [ ] **Choose the package name and the scope.** `@mpkit/core` needs an npm organisation called `mpkit`. Check it is free at <https://www.npmjs.com/org/create>. If not, pick another scope and change the name in `packages/core/package.json`, the README, the docs and `public/examples/vanilla.html`.
+- [ ] **Choose the package name and the scope.** `@mpui-kit/core` needs an npm organisation called `mpui-kit`. Check it is free at <https://www.npmjs.com/org/create>. If not, pick another scope and change the name in `packages/core/package.json`, the README, the docs and `public/examples/vanilla.html`.
 - [ ] Turn on two-factor authentication for your npm account, and use a granular access token for CI, never your password.
 - [ ] Fill in `repository`, `homepage` and `bugs` in `packages/core/package.json` once the GitHub URL exists.
 - [ ] Decide the version. The registry and the package share the source, so start both at `0.1.0` and say in the CHANGELOG which one changed.
@@ -99,13 +97,13 @@ From <https://vercel.com/open-source-program> (read 2026-09-21). **The page said
 
 What it lists as criteria, and where the project stands:
 
-| Criterion                                              | Status                                                     |
-| ------------------------------------------------------ | ---------------------------------------------------------- |
-| Open source, actively developed and maintained         | Not yet public. Commit regularly and answer issues.        |
-| Hosted on, or intended to host on, Vercel              | Yes, once step 3 is done.                                  |
-| Shows measurable impact or growth potential            | **The weak spot.** See below.                              |
-| Follows a Code of Conduct                              | Added, but the contact placeholder is still open (step 1). |
-| Credits used only for open source work and the project | Your commitment.                                           |
+| Criterion                                              | Status                                              |
+| ------------------------------------------------------ | --------------------------------------------------- |
+| Open source, actively developed and maintained         | Not yet public. Commit regularly and answer issues. |
+| Hosted on, or intended to host on, Vercel              | Yes, once step 3 is done.                           |
+| Shows measurable impact or growth potential            | **The weak spot.** See below.                       |
+| Follows a Code of Conduct                              | Added, with a real contact address (step 1).        |
+| Credits used only for open source work and the project | Your commitment.                                    |
 
 Benefits listed: $3,600 of Vercel credits over 3 years, a starter pack with credits from third-party services, and community support.
 
@@ -131,7 +129,7 @@ The page does not say how to apply or what the form asks, so **do not prepare an
 
 ### Known limits worth telling users
 
-- Cameroon prefix and region data is community data, not an authoritative source. Operator detection is a hint. Never route money by it.
+- Cameroon's operator prefixes were verified against the ART numbering plan (2026-09-28); the region and city names are still unverified community data. Operator detection is a hint, not proof: never route money by it, since numbers can still be reassigned.
 - The components are UI only. They never call a payment API, so your backend must confirm every payment before you deliver anything.
 - Requires Tailwind CSS v4, shadcn/ui and React 19.
 - The components never collect card numbers. A payment method's panel hosts your provider's own fields, and only a token reaches your code. See [SECURITY.md](./SECURITY.md).

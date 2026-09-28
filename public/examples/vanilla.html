@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>MP Kit core en JavaScript simple</title>
+    <title>MPUI-KIT core en JavaScript simple</title>
     <style>
       :root {
         color-scheme: light dark;
@@ -89,10 +89,10 @@
   </head>
   <body>
     <main>
-      <h1>MP Kit core, sans framework</h1>
+      <h1>MPUI-KIT core, sans framework</h1>
       <p class="muted">
-        Cette page n'utilise aucun framework : juste le paquet <code>@mpkit/core</code> et le DOM.
-        Le paiement est simulé : rien n'est envoyé.
+        Cette page n'utilise aucun framework : juste le paquet <code>@mpui-kit/core</code> et le
+        DOM. Le paiement est simulé : rien n'est envoyé.
       </p>
 
       <form id="form" novalidate>
@@ -140,7 +140,7 @@
         phoneErrorMessage,
         resolvePayment,
         defaultPaymentMethods,
-      } from "./mpkit-core.js"
+      } from "./mpui-kit-core.js"
 
       const AMOUNT = 25000
       const t = createTranslator("fr")

@@ -45,4 +45,4 @@ next-env.d.ts
 
 # built by `pnpm core:build`
 /packages/core/dist/
-/public/examples/mpkit-core.js
+/public/examples/mpui-kit-core.js

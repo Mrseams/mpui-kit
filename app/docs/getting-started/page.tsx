@@ -6,16 +6,16 @@ import { registryUrlTemplate } from "@/lib/site"
 
 export const metadata: Metadata = { title: "Getting started" }
 
-const providerExample = `import { MpKitProvider } from "@/components/mpkit/mpkit-provider"
-import { cm } from "@/lib/mpkit/countries/cm"
+const providerExample = `import { MpuiKitProvider } from "@/components/mpui-kit/mpui-kit-provider"
+import { cm } from "@/lib/mpui-kit/countries/cm"
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="fr">
       <body>
-        <MpKitProvider country={cm} locale="fr">
+        <MpuiKitProvider country={cm} locale="fr">
           {children}
-        </MpKitProvider>
+        </MpuiKitProvider>
       </body>
     </html>
   )
@@ -65,11 +65,12 @@ export default function GettingStarted() {
       <section className="space-y-3">
         <h2 className="text-xl font-semibold">1. Register the namespace</h2>
         <p className="text-muted-foreground">
-          Items depend on each other through the <code>@mpkit</code> namespace, so register it once.
+          Items depend on each other through the <code>@mpui-kit</code> namespace, so register it
+          once.
         </p>
         <CodeBlock
-          label="Register the mpkit namespace"
-          code={`npx shadcn@latest registry add @mpkit=${registryUrlTemplate}`}
+          label="Register the mpui-kit namespace"
+          code={`npx shadcn@latest registry add @mpui-kit=${registryUrlTemplate}`}
         />
       </section>
 
@@ -77,22 +78,22 @@ export default function GettingStarted() {
         <h2 className="text-xl font-semibold">2. Add a country and the provider</h2>
         <p className="text-muted-foreground">
           Components never assume a country. They read it from a prop or from{" "}
-          <code>MpKitProvider</code>. Shared pieces, such as the country types, are installed
+          <code>MpuiKitProvider</code>. Shared pieces, such as the country types, are installed
           automatically.
         </p>
         <CodeBlock
           label="Install a country and the provider"
-          code="npx shadcn@latest add @mpkit/country-cm @mpkit/mpkit-provider"
+          code="npx shadcn@latest add @mpui-kit/country-cm @mpui-kit/mpui-kit-provider"
         />
         <p className="text-muted-foreground">
-          Files land in <code>lib/mpkit/</code> and <code>components/mpkit/</code>, or under{" "}
+          Files land in <code>lib/mpui-kit/</code> and <code>components/mpui-kit/</code>, or under{" "}
           <code>src/</code> if your project uses it.
         </p>
       </section>
 
       <section className="space-y-3">
         <h2 className="text-xl font-semibold">3. Wrap your app</h2>
-        <CodeBlock label="MpKitProvider example" code={providerExample} />
+        <CodeBlock label="MpuiKitProvider example" code={providerExample} />
       </section>
 
       <section className="space-y-3">

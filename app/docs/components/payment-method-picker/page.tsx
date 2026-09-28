@@ -7,10 +7,10 @@ import type { PropRow } from "@/components/site/props-table"
 
 export const metadata: Metadata = { title: "Payment method picker" }
 
-const usage = `import { PaymentMethodPicker } from "@/components/mpkit/payment-method-picker"
-import { emptySelection, type PaymentSelection } from "@/lib/mpkit/payment-methods"
+const usage = `import { PaymentMethodPicker } from "@/components/mpui-kit/payment-method-picker"
+import { emptySelection, type PaymentSelection } from "@/lib/mpui-kit/payment-methods"
 
-// Inside <MpKitProvider country={cm}>
+// Inside <MpuiKitProvider country={cm}>
 const [selection, setSelection] = useState<PaymentSelection>(emptySelection)
 const [ready, setReady] = useState(false)
 
@@ -23,7 +23,7 @@ const [ready, setReady] = useState(false)
   }}
 />`
 
-const customMethods = `import { defaultPaymentMethods } from "@/lib/mpkit/payment-methods"
+const customMethods = `import { defaultPaymentMethods } from "@/lib/mpui-kit/payment-methods"
 
 // Mobile Money only
 <PaymentMethodPicker methods={defaultPaymentMethods(cm, { card: false, cash: false })} />
@@ -65,13 +65,13 @@ const props: PropRow[] = [
   {
     name: "country",
     type: "CountryConfig",
-    default: "MpKitProvider's country",
+    default: "MpuiKitProvider's country",
     description: "Country to use. Throws if neither this nor a provider is set.",
   },
   {
     name: "locale",
     type: '"fr" | "en"',
-    default: "MpKitProvider's locale, then “fr”",
+    default: "MpuiKitProvider's locale, then “fr”",
     description: "Language of the labels and messages.",
   },
   {

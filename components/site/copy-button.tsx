@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react"
 
 import { Button } from "@/components/ui/button"
-import { copyToClipboard } from "@/lib/mpkit/clipboard"
+import { copyToClipboard } from "@/lib/mpui-kit/clipboard"
 
 export function CopyButton({ text, label = "Copy" }: { text: string; label?: string }) {
   const [state, setState] = useState<"idle" | "copied" | "failed">("idle")
