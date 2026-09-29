@@ -8,7 +8,7 @@ Cameroon is the first supported country. Country data is pluggable, so adding an
 
 > _GIF placeholder: live checkout demo (FR/EN toggle, phone approval, receipt)._
 
-> **Status: pre-release (0.1.0 in development).** The components below are being built one at a time. Nothing here is published yet: the install commands below use the domain the docs site will be deployed to, but it is not live.
+> **Status: 0.1.0.** The docs site is live at [mpui-kit.vercel.app](https://mpui-kit.vercel.app), the install commands below work, and [`@mpui-kit/core`](https://www.npmjs.com/package/@mpui-kit/core) is published on npm.
 
 ## Why
 
@@ -42,7 +42,7 @@ npx shadcn@latest add @mpui-kit/momo-checkout
 
 Files are added under `lib/mpui-kit/` and `components/mpui-kit/` (or `src/lib/mpui-kit/` and `src/components/mpui-kit/` if your project uses `src/`).
 
-The namespace is required because items depend on each other by `@mpui-kit/<name>`. `mpui-kit.vercel.app` is where the docs site will be deployed; the commands above will not work until it is live.
+The namespace is required because items depend on each other by `@mpui-kit/<name>`.
 
 ## Requirements
 
@@ -76,7 +76,7 @@ PayPal widgets in test/sandbox mode.
 
 ### Headless and framework-free
 
-The logic is separate from the UI. `registry/mpui-kit/lib/core` has no React and no dependencies, and `@mpui-kit/core` (not published yet) is built from it, so you can use the checkout controller, phone field and countdown with Vue, Svelte or plain JavaScript. See [packages/core](./packages/core/README.md) and the Headless guide in the docs.
+The logic is separate from the UI. `registry/mpui-kit/lib/core` has no React and no dependencies, and [`@mpui-kit/core`](https://www.npmjs.com/package/@mpui-kit/core) is published on npm from it, so you can use the checkout controller, phone field and countdown with Vue, Svelte or plain JavaScript: `npm install @mpui-kit/core`. See [packages/core](./packages/core/README.md) and the Headless guide in the docs.
 
 Planned: landmark-based address input, OTP input, FCFA range slider, French date picker, WhatsApp button and chat widget, network banner, data-saver image, low-data mode provider, transaction timeline, listing card block, pricing table block.
 

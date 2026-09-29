@@ -24,4 +24,4 @@ The components never collect card numbers. To take cards or PayPal, use your pro
 
 ## Supported versions
 
-MPUI-KIT is pre-release (0.1.0 in development). Fixes go to the latest version on the default branch.
+MPUI-KIT is at 0.1.0. Fixes go to the latest version on the default branch.

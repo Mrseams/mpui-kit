@@ -4,7 +4,7 @@ The framework-free core of [MPUI-KIT](../../README.md): a Mobile Money checkout 
 
 It has **no dependencies** and no UI. It works in the browser and in Node, with React, Vue, Svelte, Solid or plain JavaScript. If you use React and shadcn/ui, the [components](../../README.md) are built on this package.
 
-> **Status: pre-release.** Not published yet. Cameroon's operator prefixes were verified against the ART numbering plan on 2026-09-28; region and city names are still unverified community data.
+> **Status: 0.1.0, published.** `npm install @mpui-kit/core`. Cameroon's operator prefixes were verified against the ART numbering plan on 2026-09-28; region and city names are still unverified community data.
 
 ## What is in it
 

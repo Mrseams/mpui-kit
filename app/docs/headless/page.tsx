@@ -140,10 +140,10 @@ export default function HeadlessPage() {
         </h2>
         <p className="text-muted-foreground max-w-prose">
           <code>@mpui-kit/core</code> is built from the same source as the registry, as ESM and
-          CommonJS with type declarations. <strong>It is not published yet.</strong> The package
-          name and scope are provisional until the project has its own npm scope. Cameroon&apos;s
-          operator prefixes were verified against the ART numbering plan on 2026-09-28; region and
-          city names are still unverified community data.
+          CommonJS with type declarations, and published on npm:{" "}
+          <code>npm install @mpui-kit/core</code>. Cameroon&apos;s operator prefixes were verified
+          against the ART numbering plan on 2026-09-28; region and city names are still unverified
+          community data.
         </p>
         <p className="text-muted-foreground max-w-prose">
           The core never calls a payment provider and never asks for card details. Always confirm a
