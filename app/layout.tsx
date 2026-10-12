@@ -3,6 +3,7 @@ import localFont from "next/font/local"
 
 import { SiteFooter } from "@/components/site/site-footer"
 import { SiteHeader } from "@/components/site/site-header"
+import { siteUrl } from "@/lib/site"
 import { themeInitScript } from "@/lib/theme"
 
 import "./globals.css"
@@ -22,6 +23,8 @@ const poppins = localFont({
 })
 
 export const metadata: Metadata = {
+  // Makes the Open Graph image URL absolute.
+  metadataBase: new URL(siteUrl),
   title: { default: "MPUI-KIT", template: "%s · MPUI-KIT" },
   description:
     "Open-source shadcn/ui components for African markets: Mobile Money, FCFA, local phone numbers and bilingual FR/EN forms.",
