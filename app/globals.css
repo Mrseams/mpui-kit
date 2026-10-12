@@ -134,3 +134,29 @@
     color-scheme: dark;
   }
 }
+
+/* Code highlighted at build time by lib/highlight.ts. Colors come from Shiki's
+   per-token CSS variables, so the theme switch needs no JavaScript. */
+@layer components {
+  .shiki {
+    background: transparent;
+    counter-reset: line;
+  }
+  .shiki span {
+    color: var(--shiki-light);
+  }
+  .dark .shiki span {
+    color: var(--shiki-dark);
+  }
+  .line-numbers .shiki .line::before {
+    counter-increment: line;
+    content: counter(line);
+    display: inline-block;
+    width: 2rem;
+    margin-right: 1rem;
+    text-align: right;
+    color: var(--muted-foreground);
+    opacity: 0.5;
+    user-select: none;
+  }
+}

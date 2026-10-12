@@ -4,7 +4,6 @@ import { useState } from "react"
 
 import { Button } from "@/components/ui/button"
 
-import { CheckoutDemo } from "@/app/docs/components/momo-checkout/checkout-demo"
 import { LocaleToggle } from "@/components/site/locale-toggle"
 import { Currency } from "@/components/mpui-kit/currency"
 import { MpuiKitProvider, useLocale, useT } from "@/components/mpui-kit/mpui-kit-provider"
@@ -24,29 +23,47 @@ import {
 const inputClass =
   "border-input bg-background focus-visible:border-ring focus-visible:ring-ring/50 h-9 w-full rounded-lg border px-3 text-sm outline-none focus-visible:ring-3"
 
-export function Playground() {
+/** Holds the language for every example on the page, with a sticky FR/EN switch. */
+export function PlaygroundProvider({ children }: { children: React.ReactNode }) {
   const [locale, setLocale] = useState<Locale>("fr")
 
   return (
     <MpuiKitProvider country={cm} locale={locale}>
-      <div className="mt-6 space-y-8">
+      <div className="bg-background/80 sticky top-14 z-10 -mx-4 mb-8 flex items-center justify-between gap-3 border-b px-4 py-3 backdrop-blur">
+        <p className="text-muted-foreground text-sm">
+          {locale === "fr" ? "Langue des exemples" : "Example language"}
+        </p>
         <LocaleToggle locale={locale} onChange={setLocale} />
-        <FcfaSection />
-        <PhoneSection />
-        <PickerSection />
-        <UssdSection />
-        <Section title="MomoCheckout">
-          <CheckoutDemo />
-        </Section>
-        <StringsSection />
       </div>
+      {children}
     </MpuiKitProvider>
   )
 }
 
-function Section({ title, children }: { title: string; children: React.ReactNode }) {
+/** The single components and helpers, each with its raw output. */
+export function BuildingBlocks() {
   return (
-    <section className="space-y-3 rounded-lg border p-4">
+    <div className="grid gap-6 md:grid-cols-2">
+      <FcfaSection />
+      <PhoneSection />
+      <PickerSection />
+      <UssdSection />
+      <StringsSection />
+    </div>
+  )
+}
+
+function Section({
+  title,
+  className,
+  children,
+}: {
+  title: string
+  className?: string
+  children: React.ReactNode
+}) {
+  return (
+    <section className={`bg-card space-y-3 rounded-2xl border p-5 ${className ?? ""}`}>
       <h2 className="text-lg font-semibold">{title}</h2>
       {children}
     </section>
@@ -129,7 +146,7 @@ function PickerSection() {
   const [resolved, setResolved] = useState<ResolvedPayment | null>(null)
 
   return (
-    <Section title="PaymentMethodPicker">
+    <Section title="PaymentMethodPicker" className="md:col-span-2">
       <div className="max-w-xl">
         <PaymentMethodPicker
           value={selection}
