@@ -1,22 +1,32 @@
 import { CopyButton } from "@/components/site/copy-button"
+import { highlight, type CodeLang } from "@/lib/highlight"
 
 /**
- * A plain code block with a copy button. There is deliberately no syntax
- * highlighter: it keeps the JavaScript sent to slow, low-end phones to a minimum.
+ * A code block with a copy button. Highlighting happens on the server at build
+ * time, so slow, low-end phones download colored HTML and no highlighter.
  */
-export function CodeBlock({ code, label }: { code: string; label?: string }) {
+export async function CodeBlock({
+  code,
+  label,
+  lang,
+}: {
+  code: string
+  label?: string
+  lang?: CodeLang
+}) {
+  const html = await highlight(code, lang)
+
   return (
     <div className="bg-muted/50 relative rounded-lg border">
-      <div className="absolute top-2 right-2">
+      <div className="absolute top-2 right-2 z-10">
         <CopyButton text={code} />
       </div>
-      <pre
-        className="overflow-x-auto p-4 pr-24 text-sm leading-relaxed"
-        tabIndex={0}
+      <div
+        role="region"
         aria-label={label}
-      >
-        <code>{code}</code>
-      </pre>
+        className="[&_pre]:overflow-x-auto [&_pre]:p-4 [&_pre]:pr-24 [&_pre]:text-sm [&_pre]:leading-relaxed"
+        dangerouslySetInnerHTML={{ __html: html }}
+      />
     </div>
   )
 }
