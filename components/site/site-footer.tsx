@@ -19,8 +19,8 @@ export function SiteFooter() {
           <Link href="/docs/theming" className="hover:text-foreground">
             Theming
           </Link>
-          <Link href="/playground" className="hover:text-foreground">
-            Playground
+          <Link href="/showcase" className="hover:text-foreground">
+            Showcase
           </Link>
         </nav>
       </div>

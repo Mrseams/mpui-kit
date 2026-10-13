@@ -5,7 +5,7 @@ import { ThemeToggle } from "@/components/site/theme-toggle"
 
 const links = [
   { href: "/docs", label: "Docs" },
-  { href: "/playground", label: "Playground" },
+  { href: "/showcase", label: "Showcase" },
 ]
 
 export function SiteHeader() {

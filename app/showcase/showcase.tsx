@@ -70,7 +70,7 @@ export function Showcase({
           id={`${id}-preview`}
           aria-labelledby={`${id}-preview-tab`}
           hidden={tab !== "preview"}
-          className="bg-muted/40 bg-[radial-gradient(var(--color-border)_1px,transparent_1px)] [background-size:16px_16px] px-4 py-10 sm:px-8 sm:py-14"
+          className="bg-muted/40 bg-[radial-gradient(var(--color-border)_1px,transparent_1px)] [background-size:16px_16px] px-3 py-8 sm:px-8 sm:py-14"
         >
           {children}
         </div>

@@ -4,20 +4,20 @@ import { join } from "node:path"
 import type { Metadata } from "next"
 import Link from "next/link"
 
-import { OrderCheckout } from "@/app/playground/examples/order-checkout"
-import { SendMoney } from "@/app/playground/examples/send-money"
-import { WalletForm } from "@/app/playground/examples/wallet-form"
-import { BuildingBlocks, PlaygroundProvider } from "@/app/playground/playground"
-import { Showcase } from "@/app/playground/showcase"
+import { OrderCheckout } from "@/app/showcase/examples/order-checkout"
+import { SendMoney } from "@/app/showcase/examples/send-money"
+import { WalletForm } from "@/app/showcase/examples/wallet-form"
+import { BuildingBlocks, ShowcaseProvider } from "@/app/showcase/building-blocks"
+import { Showcase } from "@/app/showcase/showcase"
 import { buttonVariants } from "@/components/ui/button"
 import { highlight } from "@/lib/highlight"
 
-export const metadata: Metadata = { title: "Playground" }
+export const metadata: Metadata = { title: "Showcase" }
 
 // The code tab shows the very file the preview runs, read at build time, so the
 // two can never drift apart.
 function source(file: string) {
-  return readFileSync(join(process.cwd(), "app/playground/examples", file), "utf8")
+  return readFileSync(join(process.cwd(), "app/showcase/examples", file), "utf8")
 }
 
 const examples = [
@@ -47,7 +47,7 @@ const examples = [
   },
 ]
 
-export default async function PlaygroundPage() {
+export default async function ShowcasePage() {
   const sources = await Promise.all(
     examples.map(async (example) => {
       const code = source(example.file)
@@ -58,14 +58,14 @@ export default async function PlaygroundPage() {
   return (
     <main className="mx-auto w-full max-w-5xl flex-1 px-4 pt-12 pb-20">
       <header className="mx-auto max-w-2xl space-y-4 pb-10 text-center">
-        <p className="text-muted-foreground text-sm">Playground</p>
+        <p className="text-muted-foreground text-sm">Showcase</p>
         <h1 className="text-4xl font-semibold tracking-tight text-balance sm:text-5xl">
           Copy a payment form, ship it today
         </h1>
         <p className="text-muted-foreground text-lg text-pretty">
           Real forms built with MPUI-KIT. Play with them, open the code, copy it into your app. Try
-          a number like <code className="text-foreground">6 77 12 34 56</code> or{" "}
-          <code className="text-foreground">6 99 12 34 56</code>.
+          a number like <code className="text-foreground whitespace-nowrap">6 77 12 34 56</code> or{" "}
+          <code className="text-foreground whitespace-nowrap">6 99 12 34 56</code>.
         </p>
         <div className="flex flex-wrap justify-center gap-3">
           <Link href="/docs/getting-started" className={buttonVariants({ size: "lg" })}>
@@ -77,7 +77,7 @@ export default async function PlaygroundPage() {
         </div>
       </header>
 
-      <PlaygroundProvider>
+      <ShowcaseProvider>
         <div className="space-y-16">
           {examples.map((example, index) => (
             <Showcase
@@ -105,7 +105,7 @@ export default async function PlaygroundPage() {
             <BuildingBlocks />
           </section>
         </div>
-      </PlaygroundProvider>
+      </ShowcaseProvider>
     </main>
   )
 }

@@ -24,7 +24,7 @@ const inputClass =
   "border-input bg-background focus-visible:border-ring focus-visible:ring-ring/50 h-9 w-full rounded-lg border px-3 text-sm outline-none focus-visible:ring-3"
 
 /** Holds the language for every example on the page, with a sticky FR/EN switch. */
-export function PlaygroundProvider({ children }: { children: React.ReactNode }) {
+export function ShowcaseProvider({ children }: { children: React.ReactNode }) {
   const [locale, setLocale] = useState<Locale>("fr")
 
   return (

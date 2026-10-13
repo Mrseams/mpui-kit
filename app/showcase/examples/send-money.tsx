@@ -112,7 +112,7 @@ export function SendMoney() {
       className="bg-card text-card-foreground mx-auto w-full max-w-sm overflow-hidden rounded-[2rem] border shadow-xl"
     >
       <div className="space-y-5 p-5 pb-4">
-        <header className="flex items-center justify-between gap-3">
+        <header className="flex flex-wrap items-center justify-between gap-2">
           <h3 className="font-semibold">{t.title}</h3>
           <span className="bg-muted rounded-full px-3 py-1 text-xs">
             {t.balance} <Currency amount={48500} className="font-semibold" />
