@@ -28,7 +28,7 @@ const pages = [
   { path: "/docs", budgetKb: 210 },
   { path: "/docs/getting-started", budgetKb: 210 },
   { path: "/docs/components/momo-checkout", budgetKb: 222 },
-  { path: "/playground", budgetKb: 222 },
+  { path: "/showcase", budgetKb: 222 },
 ]
 
 const htmlFile = (path) =>

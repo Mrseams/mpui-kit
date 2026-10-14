@@ -79,7 +79,7 @@ export function WalletForm() {
       <form
         noValidate
         onSubmit={onSubmit}
-        className="bg-card text-card-foreground relative rounded-3xl border p-6 shadow-sm"
+        className="bg-card text-card-foreground relative rounded-3xl border p-4 shadow-sm sm:p-6"
       >
         <div className="bg-muted relative mb-6 h-24 rounded-2xl">
           <WalletCard
@@ -93,7 +93,7 @@ export function WalletForm() {
           />
         </div>
 
-        <h3 className="mb-4 text-xl font-medium tracking-tight">{t.title}</h3>
+        <h3 className="mb-4 text-lg font-medium tracking-tight sm:text-xl">{t.title}</h3>
 
         <div role="radiogroup" aria-label={t.title} className="bg-muted mb-5 flex rounded-xl p-1">
           {wallets.map((operator) => (
@@ -114,7 +114,9 @@ export function WalletForm() {
                 className="size-2.5 rounded-full"
                 style={{ backgroundColor: operator.color }}
               />
-              {operator.mobileMoneyName}
+              {/* Short name on phones, so both options stay on one line. */}
+              <span className="sm:hidden">{operator.name}</span>
+              <span className="hidden sm:inline">{operator.mobileMoneyName}</span>
             </label>
           ))}
         </div>
@@ -200,13 +202,13 @@ function WalletCard({
   return (
     <div
       aria-hidden="true"
-      className="absolute inset-x-6 -top-16 flex h-40 overflow-hidden rounded-2xl bg-neutral-950 text-white shadow-xl transition-colors"
+      className="absolute inset-x-3 -top-16 flex h-40 overflow-hidden rounded-2xl bg-neutral-950 text-white shadow-xl transition-colors sm:inset-x-6"
     >
-      <div className="flex w-3/5 min-w-0 flex-col justify-between p-5">
+      <div className="flex min-w-0 flex-1 flex-col justify-between p-4 sm:p-5">
         <p className="truncate text-sm font-semibold tracking-wide italic">{brand}</p>
         <p className="leading-tight whitespace-nowrap tabular-nums">
           <span className="block text-xs text-white/50">+{callingCode}</span>
-          <span className="text-lg tracking-wide">
+          <span className="text-base tracking-wide sm:text-lg">
             {[...formatted].map((char, index) => {
               // A space takes the shade of the digit after it.
               const padding = seen >= digits.length
@@ -221,7 +223,11 @@ function WalletCard({
         </p>
         <p className="truncate text-xs text-white/60">{holder}</p>
       </div>
-      <svg viewBox="0 0 200 160" className="h-full w-2/5" preserveAspectRatio="xMidYMid slice">
+      <svg
+        viewBox="0 0 200 160"
+        className="h-full w-20 shrink-0 sm:w-2/5"
+        preserveAspectRatio="xMidYMid slice"
+      >
         <g fill="none" stroke={color} strokeLinecap="round" className="transition-[stroke]">
           <path d="M-10 40 C 60 10, 90 90, 210 30" strokeWidth="26" />
           <path d="M10 140 C 70 80, 140 170, 220 100" strokeWidth="20" />

@@ -72,7 +72,7 @@ export function OrderCheckout() {
 
   return (
     <div className="bg-card mx-auto grid w-full max-w-4xl overflow-hidden rounded-3xl border shadow-xl md:grid-cols-[0.85fr_1.15fr]">
-      <aside className="relative overflow-hidden bg-neutral-950 p-6 text-white sm:p-8">
+      <aside className="relative overflow-hidden bg-neutral-950 p-5 text-white sm:p-8">
         <svg
           aria-hidden="true"
           viewBox="0 0 200 200"
@@ -136,7 +136,7 @@ export function OrderCheckout() {
         </dl>
       </aside>
 
-      <div className="p-6 sm:p-8">
+      <div className="p-5 sm:p-8">
         <MomoCheckout
           // The outer card already draws the frame.
           className="rounded-none border-0 bg-transparent p-0 sm:p-0"
