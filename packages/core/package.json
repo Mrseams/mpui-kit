@@ -50,5 +50,26 @@
   },
   "engines": {
     "node": ">=18"
+  },
+  "scripts": {
+    "build": "tsup && node scripts/finish-core-build.mjs",
+    "check": "node scripts/check-core-package.mjs",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run"
+  },
+  "peerDependencies": {
+    "zod": "^4"
+  },
+  "peerDependenciesMeta": {
+    "zod": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "jsdom": "^30.1.0",
+    "tsup": "^8.5.1",
+    "typescript": "^5",
+    "vitest": "^5.0.1",
+    "zod": "^4.6.5"
   }
 }

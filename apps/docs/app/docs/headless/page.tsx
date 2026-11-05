@@ -8,17 +8,18 @@ const layers = [
   {
     name: "Core",
     what: "Controllers and pure helpers with no UI and no dependencies: createCheckoutController, createPhoneField, createCountdown, formatFcfa, validatePhone, the FR/EN dictionary and the Cameroon data.",
-    where: "registry/mpui-kit/lib, and the @mpui-kit/core npm package built from it",
+    where:
+      "packages/core/src, shipped through the registry and built as the @mpui-kit/core npm package",
   },
   {
     name: "Hooks",
     what: "Thin React wrappers over the core: useMomoCheckout, usePhoneField, useCountdown. They render nothing, so you bring your own markup.",
-    where: "registry/mpui-kit/hooks",
+    where: "packages/ui/src/hooks",
   },
   {
     name: "Components",
     what: "The shadcn/ui components, built on the hooks.",
-    where: "registry/mpui-kit/components",
+    where: "packages/ui/src/components",
   },
 ]
 

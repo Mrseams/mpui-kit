@@ -1,0 +1,26 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "incremental": true,
+    "plugins": [{ "name": "next" }],
+    "paths": {
+      // The library, imported the way a user's project imports it after `shadcn add`.
+      "@/lib/mpui-kit/*": ["../../packages/core/src/*"],
+      "@/components/mpui-kit/*": ["../../packages/ui/src/components/*"],
+      "@/hooks/mpui-kit/*": ["../../packages/ui/src/hooks/*"],
+      // The shadcn/ui primitives, shared with packages/ui.
+      "@/components/ui/*": ["../../packages/ui/src/shadcn/*"],
+      "@/lib/utils": ["../../packages/ui/src/shadcn/utils"],
+      "@/*": ["./*"]
+    }
+  },
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    "**/*.mts",
+    ".next/types/**/*.ts",
+    ".next/dev/types/**/*.ts"
+  ],
+  "exclude": ["node_modules"]
+}

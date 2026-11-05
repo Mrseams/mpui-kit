@@ -4,15 +4,16 @@
  * as ESM and as CommonJS, exports the same things either way, has no React or
  * Next.js in it, actually works, and stays small.
  *
- * Usage: node scripts/check-core-package.mjs
+ * Usage: pnpm --filter @mpui-kit/core check (or `pnpm core:check` from the root)
  */
 import { existsSync, readFileSync } from "node:fs"
 import { createRequire } from "node:module"
-import { join, resolve } from "node:path"
-import { pathToFileURL } from "node:url"
+import { join } from "node:path"
+import { fileURLToPath, pathToFileURL } from "node:url"
 import { gzipSync } from "node:zlib"
 
-const packageDir = resolve("packages/core")
+// This package, wherever the script is run from.
+const packageDir = fileURLToPath(new URL("..", import.meta.url))
 const dist = join(packageDir, "dist")
 const manifest = JSON.parse(readFileSync(join(packageDir, "package.json"), "utf8"))
 const GZIP_BUDGET_KB = 12

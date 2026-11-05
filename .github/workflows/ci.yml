@@ -31,20 +31,19 @@ jobs:
       - name: Lint
         run: pnpm lint
 
-      - name: Typecheck
-        run: pnpm typecheck
-
-      - name: Test
-        run: pnpm test
+      # Turborepo runs these per workspace (core, ui, docs).
+      - name: Typecheck and test
+        run: pnpm turbo run typecheck test
 
       - name: Check registry
         run: pnpm registry:check
 
-      - name: Build registry
-        run: pnpm registry:build
-
-      - name: Build site
+      # Builds @mpui-kit/core, then the registry, then the docs site.
+      - name: Build
         run: pnpm build
+
+      - name: Check core package
+        run: pnpm core:check
 
       - name: Check bundle size
         run: pnpm size

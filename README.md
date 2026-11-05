@@ -76,13 +76,13 @@ PayPal widgets in test/sandbox mode.
 
 ### Headless and framework-free
 
-The logic is separate from the UI. `registry/mpui-kit/lib/core` has no React and no dependencies, and [`@mpui-kit/core`](https://www.npmjs.com/package/@mpui-kit/core) is published on npm from it, so you can use the checkout controller, phone field and countdown with Vue, Svelte or plain JavaScript: `npm install @mpui-kit/core`. See [packages/core](./packages/core/README.md) and the Headless guide in the docs.
+The logic is separate from the UI. `packages/core/src/core` has no React and no dependencies, and [`@mpui-kit/core`](https://www.npmjs.com/package/@mpui-kit/core) is published on npm from it, so you can use the checkout controller, phone field and countdown with Vue, Svelte or plain JavaScript: `npm install @mpui-kit/core`. See [packages/core](./packages/core/README.md) and the Headless guide in the docs.
 
 Planned: landmark-based address input, OTP input, FCFA range slider, French date picker, WhatsApp button and chat widget, network banner, data-saver image, low-data mode provider, transaction timeline, listing card block, pricing table block.
 
 ## Design principles
 
-- **No hardcoded country.** Components take a `country` prop or read it from `MpuiKitProvider`. Operators, prefixes, currency, locales and regions live in `registry/mpui-kit/lib/countries/<iso>.ts`.
+- **No hardcoded country.** Components take a `country` prop or read it from `MpuiKitProvider`. Operators, prefixes, currency, locales and regions live in `packages/core/src/countries/<iso>.ts`.
 - **UI only.** No payment API calls. Payment flows take async callbacks (`onPay`, `onCheckStatus`), so they work with any backend or aggregator.
 - **Accessible by default.** Labelled inputs, keyboard navigation, `aria-live` for payment states, `prefers-reduced-motion` respected.
 - **Bilingual.** Every string goes through a small FR/EN dictionary that you can override.
@@ -98,14 +98,16 @@ Cameroon's operator prefixes were verified by the maintainer against the ART num
 ```bash
 pnpm install
 pnpm dev             # docs site at http://localhost:3000
-pnpm test            # unit tests
+pnpm test            # unit tests in every workspace (Turborepo)
 pnpm lint
 pnpm typecheck
 pnpm registry:check  # checks registry.json against the source files
-pnpm registry:build  # runs `shadcn build` into public/r
-pnpm build           # checks the registry, builds it, then builds the site
+pnpm registry:build  # runs `shadcn build` into apps/docs/public/r
+pnpm build           # builds @mpui-kit/core, the registry, then the site
 pnpm size            # checks the JavaScript each page loads, after a build
 ```
+
+The repository is a monorepo: `packages/core` (`@mpui-kit/core`, framework-free logic, published on npm), `packages/ui` (the React components shipped through the registry) and `apps/docs` (this site). See [CONTRIBUTING.md](./CONTRIBUTING.md#project-layout).
 
 ## Disclaimer
 

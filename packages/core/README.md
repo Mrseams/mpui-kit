@@ -21,7 +21,7 @@ Every controller has the same small shape: `getSnapshot()` returns the current s
 
 ## Plain JavaScript
 
-This example runs, in a real browser, as [`vanilla.html`](../../public/examples/vanilla.html).
+This example runs, in a real browser, as [`vanilla.html`](../../apps/docs/public/examples/vanilla.html).
 
 ```js
 import { cm, createCheckoutController, createPhoneField, formatFcfa } from "@mpui-kit/core"

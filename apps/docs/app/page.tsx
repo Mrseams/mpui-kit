@@ -32,7 +32,7 @@ const features = [
   },
 ]
 
-const countryExample = `// registry/mpui-kit/lib/countries/<iso>.ts
+const countryExample = `// packages/core/src/countries/<iso>.ts
 export const xx: CountryConfig = {
   iso: "XX",
   callingCode: "000",

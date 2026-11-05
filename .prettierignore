@@ -1,7 +1,8 @@
 node_modules
 .next
-public/r
+.turbo
+apps/docs/public/r
 pnpm-lock.yaml
 CHANGELOG.md
 packages/core/dist
-public/examples/mpui-kit-core.js
+apps/docs/public/examples/mpui-kit-core.js

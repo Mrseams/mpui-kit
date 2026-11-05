@@ -12,7 +12,8 @@
  *  - each npm package it imports is in `dependencies` (react and next excepted),
  *  - no file is imported through @/registry/... or a relative path.
  * It also checks that no two items write the same target, and that every source
- * file under registry/mpui-kit/ is registered (tests and the countries index excepted).
+ * file under packages/core/src and packages/ui/src is registered (tests, the countries
+ * index, the npm entry point and the shadcn stand-ins excepted).
  *
  * Usage: node scripts/check-registry.mjs [path/to/registry.json]
  */
@@ -29,8 +30,17 @@ const error = (message) => errors.push(message)
 
 // Packages every project that can use this registry already has.
 const ASSUMED_PACKAGES = new Set(["react", "react-dom", "next"])
-// Files that are part of the repo but deliberately not distributed.
-const NOT_DISTRIBUTED = [/\.test\.tsx?$/, /countries\/index\.ts$/, /lib\/core\/index\.ts$/]
+// Where the distributed source lives: framework-free logic, then React components and hooks.
+const SOURCE_ROOTS = ["packages/core/src", "packages/ui/src"]
+// Files that are part of the repo but deliberately not distributed: tests, the
+// countries index, the npm entry point of @mpui-kit/core, and the stand-ins for
+// the user's own shadcn/ui primitives.
+const NOT_DISTRIBUTED = [
+  /\.test\.tsx?$/,
+  /countries\/index\.ts$/,
+  /^packages\/core\/src\/index\.ts$/,
+  /^packages\/ui\/src\/shadcn\//,
+]
 
 const stripExtension = (path) => path.replace(/\.(tsx?|jsx?)$/, "")
 
@@ -156,10 +166,8 @@ const registered = new Set(
     (item.files ?? []).map((file) => file.path.replaceAll("\\", "/"))
   )
 )
-if (existsSync("registry/mpui-kit")) {
-  for (const path of walk("registry/mpui-kit").map((file) =>
-    relative(".", file).replaceAll("\\", "/")
-  )) {
+for (const root of SOURCE_ROOTS.filter((directory) => existsSync(directory))) {
+  for (const path of walk(root).map((file) => relative(".", file).replaceAll("\\", "/"))) {
     if (NOT_DISTRIBUTED.some((pattern) => pattern.test(path))) continue
     if (!registered.has(path)) error(`${path} is not in any registry item`)
   }

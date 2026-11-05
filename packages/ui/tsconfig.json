@@ -1,0 +1,16 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "paths": {
+      // Source files import each other as they will be installed in a user's
+      // project. Map those paths back to this workspace. src/shadcn stands in
+      // for the user's own shadcn/ui primitives and is not distributed.
+      "@/lib/mpui-kit/*": ["../core/src/*"],
+      "@/components/mpui-kit/*": ["./src/components/*"],
+      "@/hooks/mpui-kit/*": ["./src/hooks/*"],
+      "@/components/ui/*": ["./src/shadcn/*"],
+      "@/lib/utils": ["./src/shadcn/utils"]
+    }
+  },
+  "include": ["src/**/*.ts", "src/**/*.tsx", "*.ts", "*.mts"]
+}

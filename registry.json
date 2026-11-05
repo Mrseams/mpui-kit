@@ -10,7 +10,7 @@
       "description": "The CountryConfig type and shared locale and currency types. Required by every country and by components that read country data.",
       "files": [
         {
-          "path": "registry/mpui-kit/lib/countries/types.ts",
+          "path": "packages/core/src/countries/types.ts",
           "type": "registry:lib",
           "target": "lib/mpui-kit/countries/types.ts"
         }
@@ -23,7 +23,7 @@
       "description": "prefixRange() expands a regulator's numeric range, such as 650 to 653, into individual phone prefixes.",
       "files": [
         {
-          "path": "registry/mpui-kit/lib/countries/prefix-range.ts",
+          "path": "packages/core/src/countries/prefix-range.ts",
           "type": "registry:lib",
           "target": "lib/mpui-kit/countries/prefix-range.ts"
         }
@@ -37,7 +37,7 @@
       "registryDependencies": ["@mpui-kit/country-types", "@mpui-kit/prefix-range"],
       "files": [
         {
-          "path": "registry/mpui-kit/lib/countries/cm.ts",
+          "path": "packages/core/src/countries/cm.ts",
           "type": "registry:lib",
           "target": "lib/mpui-kit/countries/cm.ts"
         }
@@ -51,7 +51,7 @@
       "registryDependencies": ["@mpui-kit/country-types"],
       "files": [
         {
-          "path": "registry/mpui-kit/lib/i18n.ts",
+          "path": "packages/core/src/i18n.ts",
           "type": "registry:lib",
           "target": "lib/mpui-kit/i18n.ts"
         }
@@ -65,7 +65,7 @@
       "registryDependencies": ["@mpui-kit/country-types"],
       "files": [
         {
-          "path": "registry/mpui-kit/lib/format-fcfa.ts",
+          "path": "packages/core/src/format-fcfa.ts",
           "type": "registry:lib",
           "target": "lib/mpui-kit/format-fcfa.ts"
         }
@@ -79,7 +79,7 @@
       "registryDependencies": ["@mpui-kit/country-types"],
       "files": [
         {
-          "path": "registry/mpui-kit/lib/phone.ts",
+          "path": "packages/core/src/phone.ts",
           "type": "registry:lib",
           "target": "lib/mpui-kit/phone.ts"
         }
@@ -92,7 +92,7 @@
       "description": "Formats a duration in milliseconds as m:ss for countdown timers.",
       "files": [
         {
-          "path": "registry/mpui-kit/lib/countdown.ts",
+          "path": "packages/core/src/countdown.ts",
           "type": "registry:lib",
           "target": "lib/mpui-kit/countdown.ts"
         }
@@ -106,7 +106,7 @@
       "registryDependencies": ["@mpui-kit/country-types"],
       "files": [
         {
-          "path": "registry/mpui-kit/lib/checkout-machine.ts",
+          "path": "packages/core/src/checkout-machine.ts",
           "type": "registry:lib",
           "target": "lib/mpui-kit/checkout-machine.ts"
         }
@@ -120,7 +120,7 @@
       "registryDependencies": ["@mpui-kit/country-types", "@mpui-kit/i18n"],
       "files": [
         {
-          "path": "registry/mpui-kit/components/mpui-kit-provider.tsx",
+          "path": "packages/ui/src/components/mpui-kit-provider.tsx",
           "type": "registry:component",
           "target": "components/mpui-kit/mpui-kit-provider.tsx"
         }
@@ -138,7 +138,7 @@
       ],
       "files": [
         {
-          "path": "registry/mpui-kit/components/currency.tsx",
+          "path": "packages/ui/src/components/currency.tsx",
           "type": "registry:component",
           "target": "components/mpui-kit/currency.tsx"
         }
@@ -152,7 +152,7 @@
       "registryDependencies": ["@mpui-kit/country-types", "@mpui-kit/i18n", "@mpui-kit/phone"],
       "files": [
         {
-          "path": "registry/mpui-kit/lib/phone-errors.ts",
+          "path": "packages/core/src/phone-errors.ts",
           "type": "registry:lib",
           "target": "lib/mpui-kit/phone-errors.ts"
         }
@@ -172,7 +172,7 @@
       ],
       "files": [
         {
-          "path": "registry/mpui-kit/lib/phone-schema.ts",
+          "path": "packages/core/src/phone-schema.ts",
           "type": "registry:lib",
           "target": "lib/mpui-kit/phone-schema.ts"
         }
@@ -186,7 +186,7 @@
       "registryDependencies": ["@mpui-kit/country-types"],
       "files": [
         {
-          "path": "registry/mpui-kit/components/operator-badge.tsx",
+          "path": "packages/ui/src/components/operator-badge.tsx",
           "type": "registry:component",
           "target": "components/mpui-kit/operator-badge.tsx"
         }
@@ -208,7 +208,7 @@
       ],
       "files": [
         {
-          "path": "registry/mpui-kit/components/phone-input.tsx",
+          "path": "packages/ui/src/components/phone-input.tsx",
           "type": "registry:component",
           "target": "components/mpui-kit/phone-input.tsx"
         }
@@ -222,7 +222,7 @@
       "registryDependencies": ["@mpui-kit/country-types", "@mpui-kit/i18n", "@mpui-kit/phone"],
       "files": [
         {
-          "path": "registry/mpui-kit/lib/payment-methods.ts",
+          "path": "packages/core/src/payment-methods.ts",
           "type": "registry:lib",
           "target": "lib/mpui-kit/payment-methods.ts"
         }
@@ -243,7 +243,7 @@
       ],
       "files": [
         {
-          "path": "registry/mpui-kit/components/payment-method-picker.tsx",
+          "path": "packages/ui/src/components/payment-method-picker.tsx",
           "type": "registry:component",
           "target": "components/mpui-kit/payment-method-picker.tsx"
         }
@@ -256,7 +256,7 @@
       "description": "Copies text to the clipboard with a fallback for older Android WebViews and non-secure pages. Resolves to whether it worked; never throws.",
       "files": [
         {
-          "path": "registry/mpui-kit/lib/clipboard.ts",
+          "path": "packages/core/src/clipboard.ts",
           "type": "registry:lib",
           "target": "lib/mpui-kit/clipboard.ts"
         }
@@ -269,7 +269,7 @@
       "description": "Builds a tel: link for a USSD code with # percent-encoded, and refuses text that is not dialable.",
       "files": [
         {
-          "path": "registry/mpui-kit/lib/dial.ts",
+          "path": "packages/core/src/dial.ts",
           "type": "registry:lib",
           "target": "lib/mpui-kit/dial.ts"
         }
@@ -283,7 +283,7 @@
       "registryDependencies": ["@mpui-kit/countdown-controller"],
       "files": [
         {
-          "path": "registry/mpui-kit/hooks/use-countdown.ts",
+          "path": "packages/ui/src/hooks/use-countdown.ts",
           "type": "registry:hook",
           "target": "hooks/mpui-kit/use-countdown.ts"
         }
@@ -307,7 +307,7 @@
       ],
       "files": [
         {
-          "path": "registry/mpui-kit/components/ussd-prompt.tsx",
+          "path": "packages/ui/src/components/ussd-prompt.tsx",
           "type": "registry:component",
           "target": "components/mpui-kit/ussd-prompt.tsx"
         }
@@ -322,7 +322,7 @@
       "registryDependencies": ["@mpui-kit/country-types"],
       "files": [
         {
-          "path": "registry/mpui-kit/lib/format-date.ts",
+          "path": "packages/core/src/format-date.ts",
           "type": "registry:lib",
           "target": "lib/mpui-kit/format-date.ts"
         }
@@ -336,7 +336,7 @@
       "registryDependencies": ["@mpui-kit/checkout-controller", "@mpui-kit/checkout-machine"],
       "files": [
         {
-          "path": "registry/mpui-kit/hooks/use-momo-checkout.ts",
+          "path": "packages/ui/src/hooks/use-momo-checkout.ts",
           "type": "registry:hook",
           "target": "hooks/mpui-kit/use-momo-checkout.ts"
         }
@@ -360,7 +360,7 @@
       ],
       "files": [
         {
-          "path": "registry/mpui-kit/components/receipt-card.tsx",
+          "path": "packages/ui/src/components/receipt-card.tsx",
           "type": "registry:component",
           "target": "components/mpui-kit/receipt-card.tsx"
         }
@@ -374,7 +374,7 @@
       "registryDependencies": ["@mpui-kit/country-types", "@mpui-kit/payment-methods"],
       "files": [
         {
-          "path": "registry/mpui-kit/components/method-panel.ts",
+          "path": "packages/ui/src/components/method-panel.ts",
           "type": "registry:component",
           "target": "components/mpui-kit/method-panel.ts"
         }
@@ -402,7 +402,7 @@
       ],
       "files": [
         {
-          "path": "registry/mpui-kit/components/momo-checkout.tsx",
+          "path": "packages/ui/src/components/momo-checkout.tsx",
           "type": "registry:component",
           "target": "components/mpui-kit/momo-checkout.tsx"
         }
@@ -416,7 +416,7 @@
       "description": "A tiny observable store (getState, setState, subscribe). It is all a UI framework adapter needs: it fits React's useSyncExternalStore, a Vue ref, a Svelte store or a plain render function.",
       "files": [
         {
-          "path": "registry/mpui-kit/lib/core/store.ts",
+          "path": "packages/core/src/core/store.ts",
           "type": "registry:lib",
           "target": "lib/mpui-kit/core/store.ts"
         }
@@ -434,7 +434,7 @@
       ],
       "files": [
         {
-          "path": "registry/mpui-kit/lib/core/checkout-controller.ts",
+          "path": "packages/core/src/core/checkout-controller.ts",
           "type": "registry:lib",
           "target": "lib/mpui-kit/core/checkout-controller.ts"
         }
@@ -452,7 +452,7 @@
       ],
       "files": [
         {
-          "path": "registry/mpui-kit/lib/core/phone-field.ts",
+          "path": "packages/core/src/core/phone-field.ts",
           "type": "registry:lib",
           "target": "lib/mpui-kit/core/phone-field.ts"
         }
@@ -466,7 +466,7 @@
       "registryDependencies": ["@mpui-kit/core-store", "@mpui-kit/countdown"],
       "files": [
         {
-          "path": "registry/mpui-kit/lib/core/countdown-controller.ts",
+          "path": "packages/core/src/core/countdown-controller.ts",
           "type": "registry:lib",
           "target": "lib/mpui-kit/core/countdown-controller.ts"
         }
@@ -484,7 +484,7 @@
       ],
       "files": [
         {
-          "path": "registry/mpui-kit/hooks/use-phone-field.ts",
+          "path": "packages/ui/src/hooks/use-phone-field.ts",
           "type": "registry:hook",
           "target": "hooks/mpui-kit/use-phone-field.ts"
         }

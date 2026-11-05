@@ -25,24 +25,26 @@ We use [Conventional Commits](https://www.conventionalcommits.org): `feat:`, `fi
 
 ## Project layout
 
-| Path                               | Purpose                                                                                   |
-| ---------------------------------- | ----------------------------------------------------------------------------------------- |
-| `registry/mpui-kit/lib/countries/` | One file per country, plus `types.ts`.                                                    |
-| `registry/mpui-kit/lib/`           | Framework-free logic (formatting, phone parsing, state machine, i18n). Fully unit-tested. |
-| `registry/mpui-kit/components/`    | Components and blocks distributed to users.                                               |
-| `app/`                             | The docs site and landing page.                                                           |
-| `registry.json`                    | The registry manifest. `shadcn build` turns it into `public/r/*.json`.                    |
+| Path                           | Purpose                                                                                                                                                                               |
+| ------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `packages/core/src/countries/` | One file per country, plus `types.ts`.                                                                                                                                                |
+| `packages/core/src/`           | `@mpui-kit/core`: framework-free logic (formatting, phone parsing, state machine, i18n). Fully unit-tested. Shipped through the registry and built for npm.                           |
+| `packages/ui/src/`             | `@mpui-kit/ui` (private): React components, blocks and hooks distributed through the registry. `src/shadcn/` holds stand-ins for the user's shadcn primitives and is not distributed. |
+| `apps/docs/`                   | `@mpui-kit/docs`: the docs site and landing page (Next.js).                                                                                                                           |
+| `registry.json`                | The registry manifest. `shadcn build` turns it into `apps/docs/public/r/*.json`.                                                                                                      |
+
+The repository is a pnpm workspace driven by [Turborepo](https://turbo.build). Run every command from the root: `pnpm test`, `pnpm build` and `pnpm typecheck` run in each workspace, in dependency order.
 
 ### Import paths in registry files
 
-Files under `registry/mpui-kit/` import each other with the path they will have in a user's project, not the path they have in this repo:
+Files under `packages/core/src/` and `packages/ui/src/` import each other with the path they will have in a user's project, not the path they have in this repo:
 
 ```ts
-import { formatFcfa } from "@/lib/mpui-kit/format-fcfa" // registry/mpui-kit/lib/format-fcfa.ts here
-import { PhoneInput } from "@/components/mpui-kit/phone-input" // registry/mpui-kit/components/phone-input.tsx here
+import { formatFcfa } from "@/lib/mpui-kit/format-fcfa" // packages/core/src/format-fcfa.ts here
+import { PhoneInput } from "@/components/mpui-kit/phone-input" // packages/ui/src/components/phone-input.tsx here
 ```
 
-`tsconfig.json` and `vitest.config.mts` map these back to `registry/mpui-kit/`. Every file in `registry.json` needs a matching `target` (for example `lib/mpui-kit/format-fcfa.ts`), so the installed file lands where the imports expect it. Do not import from `@/registry/...`: the shadcn CLI would not rewrite that path for users.
+Each workspace's `tsconfig.json` and `vitest.config.mts` map these back to the source folders. Every file in `registry.json` needs a matching `target` (for example `lib/mpui-kit/format-fcfa.ts`), so the installed file lands where the imports expect it. Do not import from `@/registry/...`: the shadcn CLI would not rewrite that path for users.
 
 `pnpm registry:check` verifies this for you. For every item it checks that each import is provided by the item or its dependencies, that npm packages are listed in `dependencies`, that shadcn primitives are listed in `registryDependencies`, and that no source file is left out of the registry. Run it after adding or changing a file.
 
@@ -50,9 +52,9 @@ import { PhoneInput } from "@/components/mpui-kit/phone-input" // registry/mpui-
 
 Adding a country touches data files only. No component changes are needed, because components read everything from a `CountryConfig`.
 
-1. **Copy the template.** Copy `registry/mpui-kit/lib/countries/cm.ts` to `registry/mpui-kit/lib/countries/<iso>.ts`, using the lowercase ISO 3166-1 alpha-2 code (for example `sn.ts`).
+1. **Copy the template.** Copy `packages/core/src/countries/cm.ts` to `packages/core/src/countries/<iso>.ts`, using the lowercase ISO 3166-1 alpha-2 code (for example `sn.ts`).
 
-2. **Fill in the config.** See `registry/mpui-kit/lib/countries/types.ts` for every field.
+2. **Fill in the config.** See `packages/core/src/countries/types.ts` for every field.
 
    - `callingCode`, `nationalNumberLength` and `trunkPrefix` (only if people dial a leading digit domestically).
    - `groupSizes`: how the number is written, for example `[1, 2, 2, 2, 2]`. It must sum to `nationalNumberLength`.
@@ -65,7 +67,7 @@ Adding a country touches data files only. No component changes are needed, becau
 
 4. **No logos or brand assets.** Operators are a name plus a neutral color. Do not add logos, brand-exact colors or trademarked images.
 
-5. **Register the country.** Add it to `registry/mpui-kit/lib/countries/index.ts`:
+5. **Register the country.** Add it to `packages/core/src/countries/index.ts`:
 
    ```ts
    import { sn } from "@/lib/mpui-kit/countries/sn"
@@ -76,7 +78,7 @@ Adding a country touches data files only. No component changes are needed, becau
 
 7. **Add a registry item.** In `registry.json`, add a `country-<iso>` entry modelled on `country-cm`, so people can install just that country.
 
-8. **Add tests for anything unusual.** If your country has a trunk prefix or an unusual number format, add a case in `registry/mpui-kit/lib/phone.test.ts`.
+8. **Add tests for anything unusual.** If your country has a trunk prefix or an unusual number format, add a case in `packages/core/src/phone.test.ts`.
 
 9. **Open the pull request.** Include your sources and note anything you could not verify.
 
@@ -93,9 +95,9 @@ The audience often has slow connections. `pnpm size` (run it after `pnpm build`)
 - **Never hardcode a country.** Take a `country` prop or read from `MpuiKitProvider`.
 - **UI only.** No real payment API calls. Accept async callbacks instead.
 - **Accessible by default.** Labels, keyboard navigation, `aria-live` for async states, and respect `prefers-reduced-motion`.
-- **Every user-facing string goes through `registry/mpui-kit/lib/i18n.ts`,** in both French and English.
+- **Every user-facing string goes through `packages/core/src/i18n.ts`,** in both French and English.
 - **Keep it light.** Avoid heavy dependencies and animation libraries. The audience often has slow connections.
-- **Test the logic.** Put logic in `registry/mpui-kit/lib/` as pure functions and unit-test it.
+- **Test the logic.** Put logic in `packages/core/src/` as pure functions and unit-test it.
 
 ## Reporting bugs
 

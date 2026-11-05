@@ -5,9 +5,9 @@
  */
 import { copyFileSync, existsSync } from "node:fs"
 
-const from = "packages/core/dist/index.js"
+const from = "../../packages/core/dist/index.js"
 if (!existsSync(from)) {
-  console.error("No core build found. Run `pnpm core:build` first.")
+  console.error("No core build found. Run `pnpm core:build` from the repository root first.")
   process.exit(1)
 }
 copyFileSync(from, "public/examples/mpui-kit-core.js")

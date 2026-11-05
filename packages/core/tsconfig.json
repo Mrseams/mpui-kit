@@ -1,0 +1,11 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "paths": {
+      // Source files import each other as they will be installed in a user's
+      // project (lib/mpui-kit/...). Here they live in src/.
+      "@/lib/mpui-kit/*": ["./src/*"]
+    }
+  },
+  "include": ["src/**/*.ts", "*.ts", "*.mts"]
+}
