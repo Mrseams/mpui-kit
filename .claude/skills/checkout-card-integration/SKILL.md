@@ -7,15 +7,15 @@ description: How to use the MomoCheckout block with card, PayPal or any other pr
 
 The source of truth is the code; read it before answering or writing an integration:
 
-| What                                       | File                                                |
-| ------------------------------------------ | --------------------------------------------------- |
-| Panel contract (`MethodPanel`, props)      | `registry/mpui-kit/components/method-panel.ts`      |
-| Checkout props (`panels`, `methods`, ...)  | `registry/mpui-kit/components/momo-checkout.tsx`    |
-| `onPay` / `onCheckStatus` types            | `registry/mpui-kit/lib/core/checkout-controller.ts` |
-| `PaymentMethod`, `defaultPaymentMethods()` | `registry/mpui-kit/lib/payment-methods.ts`          |
-| Working Stripe panel                       | `components/site/stripe-card-panel.tsx`             |
-| Working PayPal panel                       | `components/site/paypal-panel.tsx`                  |
-| Demo wiring and the published guide        | `app/docs/guides/card-and-paypal/`                  |
+| What                                       | File                                              |
+| ------------------------------------------ | ------------------------------------------------- |
+| Panel contract (`MethodPanel`, props)      | `packages/ui/src/components/method-panel.ts`      |
+| Checkout props (`panels`, `methods`, ...)  | `packages/ui/src/components/momo-checkout.tsx`    |
+| `onPay` / `onCheckStatus` types            | `packages/core/src/core/checkout-controller.ts`   |
+| `PaymentMethod`, `defaultPaymentMethods()` | `packages/core/src/payment-methods.ts`            |
+| Working Stripe panel                       | `apps/docs/components/site/stripe-card-panel.tsx` |
+| Working PayPal panel                       | `apps/docs/components/site/paypal-panel.tsx`      |
+| Demo wiring and the published guide        | `apps/docs/app/docs/guides/card-and-paypal/`      |
 
 Always say the panel API is **beta and may change before 1.0**. Mobile Money and cash are not
 affected.
@@ -77,7 +77,7 @@ the provider's fields and wipes what the customer typed.
   The collect function returns the payload for `onPay`. On error, call `setError(message)` first,
   then **throw** — nothing is paid.
 - Respect `disabled` (e.g. `readOnly: disabled`) while the checkout is busy.
-- Copy `components/site/stripe-card-panel.tsx`: `elements.submit()`, then
+- Copy `apps/docs/components/site/stripe-card-panel.tsx`: `elements.submit()`, then
   `stripe.createConfirmationToken({ elements })`, return `{ confirmationTokenId }`.
 
 **`submit: "panel"` (e.g. PayPal):** the panel pays by itself and the Pay button is hidden.
@@ -85,7 +85,7 @@ the provider's fields and wipes what the customer typed.
 - Call `submit(payload)` when the provider approves (PayPal `onApprove` →
   `submit({ orderId: data.orderID })`), and `setError(...)` on provider errors.
 - **Create the PayPal order on the server** (`createOrder` fetches the app's own endpoint and
-  returns the id). `components/site/paypal-panel.tsx` creates it in the browser from a fixed
+  returns the id). `apps/docs/components/site/paypal-panel.tsx` creates it in the browser from a fixed
   amount **only because the demo has no server** — never copy that part into a real app.
 
 Panels are ordinary React components: they can use hooks and wrap themselves in the provider's

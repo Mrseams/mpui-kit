@@ -2,6 +2,12 @@
 
 All notable changes to this project are documented here. The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the project uses [Semantic Versioning](https://semver.org/).
 
+## [Unreleased]
+
+### Changed
+
+- The repository is now a pnpm + Turborepo monorepo: `packages/core` (`@mpui-kit/core`), `packages/ui` (the registry components) and `apps/docs` (the site). Nothing changes for users: registry URLs, item names, installed files and the npm package are the same.
+
 ## [0.1.0] - 2026-09-29
 
 Initial release. Phase 1.

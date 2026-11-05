@@ -1,19 +1,15 @@
 import { defineConfig } from "tsup"
 
 // The package is built from the same source files the shadcn registry ships, so
-// there is one copy of the code. Run from the repository root: tsconfig.json maps
-// `@/lib/mpui-kit/*` to `registry/mpui-kit/lib/*`, which esbuild and the type bundler follow.
+// there is one copy of the code. tsconfig.json maps `@/lib/mpui-kit/*` to `src/*`,
+// which esbuild and the type bundler follow.
 export default defineConfig({
-  entry: { index: "registry/mpui-kit/lib/core/index.ts" },
-  outDir: "packages/core/dist",
+  entry: { index: "src/index.ts" },
+  outDir: "dist",
   format: ["esm", "cjs"],
-  // The package is "type": "module", so ESM is .js and CommonJS is .cjs. (tsup
-  // would otherwise decide from the repository root, which is not.)
+  // The package is "type": "module", so ESM is .js and CommonJS is .cjs.
   outExtension: ({ format }) => ({ js: format === "esm" ? ".js" : ".cjs" }),
-  dts: {
-    // The site's tsconfig turns on incremental builds, which the declaration build cannot use.
-    compilerOptions: { incremental: false, composite: false, tsBuildInfoFile: undefined },
-  },
+  dts: true,
   clean: true,
   sourcemap: true,
   treeshake: true,

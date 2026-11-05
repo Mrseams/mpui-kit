@@ -7,10 +7,10 @@
  */
 import { copyFileSync, existsSync } from "node:fs"
 
-const from = "packages/core/dist/index.d.ts"
+const from = "dist/index.d.ts"
 if (!existsSync(from)) {
   console.error(`${from} was not built`)
   process.exit(1)
 }
-copyFileSync(from, "packages/core/dist/index.d.cts")
-console.log("wrote packages/core/dist/index.d.cts")
+copyFileSync(from, "dist/index.d.cts")
+console.log("wrote dist/index.d.cts")

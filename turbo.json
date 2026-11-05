@@ -1,0 +1,30 @@
+{
+  "$schema": "https://turborepo.com/schema.json",
+  "tasks": {
+    "build": {
+      "dependsOn": ["^build"],
+      "outputs": ["dist/**", ".next/**", "!.next/cache/**", "!.next/dev/**"]
+    },
+    "//#registry:build": {
+      "inputs": ["registry.json", "packages/core/src/**", "packages/ui/src/**"],
+      "outputs": ["apps/docs/public/r/**"]
+    },
+    "@mpui-kit/docs#build": {
+      "dependsOn": ["^build", "//#registry:build"],
+      "outputs": [
+        ".next/**",
+        "!.next/cache/**",
+        "!.next/dev/**",
+        "public/examples/mpui-kit-core.js"
+      ]
+    },
+    "typecheck": {},
+    "test": {},
+    "dev": {
+      "dependsOn": ["@mpui-kit/core#build", "//#registry:build"],
+      "cache": false,
+      "persistent": true,
+      "passThroughEnv": ["PORT"]
+    }
+  }
+}
